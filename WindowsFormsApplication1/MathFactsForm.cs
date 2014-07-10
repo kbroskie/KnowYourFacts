@@ -276,26 +276,26 @@ namespace KnowYourFacts
 					if (reference.correctResponseCount > (int) (reference.numberOfFactsProcessed))
 					{
 						displayControl.messageLabel.Text = "All facts complete! You got " + reference.correctResponseCount
-																		+ " out of the " + reference.numberOfFactsProcessed 
-																		+ " facts correct!" + reference.continuePrompt;
+								+ " out of the " + reference.numberOfFactsProcessed 
+								+ " facts correct!" + reference.continuePrompt;
 					}
 					else if (reference.correctResponseCount == 0)
 					{
-						displayControl.messageLabel.Text = "All facts complete, very nice try! You didn't get any facts												  correct this time." + reference.continuePrompt;
+						displayControl.messageLabel.Text = "All facts complete, very nice try! You didn't get any facts		correct this time." + reference.continuePrompt;
 					}
 					else
 					{
 						displayControl.messageLabel.Text = "All facts complete, great job! You got " 
-																		+ reference.correctResponseCount + " out of the " +
-																		reference.numberOfFactsProcessed + " facts correct!" 
-																		+ reference.continuePrompt;
+							+ reference.correctResponseCount + " out of the "
+							+ reference.numberOfFactsProcessed + " facts correct!" 
+							+ reference.continuePrompt;
 					}
 				}
 				else
 				{
 					reference.writeFactResponseTimeToFile (operationType);
 					displayControl.messageLabel.Text = "Speed test complete! \n\nNow try out the daily " +
-																	operationType.getOperationName () + " facts!" + reference.continuePrompt;
+							operationType.getOperationName () + " facts!" + reference.continuePrompt;
 				}	
 			}
 		}
