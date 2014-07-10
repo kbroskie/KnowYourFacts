@@ -275,14 +275,13 @@ namespace KnowYourFacts
 
 					if (reference.correctResponseCount > (int) (reference.numberOfFactsProcessed))
 					{
-						displayControl.messageLabel.Text = "All facts complete! You got " + reference.correctResponseCount 
+						displayControl.messageLabel.Text = "All facts complete! You got " + reference.correctResponseCount
 																		+ " out of the " + reference.numberOfFactsProcessed 
 																		+ " facts correct!" + reference.continuePrompt;
 					}
 					else if (reference.correctResponseCount == 0)
 					{
-						displayControl.messageLabel.Text = "All facts complete, very nice try! You didn't get any facts correct this time."
-																		+ reference.continuePrompt;
+						displayControl.messageLabel.Text = "All facts complete, very nice try! You didn't get any facts												  correct this time." + reference.continuePrompt;
 					}
 					else
 					{
@@ -296,7 +295,7 @@ namespace KnowYourFacts
 				{
 					reference.writeFactResponseTimeToFile (operationType);
 					displayControl.messageLabel.Text = "Speed test complete! \n\nNow try out the daily " +
-																operationType.getOperationName () + " facts!" + reference.continuePrompt;
+																	operationType.getOperationName () + " facts!" + reference.continuePrompt;
 				}	
 			}
 		}
@@ -316,7 +315,8 @@ namespace KnowYourFacts
 				FactsModel.Instance.AddFact (e.fact.leftNum, e.fact.rightNum, e.fact.operation);
 				m_factsDisplayControl.num1Label.Text = System.Convert.ToString (e.fact.leftNum);
 				m_factsDisplayControl.num2Label.Text = System.Convert.ToString (e.fact.rightNum);
-				m_factsDisplayControl.factSignLabel.Text = System.Convert.ToString (e.fact.operation.getOperationSign ());
+				m_factsDisplayControl.factSignLabel.Text = System.Convert.ToString 
+																			(e.fact.operation.getOperationSign ());
 				m_factsDisplayControl.inputMaskedTextBox.Text = "";
 			}
 		}
