@@ -255,7 +255,7 @@ namespace KnowYourFacts
 			// Get the next fact and update the labels.
 			// Instead of returning a number, just use the front of queue below.
 			if (reference.getNextFact (ref lNum, ref rNum, ref reference.queueOfFacts, 
-												ref reference.numberOfFactsProcessed))
+						ref reference.numberOfFactsProcessed))
 			{
 				m_factsDisplayControl.inputMaskedTextBox.Text = "";
 				m_factsDisplayControl.num1Label.Text = System.Convert.ToString (lNum);
@@ -271,7 +271,7 @@ namespace KnowYourFacts
 				if (!speedTest)
 				{
 					reference.writeResultsToFile (ref reference.correctResponseCount, ref reference.unknownFacts, 
-															ref reference.knownFacts, operationType, reference.factResponseTime);
+							ref reference.knownFacts, operationType, reference.factResponseTime);
 
 					if (reference.correctResponseCount > (int) (reference.numberOfFactsProcessed))
 					{
@@ -281,12 +281,13 @@ namespace KnowYourFacts
 					}
 					else if (reference.correctResponseCount == 0)
 					{
-						displayControl.messageLabel.Text = "All facts complete, very nice try! You didn't get any facts		correct this time." + reference.continuePrompt;
+						displayControl.messageLabel.Text = "All facts complete, very nice try!" 
+							+ "You didn't get any facts correct this time." + reference.continuePrompt;
 					}
 					else
 					{
-						displayControl.messageLabel.Text = "All facts complete, great job! You got " 
-							+ reference.correctResponseCount + " out of the "
+						displayControl.messageLabel.Text = "All facts complete, great job! "
+							+ "You got " + reference.correctResponseCount + " out of the "
 							+ reference.numberOfFactsProcessed + " facts correct!" 
 							+ reference.continuePrompt;
 					}
@@ -294,8 +295,9 @@ namespace KnowYourFacts
 				else
 				{
 					reference.writeFactResponseTimeToFile (operationType);
-					displayControl.messageLabel.Text = "Speed test complete! \n\nNow try out the daily " +
-							operationType.getOperationName () + " facts!" + reference.continuePrompt;
+					displayControl.messageLabel.Text = "Speed test complete!" 
+							+ "\n\nNow try out the daily " + operationType.getOperationName () 
+							+ " facts!" + reference.continuePrompt;
 				}	
 			}
 		}
