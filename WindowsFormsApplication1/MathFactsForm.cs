@@ -18,24 +18,18 @@ namespace KnowYourFacts
 	{
 		static MainMenuControl m_mainMenuControl;
 		public static FactsDisplayControl m_factsDisplayControl;
+		static MathFacts reference;
 
 		public static bool speedTest;
-
 		static bool menubarToggle = true;
 
 		public static MathOperation operationType;
 
-		static public System.Timers.Timer time;
-		static public long startTime;
-		static public long endTime;
-
-		static MathFacts reference;
 		static public int userResponse;
 		public static String m_userInput;
+
 		public long timeElapsed;
 		public static System.Diagnostics.Stopwatch timer;
-
-		public string continuePrompt = "\nPress the spacebar to continue.";
 
 		public MathFactsForm ()
 		{
@@ -44,24 +38,9 @@ namespace KnowYourFacts
 			initializeAndAddFactsDisplayControl ();
 
 			reference = new MathFacts ();
-			//GC.KeepAlive(reference);
-			//time = new System.Timers.Timer(500);
 			reference.factResponseTime = new List<long> ();
-			//time.Elapsed += new ElapsedEventHandler(OnTimedEvent);
-			//time.Interval = 500; // Sets the timer interval to 0.5 seconds.
-			//time.Enabled = true;
-			//Console.WriteLine("Press the Enter key to exit the program.");
-			//Console.ReadLine();
-			//GC.KeepAlive(time);
-
-			//m_userInput += new EventHandler(this.userResponseEnteredEvent);
 			//	factSource.DataSource = FactsModel.Instance.Facts;
 		}
-
-		//private static void OnTimedEvent(object source, ElapsedEventArgs e)
-		//	{
-		//	Console.WriteLine("The Elapsed event was raised at {0}", e.SignalTime);
-		//}
 
 		/*
 		 * Updates the last value entered by the user, or toggles the display 
@@ -128,20 +107,34 @@ namespace KnowYourFacts
 			m_mainMenuControl.Enabled = toggle;
 		}
 
-		// Toggle the functionality and visibility of the facts display control.
+		/*
+		 * Toggle the functionality and visibility of the facts display control.
+		 */
 		internal static void toggleFactsDisplayControl (bool toggle)
 		{
 			m_factsDisplayControl.Visible = toggle;
 			m_factsDisplayControl.Enabled = toggle;
 		}
 
-		// =======================================
-		// Handle events for starting daily facts.
-		// =======================================
-		private void dailyFactsClick (object sender, EventArgs e)
+		/*
+		 * Toggle the visibility of the facts input display control,
+		 * but leave the status area visible.
+       */
+		public static void toggleInputDisplay ()
 		{
-			Console.WriteLine ("daily facts chosen");
-			
+			m_factsDisplayControl.num1Label.Visible = false;
+			m_factsDisplayControl.num2Label.Visible = false;
+			m_factsDisplayControl.inputMaskedTextBox.Visible = false;
+			m_factsDisplayControl.lineLabel.Visible = false;
+			m_factsDisplayControl.factSignLabel.Visible = false;
+			m_factsDisplayControl.messageLabel.Focus ();
+		}
+
+		/*
+		 * Handle events for starting daily facts.
+		 */
+		private void dailyFactsClick (object sender, EventArgs e)
+		{			
 			MathOperationTypeEnum sign;
 			if (ReferenceEquals (sender, (additionFactsMenuItem)))
 			{
@@ -168,7 +161,6 @@ namespace KnowYourFacts
 		 */
 		private void speedTestClick (object sender, EventArgs e)
 		{
-			Console.WriteLine ("speed test chosen");
 			MathOperationTypeEnum sign;
 			if (sender.Equals (additionTestMenuItem))
 			{
@@ -190,12 +182,17 @@ namespace KnowYourFacts
 			startTheFacts (sign, true);
 		}
 
-
+		/*
+		 * 
+		 */ 
 		private void helpMenuItemClick (object sender, EventArgs e)
 		{
 
 		}
 
+		/*
+		 * 
+		 */
 		private void optionsMenuItemClick (object sender, EventArgs e)
 		{
 
@@ -219,107 +216,88 @@ namespace KnowYourFacts
 		 */ 
 		public void processInput (FactsDisplayControl displayControl)
 		{
-			int answer;
-			//long secondsElapsed;
+			timer.Stop();											
+
+			long secondsElapsed;
 			String inputString = (displayControl.inputMaskedTextBox.Text);
-			if (inputString != "")
-			//if (e.KeyCode == Keys.Return)
+		
+
+			// Obtain the input answer.
+			int answer = System.Convert.ToInt32 (inputString);
+			Fact input = reference.getQuestionAndResponse (operationType);
+			int calculatedAnswer = MathOperation.calculateAnswer (input.leftNum, input.rightNum, operationType);
+
+			// Only store the response time for correct answers.
+			if (answer == calculatedAnswer)
 			{
-				// Determine if no answer was entered.
-				if (inputString == "")
+				secondsElapsed = (long) (timer.ElapsedMilliseconds / 1000);
+				reference.factResponseTime.Add(secondsElapsed);
+			}
+
+			// Only keep answers for daily facts.
+			if (!speedTest)
+			{
+				if (answer == calculatedAnswer)
 				{
-					displayControl.messageLabel.Text = "Oops! You forgot to enter an answer!";
+					reference.knownFacts.Push (new Fact (input.leftNum, input.rightNum, operationType));
 				}
 				else
 				{
-					//timer.Stop();											
-
-					// Obtain the input answer.
-					answer = System.Convert.ToInt32 (inputString);
-					Fact input = reference.getQuestionAndResponse (operationType);
-
-					int calculatedAnswer = MathOperation.calculateAnswer (input.leftNum, input.rightNum, operationType);
-
-					// Only store the response time for correct answers.
-					if (answer == calculatedAnswer)
-					{
-						//secondsElapsed = time.El (endTime, startTime);
-						//secondsElapsed = timer.ElapsedTicks;
-						//secondsElapsed = 2;
-						//reference.factResponseTime.Add(secondsElapsed);
-					}
-					// Only keep answers if it is not a speed test.
-					if (!speedTest)
-					{
-						if (answer == calculatedAnswer)
-						{
-							reference.knownFacts.Push (new Fact (input.leftNum, input.rightNum, operationType));
-						}
-						else
-						{
-							reference.unknownFacts.Push (new Fact (input.leftNum, input.rightNum, operationType));
-						}
-					}
-
-					// Clear the text box.
-					m_factsDisplayControl.inputMaskedTextBox.Text = "";
-
-					int lNum = 0, rNum = 0;
-
-					// Get the next fact and update the labels.
-					// Instead of returning a number, just use the front of queue below.
-					if (reference.getNextFact (ref lNum, ref rNum, ref reference.queueOfFacts, ref reference.numberOfFactsProcessed)) // Instead of returning a number, just use the front of queue below.
-					{
-						m_factsDisplayControl.inputMaskedTextBox.Text = "";
-						m_factsDisplayControl.num1Label.Text = System.Convert.ToString (lNum);
-						m_factsDisplayControl.num2Label.Text = System.Convert.ToString (rNum);
-
-						//time (&startTime);
-						//timer.Reset();
-						//timer.Start();
-					}
-					else
-					{
-						displayControl.num1Label.Visible = false;
-						displayControl.num2Label.Visible = false;
-						displayControl.inputMaskedTextBox.Visible = false;
-						displayControl.lineLabel.Visible = false;
-						displayControl.factSignLabel.Visible = false;
-						displayControl.messageLabel.Focus ();
-
-						if (!speedTest)
-						{
-							reference.writeResultsToFile (ref reference.correctResponseCount, ref reference.unknownFacts, ref reference.knownFacts, operationType, reference.factResponseTime);
-
-							if (reference.correctResponseCount > (int) (reference.numberOfFactsProcessed))
-							{
-								displayControl.messageLabel.Text = "All facts complete! You got " + reference.correctResponseCount + " out of the " +
-															reference.numberOfFactsProcessed + " facts correct!" + reference.continuePrompt;
-							}
-							else if (reference.correctResponseCount == 0)
-							{
-								displayControl.messageLabel.Text = "All facts complete, very nice try! You didn't get any facts correct this time."
-															+ reference.continuePrompt;
-							}
-							else
-							{
-								displayControl.messageLabel.Text = "All facts complete, great job! You got " + reference.correctResponseCount + " out of the " +
-															reference.numberOfFactsProcessed + " facts correct!" + reference.continuePrompt;
-							}
-						}
-						else
-						{
-							reference.writeFactResponseTimeToFile (operationType);
-							displayControl.messageLabel.Text = "Speed test complete! \n\nNow try out the daily " +
-														 operationType.getOperationName () + " facts!" + reference.continuePrompt;
-						}
-					}
+					reference.unknownFacts.Push (new Fact (input.leftNum, input.rightNum, operationType));
 				}
+			}
+
+			// Clear the text box.
+			m_factsDisplayControl.inputMaskedTextBox.Text = "";
+
+			int lNum = 0, rNum = 0;
+
+			// Get the next fact and update the labels.
+			// Instead of returning a number, just use the front of queue below.
+			if (reference.getNextFact (ref lNum, ref rNum, ref reference.queueOfFacts, 
+												ref reference.numberOfFactsProcessed))
+			{
+				m_factsDisplayControl.inputMaskedTextBox.Text = "";
+				m_factsDisplayControl.num1Label.Text = System.Convert.ToString (lNum);
+				m_factsDisplayControl.num2Label.Text = System.Convert.ToString (rNum);
+
+				timer.Reset();
+				timer.Start();
 			}
 			else
 			{
-				// Clear the message box.
-				displayControl.messageLabel.Text = "";
+				toggleInputDisplay ();
+
+				if (!speedTest)
+				{
+					reference.writeResultsToFile (ref reference.correctResponseCount, ref reference.unknownFacts, 
+															ref reference.knownFacts, operationType, reference.factResponseTime);
+
+					if (reference.correctResponseCount > (int) (reference.numberOfFactsProcessed))
+					{
+						displayControl.messageLabel.Text = "All facts complete! You got " + reference.correctResponseCount 
+																		+ " out of the " + reference.numberOfFactsProcessed 
+																		+ " facts correct!" + reference.continuePrompt;
+					}
+					else if (reference.correctResponseCount == 0)
+					{
+						displayControl.messageLabel.Text = "All facts complete, very nice try! You didn't get any facts correct this time."
+																		+ reference.continuePrompt;
+					}
+					else
+					{
+						displayControl.messageLabel.Text = "All facts complete, great job! You got " 
+																		+ reference.correctResponseCount + " out of the " +
+																		reference.numberOfFactsProcessed + " facts correct!" 
+																		+ reference.continuePrompt;
+					}
+				}
+				else
+				{
+					reference.writeFactResponseTimeToFile (operationType);
+					displayControl.messageLabel.Text = "Speed test complete! \n\nNow try out the daily " +
+																operationType.getOperationName () + " facts!" + reference.continuePrompt;
+				}	
 			}
 		}
 

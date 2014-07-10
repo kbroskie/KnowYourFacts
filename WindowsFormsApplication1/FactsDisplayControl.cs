@@ -51,10 +51,24 @@ namespace KnowYourFacts
 		{
 			if (keyEvent.KeyCode == Keys.Return)
 			{
-				InputDetectedEventArgs args = new InputDetectedEventArgs ();
-				args.input = inputMaskedTextBox.Text;
-				//args.TimeReached = DateTime.Now;
-				OnInputDetected (args);
+				// Check if no answer was entered.
+				if (inputMaskedTextBox.Text == "")
+				{
+					messageLabel.Text = "Oops! You forgot to enter an answer!";
+				}
+				else
+				{
+					InputDetectedEventArgs args = new InputDetectedEventArgs ();
+					args.input = inputMaskedTextBox.Text;
+					//args.TimeReached = DateTime.Now;
+					OnInputDetected (args);
+				}
+			}
+
+			// The event was triggered by input being entered. Clear the status area of messages.
+			else
+			{
+				messageLabel.Text = "";
 			}
 		}
 
