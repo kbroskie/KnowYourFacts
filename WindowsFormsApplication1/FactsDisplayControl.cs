@@ -44,6 +44,8 @@ namespace KnowYourFacts
 			{
 				messageLabel.Text = "";
 				MathFactsForm.logUserInput ("space");
+				Console.WriteLine ("messageLabel_PreviewKeyDown**************");
+
 			}
 		}
 

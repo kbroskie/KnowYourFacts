@@ -17,26 +17,8 @@ namespace KnowYourFacts
 
 		public string getOperationName ()
 		{
-			if (m_operationType.Equals (MathOperationTypeEnum.ADDITION))
-			{
-				return "Addition";
-			}
-			if (m_operationType.Equals (MathOperationTypeEnum.SUBTRACTION))
-			{
-				return "Subtraction";
-			}
-			if (m_operationType.Equals (MathOperationTypeEnum.MULTIPLICATION))
-			{
-				return "Multiplication";
-			}
-			if (m_operationType.Equals (MathOperationTypeEnum.DIVISION))
-			{
-				return "Division";
-			}
-			else
-			{
-				return "";
-			}
+			String operationName = m_operationType.ToString ();
+			return operationName.Substring(0, 1) + operationName.Substring(1).ToLower ();
 		}
 
 		public MathOperationTypeEnum getOperationType ()

@@ -22,6 +22,9 @@ namespace KnowYourFacts
 
 		public static bool speedTest;
 		static bool menubarToggle = true;
+		static bool mainMenuControlToggle = false;
+		static bool factsDisplayControlToggle = true;
+		public static bool inputDisplayToggle = false;
 
 		public static MathOperation operationType;
 
@@ -38,7 +41,6 @@ namespace KnowYourFacts
 			initializeAndAddFactsDisplayControl ();
 
 			reference = new MathFacts ();
-			reference.factResponseTime = new List<long> ();
 			//	factSource.DataSource = FactsModel.Instance.Facts;
 		}
 
@@ -83,6 +85,8 @@ namespace KnowYourFacts
 		 */
 		private void toggleMainMenubar (object sender, EventArgs e)
 		{
+			Console.WriteLine ("toggleMainMenubar**************");
+
 			menubarToggle = !menubarToggle;
 
 			dailyFactsMenuItem.Visible = menubarToggle;
@@ -103,8 +107,11 @@ namespace KnowYourFacts
 		 */
 		internal static void toggleMainMenuControl (bool toggle)
 		{
-			m_mainMenuControl.Visible = toggle;
-			m_mainMenuControl.Enabled = toggle;
+			Console.WriteLine ("toggleMainMenuControl**************");
+			mainMenuControlToggle = !mainMenuControlToggle;
+
+			m_mainMenuControl.Visible = mainMenuControlToggle;
+			m_mainMenuControl.Enabled = mainMenuControlToggle;
 		}
 
 		/*
@@ -112,8 +119,11 @@ namespace KnowYourFacts
 		 */
 		internal static void toggleFactsDisplayControl (bool toggle)
 		{
-			m_factsDisplayControl.Visible = toggle;
-			m_factsDisplayControl.Enabled = toggle;
+			Console.WriteLine ("toggleFactsDisplayControl**************");
+			factsDisplayControlToggle = !factsDisplayControlToggle;
+
+			m_factsDisplayControl.Visible = factsDisplayControlToggle;
+			m_factsDisplayControl.Enabled = factsDisplayControlToggle;
 		}
 
 		/*
@@ -122,12 +132,19 @@ namespace KnowYourFacts
        */
 		public static void toggleInputDisplay ()
 		{
-			m_factsDisplayControl.num1Label.Visible = false;
-			m_factsDisplayControl.num2Label.Visible = false;
-			m_factsDisplayControl.inputMaskedTextBox.Visible = false;
-			m_factsDisplayControl.lineLabel.Visible = false;
-			m_factsDisplayControl.factSignLabel.Visible = false;
-			m_factsDisplayControl.messageLabel.Focus ();
+			Console.WriteLine ("toggleInputDisplay**************");
+			inputDisplayToggle = !inputDisplayToggle;
+
+			m_factsDisplayControl.num1Label.Visible = inputDisplayToggle;
+			m_factsDisplayControl.num2Label.Visible = inputDisplayToggle;
+			m_factsDisplayControl.inputMaskedTextBox.Visible = inputDisplayToggle;
+			m_factsDisplayControl.lineLabel.Visible = inputDisplayToggle;
+			m_factsDisplayControl.factSignLabel.Visible = inputDisplayToggle;
+
+			if (inputDisplayToggle)
+			{
+				m_factsDisplayControl.messageLabel.Focus ();
+			}
 		}
 
 		/*
@@ -281,8 +298,8 @@ namespace KnowYourFacts
 					}
 					else if (reference.correctResponseCount == 0)
 					{
-						displayControl.messageLabel.Text = "All facts complete, very nice try!" 
-							+ "You didn't get any facts correct this time." + reference.continuePrompt;
+						displayControl.messageLabel.Text = "All facts complete, very nice try!"
+							+ "\nYou didn't get any facts correct this time." + reference.continuePrompt;
 					}
 					else
 					{
@@ -298,7 +315,7 @@ namespace KnowYourFacts
 					displayControl.messageLabel.Text = "Speed test complete!" 
 							+ "\n\nNow try out the daily " + operationType.getOperationName () 
 							+ " facts!" + reference.continuePrompt;
-				}	
+				}
 			}
 		}
 
