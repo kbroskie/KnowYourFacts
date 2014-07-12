@@ -306,7 +306,7 @@ namespace KnowYourFacts
 					{
 						m_factsDisplayControl.messageLabel.Text = "All facts complete, great job!\n"
 							+ "You got " + reference.correctResponseCount + " out of the "
-							+ reference.numberOfFactsProcessed + " facts correct!" 
+							+ reference.numberOfFactsProcessed + " facts correct\n!" 
 							+ reference.continuePrompt;
 					}
 				}

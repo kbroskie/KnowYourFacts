@@ -224,30 +224,28 @@ namespace KnowYourFacts
 
 			Fact newFact;
 			newFact.operation = operation;
+			MathOperationTypeEnum operationType = operation.getOperationType ();
 
 			// Generate facts starting from 0 to the max number.
 			for (int i = 0; i <= MAX_NUM; ++i)
 			{
 				for (int j = 0; j <= MAX_NUM; ++j)
 				{
-					if (operation.getOperationType () == MathOperationTypeEnum.ADDITION ||
-						 operation.getOperationType () == MathOperationTypeEnum.MULTIPLICATION)
+					if (operationType == MathOperationTypeEnum.ADDITION ||
+						 operationType == MathOperationTypeEnum.MULTIPLICATION)
 					{
 						newFact.leftNum = i;
 						newFact.rightNum = j;
 						factsList.Add (newFact);
 					}
 
-					// MathOperation is subtraction or division.
-					else if (i >= j)
+ 					// Don't allow division by 0 or results with remainders for division facts.
+					else if (i >= j && (operationType == MathOperationTypeEnum.SUBTRACTION || 
+							(operationType == MathOperationTypeEnum.DIVISION && j != 0 && (i % j == 0))))
 					{
-						// Don't allow division by 0 or results with remainders for division facts.
-						if (operation.getOperationType () == MathOperationTypeEnum.DIVISION && j != 0 && (i % j == 0))
-						{
 							newFact.leftNum = i;
 							newFact.rightNum = j;
 							factsList.Add (newFact);
-						}
 					}
 				}
 			}
@@ -464,8 +462,8 @@ namespace KnowYourFacts
 				MathFactsForm.toggleInputDisplay ();
 
 				String operatorName = MathFactsForm.operationType.getOperationName ();
-				MathFactsForm.m_factsDisplayControl.messageLabel.Text = "No data could be found for " + operatorName + " facts.\n\n" +
-											"Please take the " + operatorName + " speed test first.";
+				MathFactsForm.m_factsDisplayControl.messageLabel.Text = "No data could be found for " + operatorName + " facts.\n" +
+											"Please take the " + operatorName + " speed test first.\n" + continuePrompt;
 				return;
 			}
 
