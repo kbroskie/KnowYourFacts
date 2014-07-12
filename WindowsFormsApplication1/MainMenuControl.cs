@@ -30,10 +30,9 @@ namespace KnowYourFacts
 			Console.WriteLine ("initiateFactsDisplay**************");
 
 			// Triggers the toggleMenuBar event.
-			MathFactsForm.toggleMainMenuControl (false);
+			MathFactsForm.toggleMainMenuControl ();
 
-			// Triggers the startDailyFacts event.
-			MathFactsForm.toggleFactsDisplayControl (true);
+			MathFactsForm.toggleFactsDisplayControl ();
 		}
 
 		private void createNewUserButtonClick (object sender, EventArgs e)

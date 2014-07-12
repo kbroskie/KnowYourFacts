@@ -11,9 +11,9 @@ namespace KnowYourFacts
 
 		public static bool speedTest;
 		static bool menubarToggle = true;
-		static bool mainMenuControlToggle = false;
-		static bool factsDisplayControlToggle = true;
-		public static bool inputDisplayToggle = false;
+		static bool mainMenuControlToggle = true;
+		static bool factsDisplayControlToggle = false;
+		public static bool inputDisplayToggle = true;
 
 		public static MathOperation operationType;
 
@@ -57,12 +57,14 @@ namespace KnowYourFacts
 		 */
 		public static void logUserInput (String userInput)
 		{
-			if (userInput == "space")
+			if (userInput == "space" && reference.queueOfFacts.Count == 0)
 			{
 				Console.WriteLine ("logUserInput**************");
 
-				toggleFactsDisplayControl (false);
-				toggleMainMenuControl (true);
+				// Check if this will trigger an early exit from facts processing.
+				toggleFactsDisplayControl ();
+				toggleInputDisplay ();
+				toggleMainMenuControl ();
 			}
 			else
 			{
@@ -96,7 +98,7 @@ namespace KnowYourFacts
 		/*
 		 * Toggle the functionality and visibility of the main menu control.
 		 */
-		internal static void toggleMainMenuControl (bool toggle)
+		internal static void toggleMainMenuControl ()
 		{
 			Console.WriteLine ("toggleMainMenuControl**************");
 			mainMenuControlToggle = !mainMenuControlToggle;
@@ -108,7 +110,7 @@ namespace KnowYourFacts
 		/*
 		 * Toggle the functionality and visibility of the facts display control.
 		 */
-		internal static void toggleFactsDisplayControl (bool toggle)
+		internal static void toggleFactsDisplayControl ()
 		{
 			Console.WriteLine ("toggleFactsDisplayControl**************");
 			factsDisplayControlToggle = !factsDisplayControlToggle;
@@ -118,8 +120,8 @@ namespace KnowYourFacts
 		}
 
 		/*
-		 * Toggle the visibility of the facts input display control,
-		 * but leave the status area visible.
+		 * Toggle the functionality and visibility of the facts input display
+		 * control, but leave the message area visible.
        */
 		public static void toggleInputDisplay ()
 		{
@@ -132,7 +134,18 @@ namespace KnowYourFacts
 			m_factsDisplayControl.lineLabel.Visible = inputDisplayToggle;
 			m_factsDisplayControl.factSignLabel.Visible = inputDisplayToggle;
 
-			if (inputDisplayToggle)
+			m_factsDisplayControl.num1Label.Enabled= inputDisplayToggle;
+			m_factsDisplayControl.num2Label.Enabled = inputDisplayToggle;
+			m_factsDisplayControl.inputMaskedTextBox.Enabled = inputDisplayToggle;
+			m_factsDisplayControl.lineLabel.Enabled = inputDisplayToggle;
+			m_factsDisplayControl.factSignLabel.Enabled = inputDisplayToggle;
+
+			m_factsDisplayControl.num1Label.Text = "";
+			m_factsDisplayControl.num2Label.Text = "";
+			m_factsDisplayControl.inputMaskedTextBox.Text = "";
+			m_factsDisplayControl.factSignLabel.Text = "";
+
+			if (!inputDisplayToggle)
 			{
 				m_factsDisplayControl.messageLabel.Focus ();
 			}
@@ -213,23 +226,22 @@ namespace KnowYourFacts
 		{
 			Console.WriteLine ("startTheFacts**************");
 
-			m_factsDisplayControl.messageLabel.Text = "";
 			operationType = new MathOperation (sign);
 			speedTest = test;
-			toggleMainMenuControl (false);
-			toggleFactsDisplayControl (true);
+			toggleMainMenuControl ();
+			toggleFactsDisplayControl ();
 			reference.startProcessingFacts (speedTest, operationType, m_factsDisplayControl);
 		}
 
 		/*
 		 * Process a fact answer
 		 */ 
-		public void processInput (FactsDisplayControl displayControl)
+		public void processInput ()
 		{
 			timer.Stop();											
 
 			long secondsElapsed;
-			String inputString = (displayControl.inputMaskedTextBox.Text);
+			String inputString = (m_factsDisplayControl.inputMaskedTextBox.Text);
 		
 			// Obtain the input answer.
 			int answer = System.Convert.ToInt32 (inputString);
@@ -239,7 +251,8 @@ namespace KnowYourFacts
 			// Only store the response time for correct answers.
 			if (answer == calculatedAnswer)
 			{
-				secondsElapsed = (long) (timer.ElapsedMilliseconds / 1000);
+				secondsElapsed = (long) (timer.ElapsedMilliseconds / 1000.0);
+				Console.WriteLine ("Seconds elapsed: " + secondsElapsed);
 				reference.factResponseTime.Add(secondsElapsed);
 			}
 
@@ -256,9 +269,6 @@ namespace KnowYourFacts
 				}
 			}
 
-			// Clear the text box.
-			m_factsDisplayControl.inputMaskedTextBox.Text = "";
-
 			int lNum = 0, rNum = 0;
 
 			// Get the next fact and update the labels.
@@ -270,8 +280,7 @@ namespace KnowYourFacts
 				m_factsDisplayControl.num1Label.Text = System.Convert.ToString (lNum);
 				m_factsDisplayControl.num2Label.Text = System.Convert.ToString (rNum);
 
-				timer.Reset();
-				timer.Start();
+				timer.Restart ();
 			}
 			else
 			{
@@ -284,18 +293,18 @@ namespace KnowYourFacts
 
 					if (reference.correctResponseCount > (int) (reference.numberOfFactsProcessed))
 					{
-						displayControl.messageLabel.Text = "All facts complete! You got " + reference.correctResponseCount
+						m_factsDisplayControl.messageLabel.Text = "All facts complete!\nYou got " + reference.correctResponseCount
 								+ " out of the " + reference.numberOfFactsProcessed 
 								+ " facts correct!" + reference.continuePrompt;
 					}
 					else if (reference.correctResponseCount == 0)
 					{
-						displayControl.messageLabel.Text = "All facts complete, very nice try!"
+						m_factsDisplayControl.messageLabel.Text = "All facts complete, very nice try!"
 							+ "\nYou didn't get any facts correct this time." + reference.continuePrompt;
 					}
 					else
 					{
-						displayControl.messageLabel.Text = "All facts complete, great job! "
+						m_factsDisplayControl.messageLabel.Text = "All facts complete, great job!\n"
 							+ "You got " + reference.correctResponseCount + " out of the "
 							+ reference.numberOfFactsProcessed + " facts correct!" 
 							+ reference.continuePrompt;
@@ -304,16 +313,16 @@ namespace KnowYourFacts
 				else
 				{
 					reference.writeFactResponseTimeToFile (operationType);
-					displayControl.messageLabel.Text = "Speed test complete!" 
-							+ "\n\nNow try out the daily " + operationType.getOperationName () 
-							+ " facts!" + reference.continuePrompt;
+					m_factsDisplayControl.messageLabel.Text = "Speed test complete!" 
+							+ "\nNow try out the daily " + operationType.getOperationName () 
+							+ " facts!\n" + reference.continuePrompt;
 				}
 			}
 		}
 
 		static void c_InputDetected (object sender, InputDetectedEventArgs e)
 		{
-			((MathFactsForm) m_factsDisplayControl.FindForm ()).processInput (m_factsDisplayControl);
+			((MathFactsForm) m_factsDisplayControl.FindForm ()).processInput ();
 		}
 
 		/*

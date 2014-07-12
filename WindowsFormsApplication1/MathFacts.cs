@@ -36,8 +36,7 @@ namespace KnowYourFacts
 		public string continuePrompt = "\nPress the spacebar to continue.";
 
 		public ArrayList factsOrder;
-		public List<int> FactsList;
-		public Queue<Fact> queueOfFacts;
+		public FactsQueue queueOfFacts;
 		public Stack<Fact> knownFacts;
 		public Stack<Fact> unknownFacts;
 
@@ -45,11 +44,10 @@ namespace KnowYourFacts
 		{
 			correctResponseCount = 0;
 			numberOfFactsProcessed = 0;
-			FactsList = new List<int> ();
 			factResponseTime = new List<long> ();
 
 			factsOrder = new ArrayList();
-			queueOfFacts = new Queue<Fact> ();
+			queueOfFacts = new FactsQueue ();
 			knownFacts = new Stack<Fact> ();
 			unknownFacts = new Stack<Fact> ();
 
@@ -62,7 +60,6 @@ namespace KnowYourFacts
 			return new Fact (queueOfFacts.First ().leftNum, queueOfFacts.First ().rightNum, operation);
 		}
 
-		//----------------------------------------------------------------------------------------
 		/*
 			Determine which filename should be used.
 		*/
@@ -383,7 +380,7 @@ namespace KnowYourFacts
 			foreach (double time in factResponseTime)
 			{
 				sum += time;
-				Console.WriteLine ("Time: " + (time / 1000));
+				Console.WriteLine ("Time: " + time);
 			}
 
 			// Store the average response time.
@@ -459,25 +456,16 @@ namespace KnowYourFacts
 													FactsDisplayControl displayControl)
 		{
 			Console.WriteLine ("startProcessingFacts**************");
-			if (MathFactsForm.inputDisplayToggle)
-			{
-				Console.WriteLine ("startProcessingFacts1**************");
-
-				MathFactsForm.toggleInputDisplay ();
-				MathFactsForm.toggleFactsDisplayControl (true);
-				MathFactsForm.toggleMainMenuControl (true);
-				MathFactsForm.toggleInputDisplay ();
-			}
 
 			MathOperationTypeEnum opType = MathFactsForm.operationType.getOperationType ();
 			if (!MathFactsForm.speedTest && !getSavedResponseTime (opType, factResponseTime, maxResponseTime))
 			{
 				// No saved response data was found for this fact type.
+				MathFactsForm.toggleInputDisplay ();
+
 				String operatorName = MathFactsForm.operationType.getOperationName ();
 				MathFactsForm.m_factsDisplayControl.messageLabel.Text = "No data could be found for " + operatorName + " facts.\n\n" +
 											"Please take the " + operatorName + " speed test first.";
-				MessageBox.Show ("No data could be found for " + operatorName + " facts.\n\n" +
-											"Please take the " + operatorName + " speed test first.");
 				return;
 			}
 
@@ -492,31 +480,21 @@ namespace KnowYourFacts
 			{
 				getFactsForSpeedTest (ref queueOfFacts, operation);
 			}
-			Console.WriteLine ("count: " + queueOfFacts.Count ());
+
 			if (queueOfFacts.Count () == 0)
 			{
-
-				Console.WriteLine ("startProcessingFacts3**************");
-
-				displayControl.messageLabel.Text = "You have mastered all the facts, there are none to practice!"
-											+ continuePrompt;
 				MathFactsForm.toggleInputDisplay ();
+				displayControl.messageLabel.Text = "You have mastered all the facts, there are none to practice!\n"
+											+ continuePrompt;
 			}
 			else
 			{
+				// Display the first fact.
 				displayControl.factSignLabel.Text = operation.getOperationSign ();
-
-				Console.WriteLine ("startProcessingFacts2**************");
-
-				MathFactsForm.toggleMainMenuControl (false);
-				MathFactsForm.toggleFactsDisplayControl (true);
-
-				displayControl.inputMaskedTextBox.Focus ();
-
-				// Obtain the numbers for the first fact to display.
 				displayControl.num1Label.Text = System.Convert.ToString (queueOfFacts.First ().leftNum);
 				displayControl.num2Label.Text = System.Convert.ToString (queueOfFacts.First ().rightNum);
 
+				displayControl.inputMaskedTextBox.Focus ();
 				MathFactsForm.timer = System.Diagnostics.Stopwatch.StartNew ();
 			}
 		}
