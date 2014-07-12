@@ -1,13 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using KnowYourFacts;
 
 namespace KnowYourFacts
 {
@@ -35,6 +27,8 @@ namespace KnowYourFacts
 		// Display the form to process input of facts.
 		private void initiateFactsDisplay (object sender, EventArgs e)
 		{
+			Console.WriteLine ("initiateFactsDisplay**************");
+
 			// Triggers the toggleMenuBar event.
 			MathFactsForm.toggleMainMenuControl (false);
 

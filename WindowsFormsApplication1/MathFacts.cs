@@ -1,13 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-
-using Facts = System.Collections.Generic.Queue<KnowYourFacts.Fact>;
-using System.Collections;
+using FactsList = System.Collections.Generic.List<KnowYourFacts.Fact>;
+using FactsQueue = System.Collections.Generic.Queue<KnowYourFacts.Fact>;
 
 namespace KnowYourFacts
 {
@@ -47,8 +45,7 @@ namespace KnowYourFacts
 		{
 			correctResponseCount = 0;
 			numberOfFactsProcessed = 0;
-			FactsList = new List<int> (new int[] { });
-			//factResponseTime = new List<long> (new long[] { });
+			FactsList = new List<int> ();
 			factResponseTime = new List<long> ();
 
 			factsOrder = new ArrayList();
@@ -123,11 +120,11 @@ namespace KnowYourFacts
 			Fill the List with newly generated facts if no known facts exist; 
 			otherwise, fill with unknown facts.
 		*/
-		void generateFactsList (ref Facts queueOfFacts, MathOperation oper)
+		void generateFactsList (ref FactsQueue facts, MathOperation oper)
 		{
 			Console.WriteLine ("generateFactsList**************");
 
-			List<Fact> mathFactsList = new List<Fact> (new Fact[] {});
+			FactsList mathFactsList = new FactsList ();
 
 			// Determine whether to read previously generated facts or generate new facts.
 			if ((File.Exists (getFileName (oper.getOperationType (), false))))
@@ -142,14 +139,14 @@ namespace KnowYourFacts
 			// Determine the number of facts and obtain a set of random numbers for displaying of the facts
 			if (mathFactsList != null)
 			{
-				randomizeFacts (ref queueOfFacts, ref mathFactsList);
+				randomizeFacts (ref facts, ref mathFactsList);
 			}
 		}
 
 		/* 
 			Read unmastered facts from the file.
 		*/
-		static void readUnknownFactsFromFile (ref List<Fact> mathFactsList, MathOperation operation)
+		static void readUnknownFactsFromFile (ref FactsList mathFactsList, MathOperation operation)
 		{
 			Console.WriteLine ("readUnknownFactsFromFile**************");
 
@@ -193,38 +190,38 @@ namespace KnowYourFacts
 		/*
 			Fills facts queue with simple facts for testing input speed.
 		*/
-		public static void getFactsForSpeedTest (ref Queue<Fact> queueOfFacts, MathOperation operationType)
+		public static void getFactsForSpeedTest (ref FactsQueue facts, MathOperation operationType)
 		{
-			List<Fact> mathFactsList;				// Later consider asking for certain range of numbers from user to be used.
+			FactsList mathFactsList;				// Later consider asking for certain range of numbers from user to be used.
 
 			MathOperationTypeEnum operation = operationType.getOperationType ();
 			if (operation == MathOperationTypeEnum.ADDITION)
 			{
-				mathFactsList = new List<Fact> (new Fact[] {new Fact(1, 1, operationType), new Fact(2, 2, operationType), 
+				mathFactsList = new FactsList (new Fact[] {new Fact(1, 1, operationType), new Fact(2, 2, operationType), 
 														 new Fact(0, 1, operationType), new Fact(0, 2, operationType)});
 			}
 			else if (operation == MathOperationTypeEnum.SUBTRACTION)
 			{
-				mathFactsList = new List<Fact> (new Fact[] {new Fact(1, 1, operationType), new Fact(2, 1, operationType), 
+				mathFactsList = new FactsList (new Fact[] {new Fact(1, 1, operationType), new Fact(2, 1, operationType), 
 									 new Fact(1, 0, operationType), new Fact(3, 2, operationType)});
 			}
 			else if (operation == MathOperationTypeEnum.MULTIPLICATION)
 			{
-				mathFactsList = new List<Fact> (new Fact[] {new Fact(1, 1, operationType), new Fact(2, 2, operationType), 
+				mathFactsList = new FactsList (new Fact[] {new Fact(1, 1, operationType), new Fact(2, 2, operationType), 
 									 new Fact(0, 1, operationType), new Fact(2, 1, operationType)});
 			}
 			else
 			{
-				mathFactsList = new List<Fact> (new Fact[] {new Fact(1, 1,  operationType), new Fact(2, 2, operationType), 
+				mathFactsList = new FactsList (new Fact[] {new Fact(1, 1,  operationType), new Fact(2, 2, operationType), 
 									 new Fact(0, 1, operationType), new Fact(4, 2, operationType)});
 			}
-			randomizeFacts (ref queueOfFacts, ref mathFactsList);
+			randomizeFacts (ref facts, ref mathFactsList);
 		}
 
 		/*
 		  Generate and stores the facts.
 		*/
-		static void generateAndStoreNewFacts (ref List<Fact> mathFactsList, MathOperation operation)
+		static void generateAndStoreNewFacts (ref FactsList factsList, MathOperation operation)
 		{
 			Console.WriteLine ("generateAndStoreNewFacts**************");
 
@@ -241,8 +238,9 @@ namespace KnowYourFacts
 					{
 						newFact.leftNum = i;
 						newFact.rightNum = j;
-						mathFactsList.Add (newFact);
+						factsList.Add (newFact);
 					}
+
 					// MathOperation is subtraction or division.
 					else if (i >= j)
 					{
@@ -251,7 +249,7 @@ namespace KnowYourFacts
 						{
 							newFact.leftNum = i;
 							newFact.rightNum = j;
-							mathFactsList.Add (newFact);
+							factsList.Add (newFact);
 						}
 					}
 				}
@@ -262,40 +260,39 @@ namespace KnowYourFacts
 			Fills the List with random numbers equivalent to the number of facts to 
 			display them in a random order.
 		*/
-		static void randomizeFacts (ref Facts queueOfFacts, ref List<Fact> mathFactsList)
+		static void randomizeFacts (ref FactsQueue facts, ref FactsList factsList)
 		{
 			Random random = new Random ();
 			int randomNumber;
 			List<int> factsOrder = new List<int> ();
 
-			while (factsOrder.Count () < mathFactsList.Count ())
+			while (factsOrder.Count () < factsList.Count ())
 			{
-
 				// Check that the number is unique.
 				do
 				{
-					randomNumber = random.Next (mathFactsList.Count ());
+					randomNumber = random.Next (factsList.Count ());
 				} while (factsOrder.Contains (randomNumber));
 
 				factsOrder.Add (randomNumber);
 			}
 
 			// Assign the numbers to a queue to display them in a random order.
-			queueOfFacts = new Facts (factsOrder.Count ());
+			facts = new FactsQueue (factsOrder.Count ());
 			foreach (int index in factsOrder)
 			{
-				queueOfFacts.Enqueue (mathFactsList[factsOrder[index]]);
+				facts.Enqueue (factsList[factsOrder[index]]);
 			}
 		}
 
 		/*
 			Functions to process the facts. Removes the last answered fact and retrieves the next fact.
 		*/
-		public bool getNextFact (ref int num1, ref int num2, ref Queue<Fact> queueOfFacts, ref int numberOfFactsProcessed)
+		public bool getNextFact (ref int num1, ref int num2, ref FactsQueue facts, ref int numberOfFactsProcessed)
 		{
 			Console.WriteLine ("getNextFact**************");
-			queueOfFacts.Dequeue ();
-			Console.WriteLine ("queueOfFacts count: " + queueOfFacts.Count ());
+			facts.Dequeue ();
+			Console.WriteLine ("facts count: " + facts.Count ());
 
 			++numberOfFactsProcessed;
 
@@ -303,8 +300,8 @@ namespace KnowYourFacts
 			if (queueOfFacts.Count () > 0)
 			{
 				// Obtain the numbers for the next fact to display.
-				num1 = queueOfFacts.Peek ().leftNum;
-				num2 = queueOfFacts.Peek ().rightNum;
+				num1 = facts.Peek ().leftNum;
+				num2 = facts.Peek ().rightNum;
 				return true;
 			}
 
@@ -317,29 +314,25 @@ namespace KnowYourFacts
 		public static bool getSavedResponseTime (MathOperationTypeEnum operationType,
 															  List<long> factResponseTime, int maxResponseTime)
 		{
-			//List <int> responseTime = null;
+			List<int> responseTime = new List<int> ();
 			Console.WriteLine ("getSavedResponseTime**************");
-			/*
+			
 			try 
 			{
 				StreamReader din = File.OpenText (FACT_RESPONSE_TIME_FILE);
 				String savedTime = "";
 				while ((savedTime = din.ReadLine ()) != null)
 				{
-					//responseTime.Add (System.Convert.ToInt32 (savedTime));
+					responseTime.Add (System.Convert.ToInt32 (savedTime));
 				}
 				din.Close ();
 			}
 			catch (FileNotFoundException)
 			{
-				Console.WriteLine("exception detected**************");
 				return false;
 			}
-			Console.WriteLine("after exception**************");
 			
-			maxResponseTime = responseTime[(int)operationType];
-			 */
-			maxResponseTime = 3;
+			maxResponseTime = responseTime[(int) operationType];
 			if (maxResponseTime == 0)
 			{
 				// No fact response times have been recorded.
@@ -356,10 +349,10 @@ namespace KnowYourFacts
 		{
 			Console.WriteLine ("writeFactResponseTime**************");
 
-			List<int> responseTime = new List<int> (new int[] { });
+			List<int> responseTime = new List<int> ();
 	
 			// Read in the current input and write out the new data.
-			if (File.Exists(FACT_RESPONSE_TIME_FILE))
+			if (File.Exists (FACT_RESPONSE_TIME_FILE))
 			{
 				StreamReader din = File.OpenText (FACT_RESPONSE_TIME_FILE);
 				String savedTime = din.ReadLine ();
@@ -383,7 +376,7 @@ namespace KnowYourFacts
 			else
 			{
 				// The file was not created yet - create default data.
-				responseTime = new List<int>(new int[] {0, 0, 0, 0});
+				responseTime = new List<int> (new int[] {0, 0, 0, 0});
 			}
 
 			double sum = 0;
@@ -394,21 +387,21 @@ namespace KnowYourFacts
 			}
 
 			// Store the average response time.
-			responseTime[(int)operation.getOperationType()] = (int) (System.Math.Ceiling (sum / factResponseTime.Count ()));
+			responseTime[(int) operation.getOperationType()] = (int) (System.Math.Ceiling (sum / factResponseTime.Count ()));
 
 			StreamWriter sw = new StreamWriter (FACT_RESPONSE_TIME_FILE);
 			foreach (int time in responseTime)
 			{
-				sw.WriteLine(time);
+				sw.WriteLine (time);
 			}
 
 			sw.Close ();
 		}
 
 		/*
-		  The writeToFile function opens the file, erases the current 
-		  in the file, and then prints the new results.
-		  */
+		 * The writeToFile function opens the file, erases the current 
+		 * in the file, and then prints the new results.
+		 */
 		public void writeResultsToFile (ref int correctResponseCount, ref Stack<Fact> unknown, ref Stack<Fact> known,
 										MathOperation operatorType, List<long> factResponseTime)
 		{
@@ -427,20 +420,20 @@ namespace KnowYourFacts
 			while (knownFacts.Count () != 0)
 			{
 				// Determine whether a correct answer was entered, and whether the answer was entered after a period of elapsed time. 
-				//if (factResponseTime[index] < maxResponseTime)
-				//{ 
-				// A correct answer was given. Store in the known facts file.
-				swK.WriteLine (knownFacts.Peek ().leftNum);
-				swK.WriteLine (knownFacts.Peek ().rightNum);
-				/*}
+				if (factResponseTime[index] < maxResponseTime)
+				{ 
+					// A correct answer was given. Store in the known facts file.
+					swK.WriteLine (knownFacts.Peek ().leftNum);
+					swK.WriteLine (knownFacts.Peek ().rightNum);
+				}
 
 				// Correct answer was given, but in more than allotted time for a known fact.
 				else
 				{
-					swU.WriteLine (knownFacts.Peek().leftNum);
+					swU.WriteLine (knownFacts.Peek ().leftNum);
 					swU.WriteLine (knownFacts.Peek ().rightNum);
 				}
-				*/
+				
 				knownFacts.Pop ();
 				++correctResponseCount;
 				++index;
@@ -460,19 +453,20 @@ namespace KnowYourFacts
 		}
 
 		/*
-			Handles starting the daily facts and speed test.
-		*/
+		 * Handles starting the daily facts and speed test.
+		 */
 		public void startProcessingFacts (bool speedTest, MathOperation operation,
 													FactsDisplayControl displayControl)
 		{
 			Console.WriteLine ("startProcessingFacts**************");
 			if (MathFactsForm.inputDisplayToggle)
 			{
+				Console.WriteLine ("startProcessingFacts1**************");
+
 				MathFactsForm.toggleInputDisplay ();
 				MathFactsForm.toggleFactsDisplayControl (true);
 				MathFactsForm.toggleMainMenuControl (true);
 				MathFactsForm.toggleInputDisplay ();
-
 			}
 
 			MathOperationTypeEnum opType = MathFactsForm.operationType.getOperationType ();
@@ -499,8 +493,11 @@ namespace KnowYourFacts
 				getFactsForSpeedTest (ref queueOfFacts, operation);
 			}
 			Console.WriteLine ("count: " + queueOfFacts.Count ());
-			if (queueOfFacts.Count() == 0)
+			if (queueOfFacts.Count () == 0)
 			{
+
+				Console.WriteLine ("startProcessingFacts3**************");
+
 				displayControl.messageLabel.Text = "You have mastered all the facts, there are none to practice!"
 											+ continuePrompt;
 				MathFactsForm.toggleInputDisplay ();
@@ -509,7 +506,8 @@ namespace KnowYourFacts
 			{
 				displayControl.factSignLabel.Text = operation.getOperationSign ();
 
-				//toggleFactInputView ();
+				Console.WriteLine ("startProcessingFacts2**************");
+
 				MathFactsForm.toggleMainMenuControl (false);
 				MathFactsForm.toggleFactsDisplayControl (true);
 
@@ -519,8 +517,7 @@ namespace KnowYourFacts
 				displayControl.num1Label.Text = System.Convert.ToString (queueOfFacts.First ().leftNum);
 				displayControl.num2Label.Text = System.Convert.ToString (queueOfFacts.First ().rightNum);
 
-				//MathFactsForm.time.BeginInit();
-				MathFactsForm.timer = System.Diagnostics.Stopwatch.StartNew();
+				MathFactsForm.timer = System.Diagnostics.Stopwatch.StartNew ();
 			}
 		}
 	}

@@ -1,16 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Resources;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Timers;
-
-using Facts = System.Collections.Generic.List<KnowYourFacts.Fact>;
 
 namespace KnowYourFacts
 {
@@ -44,23 +33,6 @@ namespace KnowYourFacts
 			//	factSource.DataSource = FactsModel.Instance.Facts;
 		}
 
-		/*
-		 * Updates the last value entered by the user, or toggles the display 
-		 * if the spacebar was pressed to clear a status bar message.
-		 */
-		public static void logUserInput (String userInput)
-		{
-			if (userInput == "space")
-			{
-				toggleFactsDisplayControl (false);
-				toggleMainMenuControl (true);
-			}
-			else
-			{
-				m_userInput = userInput;
-			}
-		}
-
 		private void initializeAndAddMainMenuControl ()
 		{
 			m_mainMenuControl = MainMenuControl.Instance;
@@ -77,6 +49,25 @@ namespace KnowYourFacts
 			m_factsDisplayControl.InputDetected += c_InputDetected;
 
 			this.Controls.Add (m_factsDisplayControl);
+		}
+
+		/*
+		 * Updates the last value entered by the user, or toggles the display 
+		 * if the spacebar was pressed to clear a status bar message.
+		 */
+		public static void logUserInput (String userInput)
+		{
+			if (userInput == "space")
+			{
+				Console.WriteLine ("logUserInput**************");
+
+				toggleFactsDisplayControl (false);
+				toggleMainMenuControl (true);
+			}
+			else
+			{
+				m_userInput = userInput;
+			}
 		}
 
 		/*
@@ -220,6 +211,8 @@ namespace KnowYourFacts
 		 */
 		public void startTheFacts (MathOperationTypeEnum sign, Boolean test)
 		{
+			Console.WriteLine ("startTheFacts**************");
+
 			m_factsDisplayControl.messageLabel.Text = "";
 			operationType = new MathOperation (sign);
 			speedTest = test;
@@ -238,7 +231,6 @@ namespace KnowYourFacts
 			long secondsElapsed;
 			String inputString = (displayControl.inputMaskedTextBox.Text);
 		
-
 			// Obtain the input answer.
 			int answer = System.Convert.ToInt32 (inputString);
 			Fact input = reference.getQuestionAndResponse (operationType);

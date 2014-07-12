@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace KnowYourFacts
+﻿namespace KnowYourFacts
 {
 	/*
 	 * A class to hold the first name of a user.

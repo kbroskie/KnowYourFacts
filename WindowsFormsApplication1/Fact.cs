@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace KnowYourFacts
+﻿namespace KnowYourFacts
 {
 	// Holds two integers and a MathOperation associated with a math fact.
 	public struct Fact
