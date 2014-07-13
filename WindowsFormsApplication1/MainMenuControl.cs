@@ -36,14 +36,14 @@ namespace KnowYourFacts
 
 		private void createNewUserButtonClick (object sender, EventArgs e)
 		{
-			UserProfile users = new UserProfile ();
-			if (users.checkForProfiles ())
+			UserProfile userProfile = new UserProfile ();
+			if (userProfile.checkForProfiles ())
 			{
 				// Load this as the default username. Load others later on.
-				users.setUsername (users.getLastProfileLoaded ());
+				userProfile.user.name = userProfile.getLastProfileLoaded ();
 			}
 
-			string name = users.getUsername ();
+			string name = userProfile.user.name;
 			MessageBox.Show (name);
 		}
 

@@ -8,15 +8,15 @@ namespace KnowYourFacts
 	/*
 	 * Class for retrieving of stored user profiles.
 	 */
-	class UserProfile : User
+	public class UserProfile
 	{
 		const string USER_PROFILES = "UserProfiles.txt";
 
-		public UserProfile () :
-			base ()
-		{
-		}
-
+		public User user;
+		
+		public UserProfile () : 
+			base () {}
+			
 		public bool checkForProfiles ()
 		{
 			try
@@ -32,7 +32,7 @@ namespace KnowYourFacts
 
 		public string getLastProfileLoaded ()
 		{
-			List<User> profiles = null;
+			List<User> profiles = new List<User>();
 
 			try
 			{
@@ -47,7 +47,7 @@ namespace KnowYourFacts
 				}
 				din.Close ();
 
-				return profiles.First ().getUsername ();
+				return profiles.First ().name;
 			}
 			catch (Exception)
 			{
