@@ -33,7 +33,7 @@ namespace KnowYourFacts
 		public int correctResponseCount;
 		public int numberOfFactsProcessed;
 
-		public string continuePrompt = "\nPress the spacebar to continue.";
+		public string completionContinuePrompt = "\nPress the spacebar to continue.";
 
 		public ArrayList factsOrder;
 		public FactsQueue queueOfFacts;
@@ -55,8 +55,6 @@ namespace KnowYourFacts
 
 		public Fact getQuestionAndResponse (MathOperation operation)
 		{
-			Console.WriteLine ("getQuestionAndResponse**************");
-
 			return new Fact (queueOfFacts.First ().leftNum, queueOfFacts.First ().rightNum, operation);
 		}
 
@@ -65,8 +63,6 @@ namespace KnowYourFacts
 		*/
 		static string getFileName (MathOperationTypeEnum op, bool knownFile)
 		{
-			Console.WriteLine ("getFileName**************");
-
 			if (op == MathOperationTypeEnum.ADDITION)
 			{
 				if (knownFile)
@@ -119,8 +115,6 @@ namespace KnowYourFacts
 		*/
 		void generateFactsList (ref FactsQueue facts, MathOperation oper)
 		{
-			Console.WriteLine ("generateFactsList**************");
-
 			FactsList mathFactsList = new FactsList ();
 
 			// Determine whether to read previously generated facts or generate new facts.
@@ -145,8 +139,6 @@ namespace KnowYourFacts
 		*/
 		static void readUnknownFactsFromFile (ref FactsList mathFactsList, MathOperation operation)
 		{
-			Console.WriteLine ("readUnknownFactsFromFile**************");
-
 			StreamReader din = File.OpenText (getFileName (operation.getOperationType (), false));
 
 			Fact factFromFile;
@@ -220,8 +212,6 @@ namespace KnowYourFacts
 		*/
 		static void generateAndStoreNewFacts (ref FactsList factsList, MathOperation operation)
 		{
-			Console.WriteLine ("generateAndStoreNewFacts**************");
-
 			Fact newFact;
 			newFact.operation = operation;
 			MathOperationTypeEnum operationType = operation.getOperationType ();
@@ -283,20 +273,15 @@ namespace KnowYourFacts
 		/*
 			Functions to process the facts. Removes the last answered fact and retrieves the next fact.
 		*/
-		public bool getNextFact (ref int num1, ref int num2, ref FactsQueue facts, ref int numberOfFactsProcessed)
+		public bool getNextFact (ref Fact nextFact)
 		{
-			Console.WriteLine ("getNextFact**************");
-			facts.Dequeue ();
-			Console.WriteLine ("facts count: " + facts.Count ());
-
+			queueOfFacts.Dequeue ();
 			++numberOfFactsProcessed;
 
-			// Determine whether more facts are left to be displayed.
+			// Return the next fact to display, if any remain.
 			if (queueOfFacts.Count () > 0)
 			{
-				// Obtain the numbers for the next fact to display.
-				num1 = facts.Peek ().leftNum;
-				num2 = facts.Peek ().rightNum;
+				nextFact = queueOfFacts.Peek ();
 				return true;
 			}
 
@@ -310,7 +295,6 @@ namespace KnowYourFacts
 															  List<long> factResponseTime, int maxResponseTime)
 		{
 			List<int> responseTime = new List<int> ();
-			Console.WriteLine ("getSavedResponseTime**************");
 			
 			try 
 			{
@@ -342,8 +326,6 @@ namespace KnowYourFacts
 		*/
 		public void writeFactResponseTimeToFile (MathOperation operation)
 		{
-			Console.WriteLine ("writeFactResponseTime**************");
-
 			List<int> responseTime = new List<int> ();
 	
 			// Read in the current input and write out the new data.
@@ -400,8 +382,6 @@ namespace KnowYourFacts
 		public void writeResultsToFile (ref int correctResponseCount, ref Stack<Fact> unknown, ref Stack<Fact> known,
 										MathOperation operatorType, List<long> factResponseTime)
 		{
-			Console.WriteLine ("writeResultsToFile**************");
-
 			StreamWriter swU = new StreamWriter (getFileName (operatorType.getOperationType (), false));
 			StreamWriter swK = new StreamWriter (getFileName (operatorType.getOperationType (), true), true);
 
@@ -451,20 +431,22 @@ namespace KnowYourFacts
 		 * Handles starting the daily facts and speed test.
 		 */
 		public void startProcessingFacts (bool speedTest, MathOperation operation,
-													FactsDisplayControl displayControl)
+													 FactsDisplayControl displayControl, bool processingAllDailyFacts)
 		{
-			Console.WriteLine ("startProcessingFacts**************");
-
 			MathOperationTypeEnum opType = MathFactsForm.operationType.getOperationType ();
+			// Suppress messages if all daily facts are being processed.
 			if (!MathFactsForm.speedTest && !getSavedResponseTime (opType, factResponseTime, maxResponseTime))
 			{
-				// No saved response data was found for this fact type.
-				MathFactsForm.toggleInputDisplay ();
+				if (!processingAllDailyFacts)
+				{
+					// No saved response data was found for this fact type.
+					MathFactsForm.toggleInputDisplay ();
 
-				String operatorName = MathFactsForm.operationType.getOperationName ();
-				MathFactsForm.m_factsDisplayControl.messageLabel.Text = "No data could be found for " + operatorName + " facts.\n" +
-											"Please take the " + operatorName + " speed test first.\n" + continuePrompt;
-				return;
+					String operatorName = MathFactsForm.operationType.getOperationName ();
+					MathFactsForm.m_factsDisplayControl.messageLabel.Text = "No data could be found for " + operatorName + " facts.\n"
+								+ "Please take the " + operatorName + " speed test first.\n" + completionContinuePrompt;
+					return;
+				}
 			}
 
 			correctResponseCount = 0;
@@ -481,9 +463,12 @@ namespace KnowYourFacts
 
 			if (queueOfFacts.Count () == 0)
 			{
-				MathFactsForm.toggleInputDisplay ();
-				displayControl.messageLabel.Text = "You have mastered all the facts, there are none to practice!\n"
-											+ continuePrompt;
+				if (!processingAllDailyFacts)
+				{
+					MathFactsForm.toggleInputDisplay ();
+					displayControl.messageLabel.Text = "You have mastered all the facts, there are none to practice!\n"
+							+ completionContinuePrompt;
+				}
 			}
 			else
 			{

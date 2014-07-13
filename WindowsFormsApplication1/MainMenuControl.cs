@@ -27,12 +27,11 @@ namespace KnowYourFacts
 		// Display the form to process input of facts.
 		private void initiateFactsDisplay (object sender, EventArgs e)
 		{
-			Console.WriteLine ("initiateFactsDisplay**************");
-
 			// Triggers the toggleMenuBar event.
 			MathFactsForm.toggleMainMenuControl ();
 
 			MathFactsForm.toggleFactsDisplayControl ();
+			MathFactsForm.startTheFacts (MathOperationTypeEnum.ADDITION, false, true);
 		}
 
 		private void createNewUserButtonClick (object sender, EventArgs e)

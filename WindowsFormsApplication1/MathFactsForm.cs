@@ -10,6 +10,8 @@ namespace KnowYourFacts
 		static MathFacts reference;
 
 		public static bool speedTest;
+		static bool processingAllDailyFacts = false;
+
 		static bool menubarToggle = true;
 		static bool mainMenuControlToggle = true;
 		static bool factsDisplayControlToggle = false;
@@ -23,6 +25,11 @@ namespace KnowYourFacts
 		public long timeElapsed;
 		public static System.Diagnostics.Stopwatch timer;
 
+		private String continueDailyFactsPrompt = "\nPress the spacebar to continue your facts.";
+
+		/*
+		 * Constructor to create a form object with a menu control and display control.
+		 */
 		public MathFactsForm ()
 		{
 			InitializeComponent ();
@@ -59,16 +66,35 @@ namespace KnowYourFacts
 		{
 			if (userInput == "space" && reference.queueOfFacts.Count == 0)
 			{
-				Console.WriteLine ("logUserInput**************");
-
-				// Check if this will trigger an early exit from facts processing.
-				toggleFactsDisplayControl ();
-				toggleInputDisplay ();
-				toggleMainMenuControl ();
+				if (processingAllDailyFacts)
+				{
+					toggleInputDisplay ();
+					continueProcessingDailyFacts ();
+				}
+				else
+				{
+					toggleFactsDisplayControl ();
+					toggleInputDisplay ();
+					toggleMainMenuControl ();
+				}
 			}
 			else
 			{
 				m_userInput = userInput;
+			}
+		}
+
+		/*
+		 * Used to cycle through all the facts when the user selects the option to start all daily facts.
+		 */ 
+		static private void continueProcessingDailyFacts ()
+		{
+			MathOperationTypeEnum lastOperation = operationType.getOperationType ();
+
+			if (processingAllDailyFacts && lastOperation != MathOperationTypeEnum.DIVISION)
+			{
+				operationType.setOperationType ((MathOperationTypeEnum) ((int) lastOperation + 1));
+				startTheFacts (operationType.getOperationType (), speedTest = false, processingAllDailyFacts);
 			}
 		}
 
@@ -78,8 +104,6 @@ namespace KnowYourFacts
 		 */
 		private void toggleMainMenubar (object sender, EventArgs e)
 		{
-			Console.WriteLine ("toggleMainMenubar**************");
-
 			menubarToggle = !menubarToggle;
 
 			dailyFactsMenuItem.Visible = menubarToggle;
@@ -100,7 +124,6 @@ namespace KnowYourFacts
 		 */
 		internal static void toggleMainMenuControl ()
 		{
-			Console.WriteLine ("toggleMainMenuControl**************");
 			mainMenuControlToggle = !mainMenuControlToggle;
 
 			m_mainMenuControl.Visible = mainMenuControlToggle;
@@ -112,7 +135,6 @@ namespace KnowYourFacts
 		 */
 		internal static void toggleFactsDisplayControl ()
 		{
-			Console.WriteLine ("toggleFactsDisplayControl**************");
 			factsDisplayControlToggle = !factsDisplayControlToggle;
 
 			m_factsDisplayControl.Visible = factsDisplayControlToggle;
@@ -125,7 +147,6 @@ namespace KnowYourFacts
        */
 		public static void toggleInputDisplay ()
 		{
-			Console.WriteLine ("toggleInputDisplay**************");
 			inputDisplayToggle = !inputDisplayToggle;
 
 			m_factsDisplayControl.num1Label.Visible = inputDisplayToggle;
@@ -174,7 +195,7 @@ namespace KnowYourFacts
 				sign = MathOperationTypeEnum.DIVISION;
 			}
 
-			startTheFacts (sign, false);
+			startTheFacts (sign, false, false);
 		}
 
 		/*
@@ -200,7 +221,7 @@ namespace KnowYourFacts
 				sign = MathOperationTypeEnum.DIVISION;
 			}
 
-			startTheFacts (sign, true);
+			startTheFacts (sign, true, false);
 		}
 
 		/*
@@ -222,15 +243,25 @@ namespace KnowYourFacts
 		/*
 		 * Starts the chosen daily facts or speed test
 		 */
-		public void startTheFacts (MathOperationTypeEnum sign, Boolean test)
+		static public void startTheFacts (MathOperationTypeEnum sign, Boolean isSpeedTest, Boolean processAllDailyFacts)
 		{
-			Console.WriteLine ("startTheFacts**************");
-
 			operationType = new MathOperation (sign);
-			speedTest = test;
-			toggleMainMenuControl ();
-			toggleFactsDisplayControl ();
-			reference.startProcessingFacts (speedTest, operationType, m_factsDisplayControl);
+			speedTest = isSpeedTest;
+			processingAllDailyFacts = processAllDailyFacts;
+
+			if (!processingAllDailyFacts)
+			{
+				toggleMainMenuControl ();
+				toggleFactsDisplayControl ();
+			}
+
+			// Change the bool value so the last set of messages for all daily facts are not suppressed.
+			if (operationType.getOperationType () == MathOperationTypeEnum.DIVISION)
+			{
+				processingAllDailyFacts = !processingAllDailyFacts;
+			}
+
+			reference.startProcessingFacts (speedTest, operationType, m_factsDisplayControl, processingAllDailyFacts);
 		}
 
 		/*
@@ -238,12 +269,13 @@ namespace KnowYourFacts
 		 */ 
 		public void processInput ()
 		{
+			Console.WriteLine ("processInput**************");
 			timer.Stop();											
 
 			long secondsElapsed;
-			String inputString = (m_factsDisplayControl.inputMaskedTextBox.Text);
 		
 			// Obtain the input answer.
+			String inputString = (m_factsDisplayControl.inputMaskedTextBox.Text);
 			int answer = System.Convert.ToInt32 (inputString);
 			Fact input = reference.getQuestionAndResponse (operationType);
 			int calculatedAnswer = MathOperation.calculateAnswer (input.leftNum, input.rightNum, operationType);
@@ -252,7 +284,6 @@ namespace KnowYourFacts
 			if (answer == calculatedAnswer)
 			{
 				secondsElapsed = (long) (timer.ElapsedMilliseconds / 1000.0);
-				Console.WriteLine ("Seconds elapsed: " + secondsElapsed);
 				reference.factResponseTime.Add(secondsElapsed);
 			}
 
@@ -269,54 +300,89 @@ namespace KnowYourFacts
 				}
 			}
 
-			int lNum = 0, rNum = 0;
+			Fact nextFact = new Fact();
 
 			// Get the next fact and update the labels.
-			// Instead of returning a number, just use the front of queue below.
-			if (reference.getNextFact (ref lNum, ref rNum, ref reference.queueOfFacts, 
-						ref reference.numberOfFactsProcessed))
+			if (reference.getNextFact (ref nextFact))
 			{
 				m_factsDisplayControl.inputMaskedTextBox.Text = "";
-				m_factsDisplayControl.num1Label.Text = System.Convert.ToString (lNum);
-				m_factsDisplayControl.num2Label.Text = System.Convert.ToString (rNum);
+				m_factsDisplayControl.num1Label.Text = System.Convert.ToString (nextFact.leftNum);
+				m_factsDisplayControl.num2Label.Text = System.Convert.ToString (nextFact.rightNum);
 
 				timer.Restart ();
 			}
 			else
 			{
 				toggleInputDisplay ();
+				displayCompletionMessage ();
+			}
+		}
 
-				if (!speedTest)
+		/*
+		 * Displays a completion message for finishing a set of facts, based on the number of 
+		 * facts correct.
+		 */ 
+		void displayCompletionMessage ()
+		{
+			if (!speedTest)
+			{
+				reference.writeResultsToFile (ref reference.correctResponseCount, ref reference.unknownFacts,
+						ref reference.knownFacts, operationType, reference.factResponseTime);
+
+				if (reference.correctResponseCount == 0)
 				{
-					reference.writeResultsToFile (ref reference.correctResponseCount, ref reference.unknownFacts, 
-							ref reference.knownFacts, operationType, reference.factResponseTime);
-
-					if (reference.correctResponseCount > (int) (reference.numberOfFactsProcessed))
-					{
-						m_factsDisplayControl.messageLabel.Text = "All facts complete!\nYou got " + reference.correctResponseCount
-								+ " out of the " + reference.numberOfFactsProcessed 
-								+ " facts correct!" + reference.continuePrompt;
-					}
-					else if (reference.correctResponseCount == 0)
+					if (processingAllDailyFacts && operationType.getOperationType () != MathOperationTypeEnum.DIVISION)
 					{
 						m_factsDisplayControl.messageLabel.Text = "All facts complete, very nice try!"
-							+ "\nYou didn't get any facts correct this time." + reference.continuePrompt;
+								+ "\nYou didn't get any facts correct this time.\n" + continueDailyFactsPrompt;
+					}
+					else
+					{
+						m_factsDisplayControl.messageLabel.Text = "All facts complete, very nice try!"
+								+ "\nYou didn't get any facts correct this time.\n" + reference.completionContinuePrompt;
+					}
+				}
+				
+				else if (reference.correctResponseCount < (int) (reference.numberOfFactsProcessed / 2))
+				{
+					if (processingAllDailyFacts && operationType.getOperationType () != MathOperationTypeEnum.DIVISION)
+					{
+						m_factsDisplayControl.messageLabel.Text = "All facts complete!\nYou got " + reference.correctResponseCount
+								+ " out of " + reference.numberOfFactsProcessed
+								+ " facts correct!" + continueDailyFactsPrompt;
+					}
+					else
+					{
+						m_factsDisplayControl.messageLabel.Text = "All facts complete!\nYou got " + reference.correctResponseCount
+								+ " out of " + reference.numberOfFactsProcessed
+								+ " facts correct!" + reference.completionContinuePrompt;
+					}
+				}
+				
+				else
+				{
+					if (processingAllDailyFacts && operationType.getOperationType () != MathOperationTypeEnum.DIVISION)
+					{
+						m_factsDisplayControl.messageLabel.Text = "All facts complete, great job!\n"
+							+ "You got " + reference.correctResponseCount + " out of "
+							+ reference.numberOfFactsProcessed + " facts correct!\n"
+							+ continueDailyFactsPrompt;
 					}
 					else
 					{
 						m_factsDisplayControl.messageLabel.Text = "All facts complete, great job!\n"
-							+ "You got " + reference.correctResponseCount + " out of the "
-							+ reference.numberOfFactsProcessed + " facts correct\n!" 
-							+ reference.continuePrompt;
+							+ "You got " + reference.correctResponseCount + " out of "
+							+ reference.numberOfFactsProcessed + " facts correct!\n"
+							+ reference.completionContinuePrompt;
 					}
 				}
-				else
-				{
-					reference.writeFactResponseTimeToFile (operationType);
-					m_factsDisplayControl.messageLabel.Text = "Speed test complete!" 
-							+ "\nNow try out the daily " + operationType.getOperationName () 
-							+ " facts!\n" + reference.continuePrompt;
-				}
+			}
+			else
+			{
+				reference.writeFactResponseTimeToFile (operationType);
+				m_factsDisplayControl.messageLabel.Text = "Speed test complete!"
+						+ "\nNow try out the daily " + operationType.getOperationName ()
+						+ " facts!\n" + reference.completionContinuePrompt;
 			}
 		}
 
