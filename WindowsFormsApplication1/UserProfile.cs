@@ -6,16 +6,18 @@ using System.Linq;
 namespace KnowYourFacts
 {
 	/*
-	 * Class for retrieving of stored user profiles.
+	 * Struct for storing & retrieving user profiles.
 	 */
-	public class UserProfile
+	public struct UserProfile
 	{
 		const string USER_PROFILES = "UserProfiles.txt";
 
 		public User user;
 		
-		public UserProfile () : 
-			base () {}
+		public UserProfile (User user)
+		{
+			this.user = user;
+		}
 			
 		public bool checkForProfiles ()
 		{

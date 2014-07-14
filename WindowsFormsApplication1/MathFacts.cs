@@ -50,7 +50,6 @@ namespace KnowYourFacts
 			queueOfFacts = new FactsQueue ();
 			knownFacts = new Stack<Fact> ();
 			unknownFacts = new Stack<Fact> ();
-
 		}
 
 		public Fact getQuestionAndResponse (MathOperation operation)
@@ -118,7 +117,7 @@ namespace KnowYourFacts
 			FactsList mathFactsList = new FactsList ();
 
 			// Determine whether to read previously generated facts or generate new facts.
-			if ((File.Exists (getFileName (oper.getOperationType (), false))))
+			if ((File.Exists (getFileName (oper.operationType, false))))
 			{
 				readUnknownFactsFromFile (ref mathFactsList, oper);
 			}
@@ -139,7 +138,7 @@ namespace KnowYourFacts
 		*/
 		static void readUnknownFactsFromFile (ref FactsList mathFactsList, MathOperation operation)
 		{
-			StreamReader din = File.OpenText (getFileName (operation.getOperationType (), false));
+			StreamReader din = File.OpenText (getFileName (operation.operationType, false));
 
 			Fact factFromFile;
 			try
@@ -183,7 +182,7 @@ namespace KnowYourFacts
 		{
 			FactsList mathFactsList;				// Later consider asking for certain range of numbers from user to be used.
 
-			MathOperationTypeEnum operation = operationType.getOperationType ();
+			MathOperationTypeEnum operation = operationType.operationType;
 			if (operation == MathOperationTypeEnum.ADDITION)
 			{
 				mathFactsList = new FactsList (new Fact[] {new Fact(1, 1, operationType), new Fact(2, 2, operationType), 
@@ -214,7 +213,7 @@ namespace KnowYourFacts
 		{
 			Fact newFact;
 			newFact.operation = operation;
-			MathOperationTypeEnum operationType = operation.getOperationType ();
+			MathOperationTypeEnum operationType = operation.operationType;
 
 			// Generate facts starting from 0 to the max number.
 			for (int i = 0; i <= MAX_NUM; ++i)
@@ -299,6 +298,7 @@ namespace KnowYourFacts
 			try 
 			{
 				StreamReader din = File.OpenText (FACT_RESPONSE_TIME_FILE);
+				
 				String savedTime = "";
 				while ((savedTime = din.ReadLine ()) != null)
 				{
@@ -364,7 +364,7 @@ namespace KnowYourFacts
 			}
 
 			// Store the average response time.
-			responseTime[(int) operation.getOperationType()] = (int) (System.Math.Ceiling (sum / factResponseTime.Count ()));
+			responseTime[(int) operation.operationType] = (int) (System.Math.Ceiling (sum / factResponseTime.Count ()));
 
 			StreamWriter sw = new StreamWriter (FACT_RESPONSE_TIME_FILE);
 			foreach (int time in responseTime)
@@ -382,8 +382,8 @@ namespace KnowYourFacts
 		public void writeResultsToFile (ref int correctResponseCount, ref Stack<Fact> unknown, ref Stack<Fact> known,
 										MathOperation operatorType, List<long> factResponseTime)
 		{
-			StreamWriter swU = new StreamWriter (getFileName (operatorType.getOperationType (), false));
-			StreamWriter swK = new StreamWriter (getFileName (operatorType.getOperationType (), true), true);
+			StreamWriter swU = new StreamWriter (getFileName (operatorType.operationType, false));
+			StreamWriter swK = new StreamWriter (getFileName (operatorType.operationType, true), true);
 
 			// For use with factResponseTime.
 			int index = 0;
@@ -433,7 +433,7 @@ namespace KnowYourFacts
 		public void startProcessingFacts (bool speedTest, MathOperation operation,
 													 FactsDisplayControl displayControl, bool processingAllDailyFacts)
 		{
-			MathOperationTypeEnum opType = MathFactsForm.operationType.getOperationType ();
+			MathOperationTypeEnum opType = MathFactsForm.operationType.operationType;
 			// Suppress messages if all daily facts are being processed.
 			if (!MathFactsForm.speedTest && !getSavedResponseTime (opType, factResponseTime, maxResponseTime))
 			{

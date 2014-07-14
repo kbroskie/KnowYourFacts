@@ -36,20 +36,17 @@ namespace KnowYourFacts
 
 		private void createNewUserButtonClick (object sender, EventArgs e)
 		{
-			UserProfile userProfile = new UserProfile ();
-			if (userProfile.checkForProfiles ())
-			{
-				// Load this as the default username. Load others later on.
-				userProfile.user.name = userProfile.getLastProfileLoaded ();
-			}
-
-			string name = userProfile.user.name;
-			MessageBox.Show (name);
+			MathFactsForm.changeUser ();
 		}
 
 		private void exitButtonClick (object sender, EventArgs e)
 		{
 			Application.Exit ();
+		}
+
+		public void setUserButtonText (String username)
+		{
+			userButton.Text = username;
 		}
 	}
 }

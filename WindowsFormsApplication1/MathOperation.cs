@@ -2,34 +2,24 @@
 
 namespace KnowYourFacts
 {
-	public class MathOperation
+	public struct MathOperation
 	{
-		private MathOperationTypeEnum m_operationType;
+		public MathOperationTypeEnum operationType;
 
 		public MathOperation (MathOperationTypeEnum operationType)
 		{
-			m_operationType = operationType;
+			this.operationType = operationType;
 		}
 
-		public string getOperationName ()
+		public String getOperationName ()
 		{
-			String operationName = m_operationType.ToString ();
-			return operationName.Substring(0, 1) + operationName.Substring(1).ToLower ();
+			String operationName = operationType.ToString ();
+			return operationName.Substring (0, 1) + operationName.Substring (1).ToLower ();
 		}
 
-		public MathOperationTypeEnum getOperationType ()
+		public String getOperationSign ()
 		{
-			return m_operationType;
-		}
-
-		public void setOperationType (MathOperationTypeEnum oper)
-		{
-			m_operationType = oper;
-		}
-
-		public string getOperationSign ()
-		{
-			switch (m_operationType)
+			switch (operationType)
 			{
 				case MathOperationTypeEnum.ADDITION:
 					return "+";
@@ -46,11 +36,11 @@ namespace KnowYourFacts
 
 		static public int calculateAnswer (int leftNum, int rightNum, MathOperation operation)
 		{
-			if (operation.getOperationType () == MathOperationTypeEnum.ADDITION)
+			if (operation.operationType == MathOperationTypeEnum.ADDITION)
 				return leftNum + rightNum;
-			else if (operation.getOperationType () == MathOperationTypeEnum.SUBTRACTION)
+			else if (operation.operationType == MathOperationTypeEnum.SUBTRACTION)
 				return leftNum - rightNum;
-			else if (operation.getOperationType () == MathOperationTypeEnum.MULTIPLICATION)
+			else if (operation.operationType == MathOperationTypeEnum.MULTIPLICATION)
 				return leftNum * rightNum;
 			else
 				return leftNum / rightNum;

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
+using Microsoft.VisualBasic;
+using System.Collections.Generic;
 
 namespace KnowYourFacts
 {
@@ -16,6 +18,7 @@ namespace KnowYourFacts
 		static bool mainMenuControlToggle = true;
 		static bool factsDisplayControlToggle = false;
 		public static bool inputDisplayToggle = true;
+		public static KnowYourFactsFiles files = KnowYourFactsFiles.Instance;
 
 		public static MathOperation operationType;
 
@@ -26,6 +29,8 @@ namespace KnowYourFacts
 		public static System.Diagnostics.Stopwatch timer;
 
 		private String continueDailyFactsPrompt = "\nPress the spacebar to continue your facts.";
+
+		private static User user;
 
 		/*
 		 * Constructor to create a form object with a menu control and display control.
@@ -38,6 +43,16 @@ namespace KnowYourFacts
 
 			reference = new MathFacts ();
 			//	factSource.DataSource = FactsModel.Instance.Facts;
+
+			if (!files.mainDirectoryExists())
+			{
+				files.createFilesAndDirectories ();
+			}
+
+			// Need to change where this is called. If no user data is present, the input dialog appears
+			// before the form shows.
+			loadLastUserOrPromptForNewUser ();
+			m_mainMenuControl.setUserButtonText ("Welcome " + user.name + "!" + "\nNot " + user.name + "?\nClick here to change users");
 		}
 
 		private void initializeAndAddMainMenuControl ()
@@ -56,6 +71,83 @@ namespace KnowYourFacts
 			m_factsDisplayControl.InputDetected += c_InputDetected;
 
 			this.Controls.Add (m_factsDisplayControl);
+		}
+
+		private void loadLastUserOrPromptForNewUser () 
+		{
+			user.name = files.loadCurrentUsername ();
+			
+			// No user data exists
+			if (user.name == null)
+			{
+				user.name = promptForNewUsername ();
+
+				// Need to ensure name conforms to windows naming conventions. 
+				while (files.userDirectoryExists (user))
+				{
+					MessageBox.Show ("Sorry, that username is already taken.\nPlease try again with a different username.");
+					user.name = promptForNewUsername ();
+				}
+
+				files.createNewUserDirectory (user);
+			}
+		}
+
+		/*
+		 * Prompt for and obtain a new username, or use "Guest" for default.
+		 */
+		private String promptForNewUsername ()
+		{
+			String username = "";
+
+			InputDialog inputDialog = new InputDialog ();
+			if (inputDialog.ShowDialog () == DialogResult.OK)
+			{
+				username = inputDialog.inputMaskedTextbox.Text;
+
+				if (username == "")
+				{
+					var confirmResult = MessageBox.Show ("You didn't enter a username to create. Continue without creating a username?\nYour progress will not be saved.",
+							"Confirm Cancel", MessageBoxButtons.YesNo);
+					if (confirmResult == DialogResult.Yes)
+					{
+						username = "Guest";
+					}
+				}
+			}
+			else
+			{
+				var confirmResult = MessageBox.Show ("Are you sure you don't want to create a username?\nYour progress will not be saved.",
+				"Confirm Cancel", MessageBoxButtons.YesNo);
+				if (confirmResult == DialogResult.Yes)
+				{
+					username = "Guest";
+				}
+			}
+
+			if (inputDialog != null)
+			{
+				inputDialog.Dispose ();
+			}
+			return username;
+		}
+
+		public static void changeUser ()
+		{
+			ChangeUserDialog changeUserDialog = new ChangeUserDialog ();
+			changeUserDialog.setUserChoices (KnowYourFactsFiles.loadUsers ());
+
+			if (changeUserDialog.ShowDialog () == DialogResult.OK)
+			{
+				user.name = changeUserDialog.getSelectedUser ();
+				KnowYourFactsFiles.updateUsersData (user.name);
+				m_mainMenuControl.setUserButtonText ("Welcome " + user.name + "!" + "\nNot " + user.name + "?\nClick here to change users");
+			}
+
+			if (changeUserDialog != null)
+			{
+				changeUserDialog.Dispose ();
+			}
 		}
 
 		/*
@@ -89,12 +181,12 @@ namespace KnowYourFacts
 		 */ 
 		static private void continueProcessingDailyFacts ()
 		{
-			MathOperationTypeEnum lastOperation = operationType.getOperationType ();
+			MathOperationTypeEnum lastOperation = operationType.operationType;
 
 			if (processingAllDailyFacts && lastOperation != MathOperationTypeEnum.DIVISION)
 			{
-				operationType.setOperationType ((MathOperationTypeEnum) ((int) lastOperation + 1));
-				startTheFacts (operationType.getOperationType (), speedTest = false, processingAllDailyFacts);
+				operationType.operationType = (MathOperationTypeEnum) ((int) lastOperation + 1);
+				startTheFacts (operationType.operationType, speedTest = false, processingAllDailyFacts);
 			}
 		}
 
@@ -256,7 +348,7 @@ namespace KnowYourFacts
 			}
 
 			// Change the bool value so the last set of messages for all daily facts are not suppressed.
-			if (operationType.getOperationType () == MathOperationTypeEnum.DIVISION)
+			if (operationType.operationType == MathOperationTypeEnum.DIVISION)
 			{
 				processingAllDailyFacts = !processingAllDailyFacts;
 			}
@@ -269,7 +361,6 @@ namespace KnowYourFacts
 		 */ 
 		public void processInput ()
 		{
-			Console.WriteLine ("processInput**************");
 			timer.Stop();											
 
 			long secondsElapsed;
@@ -331,7 +422,7 @@ namespace KnowYourFacts
 
 				if (reference.correctResponseCount == 0)
 				{
-					if (processingAllDailyFacts && operationType.getOperationType () != MathOperationTypeEnum.DIVISION)
+					if (processingAllDailyFacts && operationType.operationType != MathOperationTypeEnum.DIVISION)
 					{
 						m_factsDisplayControl.messageLabel.Text = "All facts complete, very nice try!"
 								+ "\nYou didn't get any facts correct this time.\n" + continueDailyFactsPrompt;
@@ -345,7 +436,7 @@ namespace KnowYourFacts
 				
 				else if (reference.correctResponseCount < (int) (reference.numberOfFactsProcessed / 2))
 				{
-					if (processingAllDailyFacts && operationType.getOperationType () != MathOperationTypeEnum.DIVISION)
+					if (processingAllDailyFacts && operationType.operationType != MathOperationTypeEnum.DIVISION)
 					{
 						m_factsDisplayControl.messageLabel.Text = "All facts complete!\nYou got " + reference.correctResponseCount
 								+ " out of " + reference.numberOfFactsProcessed
@@ -361,7 +452,7 @@ namespace KnowYourFacts
 				
 				else
 				{
-					if (processingAllDailyFacts && operationType.getOperationType () != MathOperationTypeEnum.DIVISION)
+					if (processingAllDailyFacts && operationType.operationType != MathOperationTypeEnum.DIVISION)
 					{
 						m_factsDisplayControl.messageLabel.Text = "All facts complete, great job!\n"
 							+ "You got " + reference.correctResponseCount + " out of "
@@ -381,7 +472,7 @@ namespace KnowYourFacts
 			{
 				reference.writeFactResponseTimeToFile (operationType);
 				m_factsDisplayControl.messageLabel.Text = "Speed test complete!"
-						+ "\nNow try out the daily " + operationType.getOperationName ()
+						+ "\nNow try out the daily " + operationType.operationType
 						+ " facts!\n" + reference.completionContinuePrompt;
 			}
 		}
