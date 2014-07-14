@@ -82,6 +82,7 @@
 			this.Controls.Add(this.button2);
 			this.Controls.Add(this.button1);
 			this.Name = "InputDialog";
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "New Username";
 			this.ResumeLayout(false);
 			this.PerformLayout();

@@ -70,6 +70,7 @@
 			this.Controls.Add(this.button1);
 			this.Controls.Add(this.usersListBox);
 			this.Name = "ChangeUserDialog";
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Choose Username";
 			this.ResumeLayout(false);
 
