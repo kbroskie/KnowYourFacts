@@ -284,13 +284,15 @@ namespace KnowYourFacts
 		/*
 		 * Retrieves the last date a daily fact was run for the given operation.
 		 */ 
-		public static void readDailyFactsDateDataFromFile (MathOperationTypeEnum operation)
+		public String readDailyFactsDateDataFromFile (MathOperationTypeEnum operation)
 		{
 			String fileToReadDataFrom = getDailyFactsDataFilename (operation);
 
 			StreamReader fileReader = new StreamReader (fileToReadDataFrom);
-			fileReader.ReadLine ();
+			String lastDateUsed = fileReader.ReadLine ();
 			fileReader.Close ();
+
+			return lastDateUsed;
 		}
  
 		private static String getDailyFactsDataFilename (MathOperationTypeEnum operation)

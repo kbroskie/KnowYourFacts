@@ -13,6 +13,7 @@ namespace KnowYourFacts
 
 		public static bool speedTest;
 		static bool processingAllDailyFacts = false;
+		static bool saveProgress = true;
 
 		static bool menubarToggle = true;
 		static bool mainMenuControlToggle = true;
@@ -183,7 +184,7 @@ namespace KnowYourFacts
 		/*
 		 * Used to cycle through all the facts when the user selects the option to start all daily facts.
 		 */ 
-		static private void continueProcessingDailyFacts ()
+		private static void continueProcessingDailyFacts ()
 		{
 			MathOperationTypeEnum lastOperation = operationType.operationType;
 
@@ -339,8 +340,26 @@ namespace KnowYourFacts
 		/*
 		 * Starts the chosen daily facts or speed test
 		 */
-		static public void startTheFacts (MathOperationTypeEnum sign, Boolean isSpeedTest, Boolean processAllDailyFacts)
+		public static void startTheFacts (MathOperationTypeEnum sign, Boolean isSpeedTest, Boolean processAllDailyFacts)
 		{
+			// Determine if the user has already used the daily facts today.
+			if (files.readDailyFactsDateDataFromFile(operationType.operationType) == DateTime.Today.ToString ("d"))
+			{
+				saveProgress = false;
+
+				var continueWithoutSavingResponse = MessageBox.Show ("Oops! It looks like you have already practiced your " + operationType.getOperationName() + " facts today.\nYou can practice them again, but your progress will not be saved.\n\n Continue anyway?",
+				"Progress Will Not Be Saved", MessageBoxButtons.YesNo);
+				if (continueWithoutSavingResponse == DialogResult.No)
+				{
+					return;
+				}
+			}
+			else
+			{
+				saveProgress = false;
+			}
+
+			
 			operationType = new MathOperation (sign);
 			speedTest = isSpeedTest;
 			processingAllDailyFacts = processAllDailyFacts;
@@ -421,8 +440,11 @@ namespace KnowYourFacts
 		{
 			if (!speedTest)
 			{
-				reference.writeResultsToFile (ref reference.correctResponseCount, ref reference.unknownFacts,
-						ref reference.knownFacts, operationType, reference.factResponseTime);
+				if (saveProgress)
+				{
+					reference.writeResultsToFile (ref reference.correctResponseCount, ref reference.unknownFacts,
+							ref reference.knownFacts, operationType, reference.factResponseTime);
+				}
 
 				if (reference.correctResponseCount == 0)
 				{
