@@ -23,6 +23,27 @@ namespace KnowYourFacts
 		String multiplicationFilename = "multiplication.txt";
 		String divisionFilename = "division.txt";
 		
+		String userProfileFilename = "profile.txt";
+		static String userFilename;
+
+		static String userPath;
+		static String dailyFactsPath;
+
+		static String unknownFactsPath;
+		static String knownFactsPath;
+		static String speedTestPath;
+		static String customSpeedTestPath;
+
+		static String dailyAdditionFactsData;
+		static String dailySubtractionFactsData;
+		static String dailyMultiplicationFactsData;
+		static String dailyDivisionFactsData;
+
+		static String speedAdditionFactsDataFilename;
+		static String speedSubtractionFactsDataFilename;
+		static String speedMultiplicationFactsDataFilename;
+		static String speedDivisionFactsDataFilename;
+		
 		static KnowYourFactsFiles instanceKnowYourFactsFiles;
 
 		public static KnowYourFactsFiles Instance
@@ -37,25 +58,34 @@ namespace KnowYourFacts
 			}
 		}
 
+		// Singleton constructor
 		private KnowYourFactsFiles ()
 		{
 			topLevelDirectory = System.IO.Path.Combine (userDirectory, "Know Your Facts");
 			usersPath = System.IO.Path.Combine (topLevelDirectory, "Users");
 			speedFactsPath = System.IO.Path.Combine (topLevelDirectory, "SpeedFacts");
-			
 			usersDataFilename = System.IO.Path.Combine (usersPath, usersData);
 		}
 
+		/*
+		 * Checks whether the main directory exists.
+		 */ 
 		public bool mainDirectoryExists ()
 		{
 			return (System.IO.File.Exists (topLevelDirectory));
 		}
 
+		/*
+		 * Checks whether the given user exists.
+		 */  
 		public bool userDirectoryExists (User user)
 		{
 			return (System.IO.File.Exists (System.IO.Path.Combine (usersPath, user.name)));
 		}
 
+		/*
+		 * Creates the default directories for the application.
+		 */ 
 		public void createDefaultProgramDirectory ()
 		{
 			paths.Add (topLevelDirectory);
@@ -79,57 +109,59 @@ namespace KnowYourFacts
 			createFilesAndDirectories ();
 		}
 
+		/*
+		 * Creates files and directories for a new user.
+		 */ 
 		public void createNewUserDirectory (User newUser)
 		{
 			// Create the individual user directories.
-			String userPath = System.IO.Path.Combine (usersPath, newUser.name);
+			userPath = System.IO.Path.Combine (usersPath, newUser.name);
 			paths.Add (userPath);
 
 			// Create the individual user subdirectories.
-			String dailyFactsPath = System.IO.Path.Combine (userPath, "dailyFactsData");
+			dailyFactsPath = System.IO.Path.Combine (userPath, "dailyFactsData");
 			paths.Add (dailyFactsPath);
 
-			String unknownFactsPath = System.IO.Path.Combine (userPath, "unknownFacts");
+			unknownFactsPath = System.IO.Path.Combine (userPath, "unknownFacts");
 			paths.Add (unknownFactsPath);
 
-			String knownFactsPath = System.IO.Path.Combine (userPath, "knownFacts");
+			knownFactsPath = System.IO.Path.Combine (userPath, "knownFacts");
 			paths.Add (knownFactsPath);
 
-			String speedTestPath = System.IO.Path.Combine (userPath, "speedTest");
+			speedTestPath = System.IO.Path.Combine (userPath, "speedTest");
 			paths.Add (speedTestPath);
 
-			String customSpeedTestPath = System.IO.Path.Combine (speedTestPath, "custom");
+			customSpeedTestPath = System.IO.Path.Combine (speedTestPath, "custom");
 
 			// Create the individual user files.
-			String dailyAdditionFactsData = System.IO.Path.Combine (dailyFactsPath, additionFilename);
-			String dailySubtractionFactsData = System.IO.Path.Combine (dailyFactsPath, subtractionFilename);
-			String dailyMultiplicationFactsData = System.IO.Path.Combine (dailyFactsPath, multiplicationFilename);
-			String dailyDivisionFactsData = System.IO.Path.Combine (dailyFactsPath, divisionFilename);
+			dailyAdditionFactsData = System.IO.Path.Combine (dailyFactsPath, additionFilename);
+			dailySubtractionFactsData = System.IO.Path.Combine (dailyFactsPath, subtractionFilename);
+			dailyMultiplicationFactsData = System.IO.Path.Combine (dailyFactsPath, multiplicationFilename);
+			dailyDivisionFactsData = System.IO.Path.Combine (dailyFactsPath, divisionFilename);
 
 			files.Add (dailyAdditionFactsData);
 			files.Add (dailySubtractionFactsData);
 			files.Add (dailyMultiplicationFactsData);
 			files.Add (dailyDivisionFactsData);
 
-			String userProfileFilename = "profile.txt";
-			String userFilename = System.IO.Path.Combine (userPath, userProfileFilename);
+			userFilename = System.IO.Path.Combine (userPath, userProfileFilename);
 			files.Add (userFilename);
 
-			String speedAdditionFactsData = System.IO.Path.Combine (speedTestPath, additionFilename);
-			String speedSubtractionFactsData = System.IO.Path.Combine (speedTestPath, subtractionFilename);
-			String speedMultiplicationFactsData = System.IO.Path.Combine (speedTestPath, multiplicationFilename);
-			String speedDivisionFactsData = System.IO.Path.Combine (speedTestPath, divisionFilename);
+			speedAdditionFactsDataFilename = System.IO.Path.Combine (speedTestPath, additionFilename);
+			speedSubtractionFactsDataFilename = System.IO.Path.Combine (speedTestPath, subtractionFilename);
+			speedMultiplicationFactsDataFilename = System.IO.Path.Combine (speedTestPath, multiplicationFilename);
+			speedDivisionFactsDataFilename = System.IO.Path.Combine (speedTestPath, divisionFilename);
 
-			files.Add (speedAdditionFactsData);
-			files.Add (speedSubtractionFactsData);
-			files.Add (speedMultiplicationFactsData);
-			files.Add (speedDivisionFactsData);
+			files.Add (speedAdditionFactsDataFilename);
+			files.Add (speedSubtractionFactsDataFilename);
+			files.Add (speedMultiplicationFactsDataFilename);
+			files.Add (speedDivisionFactsDataFilename);
 
 			createFilesAndDirectories ();
 			updateUsersData (newUser.name);
 		}
 
-		public void createFilesAndDirectories ()
+		private void createFilesAndDirectories ()
 		{
 			foreach (String path in paths)
 			{
@@ -148,10 +180,14 @@ namespace KnowYourFacts
 			}
 		}
 
+		/*
+		 * Returns the last user logged in.
+		 */ 
 		public String loadCurrentUsername ()
 		{
 			StreamReader din = File.OpenText (usersDataFilename);
 			String username;
+
 			try
 			{
 				username = din.ReadLine ();
@@ -167,7 +203,42 @@ namespace KnowYourFacts
 			return username;
 		}
 
-		public static void updateUsersData (String username)
+		/*
+		 * Updates all the read/write paths for the current user, and updates the UsersData file.
+		 */ 
+		public void updateCurrentUser (String currentUser)
+		{
+			updateUsersData (currentUser);
+
+			if (currentUser != "Guest")
+			{
+
+				userPath = System.IO.Path.Combine (usersPath, currentUser);
+
+				dailyFactsPath = System.IO.Path.Combine (userPath, "dailyFactsData");
+				unknownFactsPath = System.IO.Path.Combine (userPath, "unknownFacts");
+				knownFactsPath = System.IO.Path.Combine (userPath, "knownFacts");
+				speedTestPath = System.IO.Path.Combine (userPath, "speedTest");
+				customSpeedTestPath = System.IO.Path.Combine (speedTestPath, "custom");
+
+				dailyAdditionFactsData = System.IO.Path.Combine (dailyFactsPath, additionFilename);
+				dailySubtractionFactsData = System.IO.Path.Combine (dailyFactsPath, subtractionFilename);
+				dailyMultiplicationFactsData = System.IO.Path.Combine (dailyFactsPath, multiplicationFilename);
+				dailyDivisionFactsData = System.IO.Path.Combine (dailyFactsPath, divisionFilename);
+
+				userFilename = System.IO.Path.Combine (userPath, userProfileFilename);
+
+				speedAdditionFactsDataFilename = System.IO.Path.Combine (speedTestPath, additionFilename);
+				speedSubtractionFactsDataFilename = System.IO.Path.Combine (speedTestPath, subtractionFilename);
+				speedMultiplicationFactsDataFilename = System.IO.Path.Combine (speedTestPath, multiplicationFilename);
+				speedDivisionFactsDataFilename = System.IO.Path.Combine (speedTestPath, divisionFilename);
+			}
+		}
+
+		/*
+		 * Updates the current user in the file system.
+		 */ 
+		private static void updateUsersData (String username)
 		{
 			try
 			{
@@ -181,6 +252,9 @@ namespace KnowYourFacts
 			}
 		}
 
+		/*
+		 * Returns a list of all the current users.
+		 */  
 		public static List<String> loadUsers ()
 		{
 			List <String> users = new List<String> ();
@@ -192,6 +266,46 @@ namespace KnowYourFacts
 			}
 
 			return users;
+		}
+
+		/*
+		 * Saves the current date for the given math fact operation.
+		 */ 
+		public static void writeDailyFactsDateDataToFile (String date, MathOperationTypeEnum operation)
+		{
+			String fileToSaveDataTo = getDailyFactsDataFilename (operation);
+			Console.WriteLine (fileToSaveDataTo);
+
+			StreamWriter fileWriter = new StreamWriter (fileToSaveDataTo, true);
+			fileWriter.Write (date);
+			fileWriter.Close ();	
+		}
+
+		/*
+		 * Retrieves the last date a daily fact was run for the given operation.
+		 */ 
+		public static void readDailyFactsDateDataFromFile (MathOperationTypeEnum operation)
+		{
+			String fileToReadDataFrom = getDailyFactsDataFilename (operation);
+
+			StreamReader fileReader = new StreamReader (fileToReadDataFrom);
+			fileReader.ReadLine ();
+			fileReader.Close ();
+		}
+ 
+		private static String getDailyFactsDataFilename (MathOperationTypeEnum operation)
+		{
+			switch (operation)
+			{
+				case MathOperationTypeEnum.ADDITION:
+					return dailyAdditionFactsData;
+				case MathOperationTypeEnum.SUBTRACTION:
+					return dailySubtractionFactsData;
+				case MathOperationTypeEnum.MULTIPLICATION:
+					return dailyMultiplicationFactsData;
+				default:
+					return dailyDivisionFactsData;
+			}
 		}
 	}
 }

@@ -62,41 +62,36 @@ namespace KnowYourFacts
 		*/
 		static string getFileName (MathOperationTypeEnum op, bool knownFile)
 		{
-			if (op == MathOperationTypeEnum.ADDITION)
+			switch (op)
 			{
-				if (knownFile)
-				{
-					return KNOWN_ADDITION_FACTS_FILE;
-				}
-				else
-				{
-					return UNKNOWN_ADDITION_FACTS_FILE;
-				}
-			}
-			else if (op == MathOperationTypeEnum.SUBTRACTION)
-			{
-				if (knownFile)
-				{
-					return KNOWN_SUBTRACTION_FACTS_FILE;
-				}
-				else
-				{
-					return UNKNOWN_SUBTRACTION_FACTS_FILE;
-				}
-			}
-			else if (op == MathOperationTypeEnum.MULTIPLICATION)
-			{
-				if (knownFile)
-				{
-					return KNOWN_MULTIPLICATION_FACTS_FILE;
-				}
-				else
-				{
-					return UNKNOWN_MULTIPLICATION_FACTS_FILE;
-				}
-			}
-			else
-			{
+				case MathOperationTypeEnum.ADDITION:
+					if (knownFile)
+					{
+						return KNOWN_ADDITION_FACTS_FILE;
+					}
+					else
+					{
+						return UNKNOWN_ADDITION_FACTS_FILE;
+					}
+				case MathOperationTypeEnum.SUBTRACTION:
+					if (knownFile)
+					{
+						return KNOWN_SUBTRACTION_FACTS_FILE;
+					}
+					else
+					{
+						return UNKNOWN_SUBTRACTION_FACTS_FILE;
+					}	
+				case MathOperationTypeEnum.MULTIPLICATION:
+					if (knownFile)
+					{
+						return KNOWN_MULTIPLICATION_FACTS_FILE;
+					}
+					else
+					{
+						return UNKNOWN_MULTIPLICATION_FACTS_FILE;
+					}
+			case MathOperationTypeEnum.DIVISION:
 				if (knownFile)
 				{
 					return KNOWN_DIVISION_FACTS_FILE;
@@ -105,6 +100,8 @@ namespace KnowYourFacts
 				{
 					return UNKNOWN_DIVISION_FACTS_FILE;
 				}
+				default:
+					return null;
 			}
 		}
 
@@ -425,6 +422,9 @@ namespace KnowYourFacts
 			// Close the files.
 			swU.Close ();
 			swK.Close ();
+
+			// Save the current date in MM/DD/YYYY format to file.
+			KnowYourFactsFiles.writeDailyFactsDateDataToFile (DateTime.Today.ToString ("d"), operatorType.operationType);
 		}
 
 		/*

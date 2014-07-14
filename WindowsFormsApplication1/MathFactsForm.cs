@@ -46,7 +46,7 @@ namespace KnowYourFacts
 
 			if (!files.mainDirectoryExists())
 			{
-				files.createFilesAndDirectories ();
+				files.createDefaultProgramDirectory ();
 			}
 
 			// Need to change where this is called. If no user data is present, the input dialog appears
@@ -90,6 +90,10 @@ namespace KnowYourFacts
 				}
 
 				files.createNewUserDirectory (user);
+			}
+			else
+			{
+				files.updateCurrentUser (user.name);
 			}
 		}
 
@@ -140,7 +144,7 @@ namespace KnowYourFacts
 			if (changeUserDialog.ShowDialog () == DialogResult.OK)
 			{
 				user.name = changeUserDialog.getSelectedUser ();
-				KnowYourFactsFiles.updateUsersData (user.name);
+				files.updateCurrentUser (user.name);
 				m_mainMenuControl.setUserButtonText ("Welcome " + user.name + "!" + "\nNot " + user.name + "?\nClick here to change users");
 			}
 
