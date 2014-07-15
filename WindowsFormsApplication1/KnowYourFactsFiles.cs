@@ -18,10 +18,11 @@ namespace KnowYourFacts
 
 		static String speedFactsPath;
 
-		String additionFilename = "addition.txt";
-		String subtractionFilename = "subtraction.txt";
-		String multiplicationFilename = "multiplication.txt";
-		String divisionFilename = "division.txt";
+		static String additionFilename = "addition.txt";
+		static String subtractionFilename = "subtraction.txt";
+		static String multiplicationFilename = "multiplication.txt";
+		static String divisionFilename = "division.txt";
+		static String factResponseTimeFilename = "factResponseTime.txt";
 		
 		String userProfileFilename = "profile.txt";
 		static String userFilename;
@@ -307,6 +308,72 @@ namespace KnowYourFacts
 					return dailyMultiplicationFactsData;
 				default:
 					return dailyDivisionFactsData;
+			}
+		}
+
+		private static String getFactsFilename (MathOperationTypeEnum operation)
+		{
+			switch (operation)
+			{
+				case MathOperationTypeEnum.ADDITION:
+					return additionFilename;
+				case MathOperationTypeEnum.SUBTRACTION:
+					return subtractionFilename;
+				case MathOperationTypeEnum.MULTIPLICATION:
+					return multiplicationFilename;
+				default:
+					return divisionFilename;
+			}
+		}
+
+		public static String getFactResponseTimeFilename  ()
+		{
+			return System.IO.Path.Combine (userPath, factResponseTimeFilename);
+		}
+
+		/*
+		 * Determine which filename should be used.
+		 */
+		public static string getDailyFactsFilename (MathOperationTypeEnum operationType, bool knownFile)
+		{
+			switch (operationType)
+			{
+				case MathOperationTypeEnum.ADDITION:
+					if (knownFile)
+					{
+						return System.IO.Path.Combine (knownFactsPath, additionFilename);
+					}
+					else
+					{
+						return System.IO.Path.Combine (unknownFactsPath, additionFilename);
+					}
+				case MathOperationTypeEnum.SUBTRACTION:
+					if (knownFile)
+					{
+						return System.IO.Path.Combine (knownFactsPath, subtractionFilename);
+					}
+					else
+					{
+						return System.IO.Path.Combine (unknownFactsPath, subtractionFilename);
+					}
+				case MathOperationTypeEnum.MULTIPLICATION:
+					if (knownFile)
+					{
+						return System.IO.Path.Combine (knownFactsPath, multiplicationFilename);
+					}
+					else
+					{
+						return System.IO.Path.Combine (unknownFactsPath, multiplicationFilename);
+					}
+				default:
+					if (knownFile)
+					{
+						return System.IO.Path.Combine (knownFactsPath,divisionFilename);
+					}
+					else
+					{
+						return System.IO.Path.Combine (unknownFactsPath,divisionFilename);
+					}
 			}
 		}
 	}

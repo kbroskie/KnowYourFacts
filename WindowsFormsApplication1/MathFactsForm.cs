@@ -342,6 +342,8 @@ namespace KnowYourFacts
 		 */
 		public static void startTheFacts (MathOperationTypeEnum sign, Boolean isSpeedTest, Boolean processAllDailyFacts)
 		{
+			operationType = new MathOperation (sign);
+
 			// Determine if the user has already used the daily facts today.
 			if (files.readDailyFactsDateDataFromFile(operationType.operationType) == DateTime.Today.ToString ("d"))
 			{
@@ -358,9 +360,7 @@ namespace KnowYourFacts
 			{
 				saveProgress = false;
 			}
-
 			
-			operationType = new MathOperation (sign);
 			speedTest = isSpeedTest;
 			processingAllDailyFacts = processAllDailyFacts;
 
