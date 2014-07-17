@@ -19,7 +19,7 @@ namespace KnowYourFacts
 		static bool mainMenuControlToggle = true;
 		static bool factsDisplayControlToggle = false;
 		public static bool inputDisplayToggle = true;
-		public static KnowYourFactsFiles files = KnowYourFactsFiles.Instance;
+		public static FactsFiles files = FactsFiles.Instance;
 
 		public static MathOperation operationType;
 
@@ -140,7 +140,7 @@ namespace KnowYourFacts
 		public static void changeUser ()
 		{
 			ChangeUserDialog changeUserDialog = new ChangeUserDialog ();
-			changeUserDialog.setUserChoices (KnowYourFactsFiles.loadUsers ());
+			changeUserDialog.setUserChoices (FactsFiles.loadUsers ());
 
 			if (changeUserDialog.ShowDialog () == DialogResult.OK)
 			{

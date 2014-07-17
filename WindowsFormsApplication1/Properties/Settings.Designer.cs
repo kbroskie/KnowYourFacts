@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace KnowYourFacts.Properties {
+namespace Broskie.KnowYourFacts.NewNamespace.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

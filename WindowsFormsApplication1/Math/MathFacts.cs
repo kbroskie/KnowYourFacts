@@ -57,7 +57,7 @@ namespace KnowYourFacts
 			FactsList mathFactsList = new FactsList ();
 
 			// Determine whether to read previously generated facts or generate new facts.
-			if ((File.Exists (KnowYourFactsFiles.getDailyFactsFilename (oper.operationType, false))))
+			if ((File.Exists (FactsFiles.getDailyFactsFilename (oper.operationType, false))))
 			{
 				readUnknownFactsFromFile (ref mathFactsList, oper);
 			}
@@ -78,7 +78,7 @@ namespace KnowYourFacts
 		 */
 		static void readUnknownFactsFromFile (ref FactsList mathFactsList, MathOperation operation)
 		{
-			StreamReader din = File.OpenText (KnowYourFactsFiles.getDailyFactsFilename (operation.operationType, false));
+			StreamReader din = File.OpenText (FactsFiles.getDailyFactsFilename (operation.operationType, false));
 			Fact factFromFile;
 			try
 			{
@@ -236,7 +236,7 @@ namespace KnowYourFacts
 
 			try
 			{
-				StreamReader din = File.OpenText (KnowYourFactsFiles.getFactResponseTimeFilename ());
+				StreamReader din = File.OpenText (FactsFiles.getFactResponseTimeFilename ());
 
 				String savedTime = "";
 				while ((savedTime = din.ReadLine ()) != null)
@@ -323,8 +323,8 @@ namespace KnowYourFacts
 		public void writeResultsToFile (ref int correctResponseCount, ref Stack<Fact> unknown, ref Stack<Fact> known,
 										MathOperation operatorType, List<long> factResponseTime)
 		{
-			StreamWriter swU = new StreamWriter (KnowYourFactsFiles.getDailyFactsFilename (operatorType.operationType, false));
-			StreamWriter swK = new StreamWriter (KnowYourFactsFiles.getDailyFactsFilename (operatorType.operationType, true), true);
+			StreamWriter swU = new StreamWriter (FactsFiles.getDailyFactsFilename (operatorType.operationType, false));
+			StreamWriter swK = new StreamWriter (FactsFiles.getDailyFactsFilename (operatorType.operationType, true), true);
 
 			// For use with factResponseTime.
 			int index = 0;
@@ -368,7 +368,7 @@ namespace KnowYourFacts
 			swK.Close ();
 
 			// Save the current date in MM/DD/YYYY format to file.
-			KnowYourFactsFiles.writeDailyFactsDateDataToFile (DateTime.Today.ToString ("d"), operatorType.operationType);
+			FactsFiles.writeDailyFactsDateDataToFile (DateTime.Today.ToString ("d"), operatorType.operationType);
 		}
 
 		/*
@@ -377,7 +377,7 @@ namespace KnowYourFacts
 		public void writeFactResponseTimeToFile (MathOperation operation)
 		{
 			List<int> responseTime = new List<int> ();
-			String responseTimeFilename = KnowYourFactsFiles.getFactResponseTimeFilename ();
+			String responseTimeFilename = FactsFiles.getFactResponseTimeFilename ();
 
 			// Read in the current input and write out the new data.
 			if (File.Exists (responseTimeFilename))
