@@ -11,7 +11,7 @@ namespace KnowYourFacts
 			this.operationType = operationType;
 		}
 
-		public String getOperationName ()
+		public override string ToString ()
 		{
 			String operationName = operationType.ToString ();
 			return operationName.Substring (0, 1) + operationName.Substring (1).ToLower ();

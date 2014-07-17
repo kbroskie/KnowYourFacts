@@ -86,16 +86,16 @@
       <DependentUpon>InputDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Utility\FactsFiles.cs" />
-    <Compile Include="FactsMvc\Controller.cs" />
+    <Compile Include="Unused\FactsMvc\Controller.cs" />
     <Compile Include="UI\FactsDisplayControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="UI\FactsDisplayControl.Designer.cs">
       <DependentUpon>FactsDisplayControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="FactsMvc\FactsModel.cs" />
-    <Compile Include="FactsMvc\FactsModelChangeEventArgs.cs" />
-    <Compile Include="FactsMvc\IView.cs" />
+    <Compile Include="Unused\FactsMvc\FactsModel.cs" />
+    <Compile Include="Unused\FactsMvc\FactsModelChangeEventArgs.cs" />
+    <Compile Include="Unused\FactsMvc\IView.cs" />
     <Compile Include="UI\MainMenuControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

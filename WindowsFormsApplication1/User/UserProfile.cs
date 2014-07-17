@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
 namespace KnowYourFacts
@@ -21,41 +20,34 @@ namespace KnowYourFacts
 			
 		public bool checkForProfiles ()
 		{
-			try
-			{
-				File.OpenText (USER_PROFILES);
-				return true;
-			}
-			catch (FileNotFoundException)
-			{
-				return false;
-			}
+			return System.IO.File.Exists (USER_PROFILES);
 		}
 
 		public string getLastProfileLoaded ()
 		{
-			List<User> profiles = new List<User>();
+			string[] names;
 
 			try
 			{
-				string name = "";
 
-				StreamReader din = File.OpenText (USER_PROFILES);
-
-				// Read the items in the file.
-				while ((name = din.ReadLine ()) != null)
+				using (System.IO.StreamReader din = System.IO.File.OpenText (USER_PROFILES))
 				{
-					profiles.Add (new User (name));
+					names = System.IO.File.ReadAllLines (USER_PROFILES);
 				}
-				din.Close ();
-
-				return profiles.First ().name;
 			}
 			catch (Exception)
 			{
 				// Display message that there was a problem reading the user data from the file.			
 				return null;
 			}
+
+			List<User> profiles = new List<User> ();
+			foreach (String name in names)
+			{
+				profiles.Add (new User (name));
+			}
+
+			return profiles.First ().name;
 		}
 	}
 }

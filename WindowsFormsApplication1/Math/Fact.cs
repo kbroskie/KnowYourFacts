@@ -13,5 +13,12 @@
 			this.rightNum = rightNum;
 			this.operation = operation;
 		}
+
+		public override string ToString ()
+		{
+			string fact = leftNum.ToString () + " " + operation.getOperationSign () + " " 
+								+ rightNum.ToString ();
+			return fact;
+		}
 	}
 }

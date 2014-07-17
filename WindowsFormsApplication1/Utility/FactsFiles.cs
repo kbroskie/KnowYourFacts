@@ -13,14 +13,6 @@ namespace KnowYourFacts
 		static String userDirectory = Environment.GetFolderPath (Environment.SpecialFolder.UserProfile);
 		static String topLevelDirectory;
 
-		public const String ADDITION = "addition.txt";
-		public const String SUBTRACTION = "subtraction.txt";
-		public const String MULTIPLICATION = "multiplication.txt";
-		public const String DIVISION = "division.txt";
-		public const String FACT_RESPONSE_TIME = "factResponseTime.txt";
-		public const String USER__PROFILE = "profile.txt";
-		public const String USER_DATA = "usersData.txt";
-
 		static String usersPath;
 		static String usersDataFilename;
 		static String userFilename;
@@ -42,6 +34,18 @@ namespace KnowYourFacts
 		static String speedSubtractionFactsDataFilename;
 		static String speedMultiplicationFactsDataFilename;
 		static String speedDivisionFactsDataFilename;
+
+		#endregion
+
+		#region Constants
+
+		public const String ADDITION = "addition.txt";
+		public const String SUBTRACTION = "subtraction.txt";
+		public const String MULTIPLICATION = "multiplication.txt";
+		public const String DIVISION = "division.txt";
+		public const String FACT_RESPONSE_TIME = "factResponseTime.txt";
+		public const String USER__PROFILE = "profile.txt";
+		public const String USER_DATA = "usersData.txt";
 
 		#endregion
 
@@ -391,7 +395,14 @@ namespace KnowYourFacts
 		 */
 		public String readDailyFactsDateDataFromFile (MathOperationTypeEnum operation)
 		{
-			return System.IO.File.ReadLines (getDailyFactsDataFilename (operation)).Last ();
+			try
+			{
+				return System.IO.File.ReadLines (getDailyFactsDataFilename (operation)).Last ();
+			}
+			catch (Exception)
+			{
+				return "";
+			}
 		}
 
 		#endregion

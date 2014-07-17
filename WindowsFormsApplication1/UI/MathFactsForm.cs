@@ -7,17 +7,17 @@ namespace KnowYourFacts
 {
 	public partial class MathFactsForm : Form, IView
 	{
-		static MainMenuControl m_mainMenuControl;
+		private static MainMenuControl m_mainMenuControl;
 		public static FactsDisplayControl m_factsDisplayControl;
-		static MathFacts reference;
+		private static MathFacts reference;
 
 		public static bool speedTest;
-		static bool processingAllDailyFacts = false;
-		static bool saveProgress = true;
+		private static bool processingAllDailyFacts = false;
+		private static bool saveProgress = true;
 
-		static bool menubarToggle = true;
-		static bool mainMenuControlToggle = true;
-		static bool factsDisplayControlToggle = false;
+		private static bool menubarToggle = true;
+		private static bool mainMenuControlToggle = true;
+		private static bool factsDisplayControlToggle = false;
 		public static bool inputDisplayToggle = true;
 		public static FactsFiles files = FactsFiles.Instance;
 
@@ -29,7 +29,8 @@ namespace KnowYourFacts
 		public long timeElapsed;
 		public static System.Diagnostics.Stopwatch timer;
 
-		private String continueDailyFactsPrompt = "\nPress the spacebar to continue your facts.";
+		public const string COMPLETION_CONTINUE_PROMPT = "\nPress the spacebar to continue.";
+		private const String CONTINUE_DAILY_FACTS_PROMPT = "\nPress the spacebar to continue your facts.";
 
 		private static User user;
 
@@ -349,7 +350,7 @@ namespace KnowYourFacts
 			{
 				saveProgress = false;
 
-				var continueWithoutSavingResponse = MessageBox.Show ("Oops! It looks like you have already practiced your " + operationType.getOperationName() + " facts today.\nYou can practice them again, but your progress will not be saved.\n\n Continue anyway?",
+				var continueWithoutSavingResponse = MessageBox.Show ("Oops! It looks like you have already practiced your " + operationType.ToString () + " facts today.\nYou can practice them again, but your progress will not be saved.\n\n Continue anyway?",
 				"Progress Will Not Be Saved", MessageBoxButtons.YesNo);
 				if (continueWithoutSavingResponse == DialogResult.No)
 				{
@@ -451,12 +452,12 @@ namespace KnowYourFacts
 					if (processingAllDailyFacts && operationType.operationType != MathOperationTypeEnum.DIVISION)
 					{
 						m_factsDisplayControl.messageLabel.Text = "All facts complete, very nice try!"
-								+ "\nYou didn't get any facts correct this time.\n" + continueDailyFactsPrompt;
+								+ "\nYou didn't get any facts correct this time.\n" + CONTINUE_DAILY_FACTS_PROMPT;
 					}
 					else
 					{
 						m_factsDisplayControl.messageLabel.Text = "All facts complete, very nice try!"
-								+ "\nYou didn't get any facts correct this time.\n" + reference.completionContinuePrompt;
+								+ "\nYou didn't get any facts correct this time.\n" + COMPLETION_CONTINUE_PROMPT;
 					}
 				}
 				
@@ -466,13 +467,13 @@ namespace KnowYourFacts
 					{
 						m_factsDisplayControl.messageLabel.Text = "All facts complete!\nYou got " + reference.correctResponseCount
 								+ " out of " + reference.numberOfFactsProcessed
-								+ " facts correct!" + continueDailyFactsPrompt;
+								+ " facts correct!" + CONTINUE_DAILY_FACTS_PROMPT;
 					}
 					else
 					{
 						m_factsDisplayControl.messageLabel.Text = "All facts complete!\nYou got " + reference.correctResponseCount
 								+ " out of " + reference.numberOfFactsProcessed
-								+ " facts correct!" + reference.completionContinuePrompt;
+								+ " facts correct!" + COMPLETION_CONTINUE_PROMPT;
 					}
 				}
 				
@@ -483,14 +484,14 @@ namespace KnowYourFacts
 						m_factsDisplayControl.messageLabel.Text = "All facts complete, great job!\n"
 							+ "You got " + reference.correctResponseCount + " out of "
 							+ reference.numberOfFactsProcessed + " facts correct!\n"
-							+ continueDailyFactsPrompt;
+							+ CONTINUE_DAILY_FACTS_PROMPT;
 					}
 					else
 					{
 						m_factsDisplayControl.messageLabel.Text = "All facts complete, great job!\n"
 							+ "You got " + reference.correctResponseCount + " out of "
 							+ reference.numberOfFactsProcessed + " facts correct!\n"
-							+ reference.completionContinuePrompt;
+							+ COMPLETION_CONTINUE_PROMPT;
 					}
 				}
 			}
@@ -498,8 +499,8 @@ namespace KnowYourFacts
 			{
 				reference.writeFactResponseTimeToFile (operationType);
 				m_factsDisplayControl.messageLabel.Text = "Speed test complete!"
-						+ "\nNow try out the daily " + operationType.operationType
-						+ " facts!\n" + reference.completionContinuePrompt;
+						+ "\nNow try out the daily " + operationType.ToString ()
+						+ " facts!\n" + COMPLETION_CONTINUE_PROMPT;
 			}
 		}
 

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+
 using FactsList = System.Collections.Generic.List<KnowYourFacts.Fact>;
 using FactsQueue = System.Collections.Generic.Queue<KnowYourFacts.Fact>;
 
@@ -11,12 +11,13 @@ namespace KnowYourFacts
 {
 	public class MathFacts
 	{
-		//----------------------------------------------------------------------------------------
+		
+
+		#region Variables and Constants
+
 		// Max number of facts to go up to
 		const int MAX_NUM = 5;
 
-		/************************************************************/
-		// Class instance variables
 		public List<long> factResponseTime;
 		public int maxResponseTime;
 		public double time;
@@ -24,12 +25,12 @@ namespace KnowYourFacts
 		public int correctResponseCount;
 		public int numberOfFactsProcessed;
 
-		public string completionContinuePrompt = "\nPress the spacebar to continue.";
-
 		public ArrayList factsOrder;
 		public FactsQueue queueOfFacts;
 		public Stack<Fact> knownFacts;
 		public Stack<Fact> unknownFacts;
+
+		#endregion
 
 		public MathFacts ()
 		{
@@ -57,7 +58,7 @@ namespace KnowYourFacts
 			FactsList mathFactsList = new FactsList ();
 
 			// Determine whether to read previously generated facts or generate new facts.
-			if ((File.Exists (FactsFiles.getDailyFactsFilename (oper.operationType, false))))
+			if ((System.IO.File.Exists (FactsFiles.getDailyFactsFilename (oper.operationType, false))))
 			{
 				readUnknownFactsFromFile (ref mathFactsList, oper);
 			}
@@ -78,22 +79,23 @@ namespace KnowYourFacts
 		 */
 		static void readUnknownFactsFromFile (ref FactsList mathFactsList, MathOperation operation)
 		{
-			StreamReader din = File.OpenText (FactsFiles.getDailyFactsFilename (operation.operationType, false));
-			Fact factFromFile;
 			try
 			{
-				String numInFile = din.ReadLine ();
+				String[] numbers = System.IO.File.ReadAllLines (FactsFiles.getDailyFactsFilename (operation.operationType,
+					false));
+			
+				Fact newFact = new Fact ();
+				newFact.operation = operation;
 
-				// Read the items in the file.
-				while (numInFile != null)
+				for (int index = 0; index < numbers.Count (); ++index)
 				{
-					factFromFile = new Fact ();
-					factFromFile.leftNum = System.Convert.ToInt32 (numInFile);
-					numInFile = din.ReadLine ();
-					factFromFile.rightNum = System.Convert.ToInt32 (numInFile);
-					factFromFile.operation = operation;
-					mathFactsList.Add (factFromFile);
-					numInFile = din.ReadLine ();
+					newFact.leftNum = System.Convert.ToInt32 (numbers[index++]);
+
+					if (numbers.Count () != 0)
+					{
+						newFact.rightNum = System.Convert.ToInt32 (numbers[index]);
+						mathFactsList.Add (newFact);
+					}
 				}
 			}
 			catch (Exception e)
@@ -101,16 +103,13 @@ namespace KnowYourFacts
 				if (e.InnerException is System.IO.FileNotFoundException)
 				{
 					MessageBox.Show ("The file with your unmastered facts could not be found.");
+					return;
 				}
 				else
 				{
 					MessageBox.Show ("There was a problem reading the file with your unmastered facts.");
 					Application.Exit ();
 				}
-			}
-			finally
-			{
-				din.Close ();
 			}
 		}
 
@@ -233,32 +232,25 @@ namespace KnowYourFacts
 															  List<long> factResponseTime, ref int maxResponseTime)
 		{
 			List<int> responseTime = new List<int> ();
-
+			String[] savedTimes;
 			try
 			{
-				StreamReader din = File.OpenText (FactsFiles.getFactResponseTimeFilename ());
-
-				String savedTime = "";
-				while ((savedTime = din.ReadLine ()) != null)
-				{
-					responseTime.Add (System.Convert.ToInt32 (savedTime));
-				}
-				din.Close ();
+				savedTimes = System.IO.File.ReadAllLines (FactsFiles.getFactResponseTimeFilename ());
 			}
-			catch (FileNotFoundException)
+			catch (System.IO.FileNotFoundException)
 			{
 				return false;
+			}
+
+			foreach (String time in savedTimes)
+			{
+				responseTime.Add (System.Convert.ToInt32 (time));
 			}
 
 			maxResponseTime = responseTime[(int) operationType];
 
-			if (maxResponseTime == 0)
-			{
-				// No fact response times have been recorded.
-				return false;
-			}
-
-			return true;
+			// No fact response times have been recorded if no maxResponseTime exists
+			return !maxResponseTime.Equals(0);
 		}
 
 		/*
@@ -276,9 +268,9 @@ namespace KnowYourFacts
 					// No saved response data was found for this fact type.
 					MathFactsForm.toggleInputDisplay ();
 
-					String operatorName = MathFactsForm.operationType.getOperationName ();
+					String operatorName = MathFactsForm.operationType.ToString ();
 					MathFactsForm.m_factsDisplayControl.messageLabel.Text = "No data could be found for " + operatorName + " facts.\n"
-								+ "Please take the " + operatorName + " speed test first.\n" + completionContinuePrompt;
+								+ "Please take the " + operatorName + " speed test first.\n" + MathFactsForm.COMPLETION_CONTINUE_PROMPT;
 					return;
 				}
 			}
@@ -301,7 +293,7 @@ namespace KnowYourFacts
 				{
 					MathFactsForm.toggleInputDisplay ();
 					displayControl.messageLabel.Text = "You have mastered all the facts, there are none to practice!\n"
-							+ completionContinuePrompt;
+							+ MathFactsForm.COMPLETION_CONTINUE_PROMPT;
 				}
 			}
 			else
@@ -323,49 +315,47 @@ namespace KnowYourFacts
 		public void writeResultsToFile (ref int correctResponseCount, ref Stack<Fact> unknown, ref Stack<Fact> known,
 										MathOperation operatorType, List<long> factResponseTime)
 		{
-			StreamWriter swU = new StreamWriter (FactsFiles.getDailyFactsFilename (operatorType.operationType, false));
-			StreamWriter swK = new StreamWriter (FactsFiles.getDailyFactsFilename (operatorType.operationType, true), true);
-
-			// For use with factResponseTime.
-			int index = 0;
-
-			// Clear the current contents of the unknown facts file.
-			swU.Write ("");
-
-			// Store each number from the List in the appropriate file.
-			while (knownFacts.Count () != 0)
+			using (System.IO.StreamWriter swU = new System.IO.StreamWriter (FactsFiles.getDailyFactsFilename
+					(operatorType.operationType, false))) 
 			{
-				// Determine whether a correct answer was entered, and whether the answer was entered after a period of elapsed time. 
-				if (factResponseTime[index] < maxResponseTime)
+				using (System.IO.StreamWriter swK = new System.IO.StreamWriter (FactsFiles.getDailyFactsFilename
+						(operatorType.operationType, true), true))
 				{
-					// A correct answer was given. Store in the known facts file.
-					swK.WriteLine (knownFacts.Peek ().leftNum);
-					swK.WriteLine (knownFacts.Peek ().rightNum);
+					// For use with factResponseTime.
+					int index = 0;
+
+					// Store each number from the List in the appropriate file.
+					while (knownFacts.Count () != 0)
+					{
+						// Determine whether a correct answer was entered, and whether the answer was entered after a period of elapsed time. 
+						if (factResponseTime[index] < maxResponseTime)
+						{
+							// A correct answer was given. Store in the known facts file.
+							swK.WriteLine (knownFacts.Peek ().leftNum);
+							swK.WriteLine (knownFacts.Peek ().rightNum);
+						}
+
+						// Correct answer was given, but in more than allotted time for a known fact.
+						else
+						{
+							swU.WriteLine (knownFacts.Peek ().leftNum);
+							swU.WriteLine (knownFacts.Peek ().rightNum);
+						}
+
+						knownFacts.Pop ();
+						++correctResponseCount;
+						++index;
+					}
+
+					// Store incorrect responses in the unknown facts file.
+					while (unknownFacts.Count () != 0)
+					{
+						swU.WriteLine (unknownFacts.Peek ().leftNum);
+						swU.WriteLine (unknownFacts.Peek ().rightNum);
+						unknownFacts.Pop ();
+					}
 				}
-
-				// Correct answer was given, but in more than allotted time for a known fact.
-				else
-				{
-					swU.WriteLine (knownFacts.Peek ().leftNum);
-					swU.WriteLine (knownFacts.Peek ().rightNum);
-				}
-
-				knownFacts.Pop ();
-				++correctResponseCount;
-				++index;
 			}
-
-			// Store incorrect responses in the unknown facts file.
-			while (unknownFacts.Count () != 0)
-			{
-				swU.WriteLine (unknownFacts.Peek ().leftNum);
-				swU.WriteLine (unknownFacts.Peek ().rightNum);
-				unknownFacts.Pop ();
-			}
-
-			// Close the files.
-			swU.Close ();
-			swK.Close ();
 
 			// Save the current date in MM/DD/YYYY format to file.
 			FactsFiles.writeDailyFactsDateDataToFile (DateTime.Today.ToString ("d"), operatorType.operationType);
@@ -380,18 +370,14 @@ namespace KnowYourFacts
 			String responseTimeFilename = FactsFiles.getFactResponseTimeFilename ();
 
 			// Read in the current input and write out the new data.
-			if (File.Exists (responseTimeFilename))
+			if (System.IO.File.Exists (responseTimeFilename))
 			{
-				StreamReader din = File.OpenText (responseTimeFilename);
-				String savedTime = din.ReadLine ();
+				String[] savedTimes = System.IO.File.ReadAllLines (responseTimeFilename);
 
-				while (savedTime != null)
+				foreach (String time in savedTimes)
 				{
-					responseTime.Add (Convert.ToInt32 (savedTime));
-					savedTime = din.ReadLine ();
+					responseTime.Add (Convert.ToInt32 (time));
 				}
-
-				din.Close ();
 
 				// Determine if the saved file has a complete data set.
 				if (responseTime.Count != 4)
@@ -415,13 +401,13 @@ namespace KnowYourFacts
 			// Store the average response time.
 			responseTime[(int) operation.operationType] = (int) (System.Math.Ceiling (sum / factResponseTime.Count ()));
 
-			StreamWriter sw = new StreamWriter (responseTimeFilename);
-			foreach (int time in responseTime)
+			using (System.IO.StreamWriter sw = new System.IO.StreamWriter (responseTimeFilename))
 			{
-				sw.WriteLine (time);
+				foreach (int time in responseTime)
+				{
+					sw.WriteLine (time);
+				}
 			}
-
-			sw.Close ();
 		}
 	}
 }
