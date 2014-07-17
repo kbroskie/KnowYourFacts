@@ -79,7 +79,6 @@ namespace KnowYourFacts
 		static void readUnknownFactsFromFile (ref FactsList mathFactsList, MathOperation operation)
 		{
 			StreamReader din = File.OpenText (KnowYourFactsFiles.getDailyFactsFilename (operation.operationType, false));
-
 			Fact factFromFile;
 			try
 			{
@@ -231,7 +230,7 @@ namespace KnowYourFacts
 		 * Retrieve the current saved response time.
 		 */
 		public static bool getSavedResponseTime (MathOperationTypeEnum operationType,
-															  List<long> factResponseTime, int maxResponseTime)
+															  List<long> factResponseTime, ref int maxResponseTime)
 		{
 			List<int> responseTime = new List<int> ();
 
@@ -252,6 +251,7 @@ namespace KnowYourFacts
 			}
 
 			maxResponseTime = responseTime[(int) operationType];
+
 			if (maxResponseTime == 0)
 			{
 				// No fact response times have been recorded.
@@ -269,7 +269,7 @@ namespace KnowYourFacts
 		{
 			MathOperationTypeEnum opType = MathFactsForm.operationType.operationType;
 			// Suppress messages if all daily facts are being processed.
-			if (!MathFactsForm.speedTest && !getSavedResponseTime (opType, factResponseTime, maxResponseTime))
+			if (!MathFactsForm.speedTest && !getSavedResponseTime (opType, factResponseTime, ref maxResponseTime))
 			{
 				if (!processingAllDailyFacts)
 				{
@@ -325,8 +325,7 @@ namespace KnowYourFacts
 		{
 			StreamWriter swU = new StreamWriter (KnowYourFactsFiles.getDailyFactsFilename (operatorType.operationType, false));
 			StreamWriter swK = new StreamWriter (KnowYourFactsFiles.getDailyFactsFilename (operatorType.operationType, true), true);
-			Console.WriteLine (swU);
-			Console.WriteLine (swK);
+
 			// For use with factResponseTime.
 			int index = 0;
 
@@ -388,7 +387,6 @@ namespace KnowYourFacts
 
 				while (savedTime != null)
 				{
-					Console.WriteLine (savedTime);
 					responseTime.Add (Convert.ToInt32 (savedTime));
 					savedTime = din.ReadLine ();
 				}
