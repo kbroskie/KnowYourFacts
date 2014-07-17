@@ -261,16 +261,6 @@ namespace KnowYourFacts
 			return true;
 		}
 
-		
-
-		
-
-		
-
-		
-
-		
-
 		/*
 		 * Handles starting the daily facts and speed test.
 		 */
@@ -335,7 +325,8 @@ namespace KnowYourFacts
 		{
 			StreamWriter swU = new StreamWriter (KnowYourFactsFiles.getDailyFactsFilename (operatorType.operationType, false));
 			StreamWriter swK = new StreamWriter (KnowYourFactsFiles.getDailyFactsFilename (operatorType.operationType, true), true);
-
+			Console.WriteLine (swU);
+			Console.WriteLine (swK);
 			// For use with factResponseTime.
 			int index = 0;
 

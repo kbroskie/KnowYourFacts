@@ -368,11 +368,11 @@ namespace KnowYourFacts
 				default:
 					if (knownFile)
 					{
-						return System.IO.Path.Combine (knownFactsPath,divisionFilename);
+						return System.IO.Path.Combine (knownFactsPath, divisionFilename);
 					}
 					else
 					{
-						return System.IO.Path.Combine (unknownFactsPath,divisionFilename);
+						return System.IO.Path.Combine (unknownFactsPath, divisionFilename);
 					}
 			}
 		}

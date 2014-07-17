@@ -23,7 +23,7 @@ namespace KnowYourFacts
 
 		public static MathOperation operationType;
 
-		static public int userResponse;
+		public static int userResponse;
 		public static String m_userInput;
 
 		public long timeElapsed;
@@ -273,7 +273,7 @@ namespace KnowYourFacts
 		 * Handle events for starting daily facts.
 		 */
 		private void dailyFactsClick (object sender, EventArgs e)
-		{			
+		{
 			MathOperationTypeEnum sign;
 			if (ReferenceEquals (sender, (additionFactsMenuItem)))
 			{
@@ -358,7 +358,7 @@ namespace KnowYourFacts
 			}
 			else
 			{
-				saveProgress = false;
+				saveProgress = true;
 			}
 			
 			speedTest = isSpeedTest;
@@ -371,7 +371,7 @@ namespace KnowYourFacts
 			}
 
 			// Change the bool value so the last set of messages for all daily facts are not suppressed.
-			if (operationType.operationType == MathOperationTypeEnum.DIVISION)
+			else if (operationType.operationType == MathOperationTypeEnum.DIVISION)
 			{
 				processingAllDailyFacts = !processingAllDailyFacts;
 			}
@@ -384,7 +384,7 @@ namespace KnowYourFacts
 		 */ 
 		public void processInput ()
 		{
-			timer.Stop();											
+			timer.Stop();
 
 			long secondsElapsed;
 		
