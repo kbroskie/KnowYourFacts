@@ -19,10 +19,13 @@ namespace KnowYourFacts
 
 		public void setUserChoices (List <String> users)
 		{
+			usersListBox.Items.Add ("<New User>");
+
 			foreach (String user in users)
 			{
 				usersListBox.Items.Add (user);
 			}
+			usersListBox.SelectedIndex = 0;	
 		}
 
 		public String getSelectedUser ()

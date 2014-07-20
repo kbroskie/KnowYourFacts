@@ -34,6 +34,8 @@ namespace KnowYourFacts
 
 		private static UserProfile userProfile;
 
+		readonly static UserProfile GUEST_PROFILE = new UserProfile (new User ("Guest"));
+
 		/*
 		 * Constructor to create a form object with a menu control and display control.
 		 */
@@ -78,18 +80,11 @@ namespace KnowYourFacts
 		private void loadLastUserOrPromptForNewUser () 
 		{
 			userProfile.user.name = files.loadCurrentUsername ();
-			
-			// No user data exists
-			if (userProfile.user.name == null)
-			{
-				userProfile.user.name = promptForNewUserProfile ();
 
-				// Need to ensure name conforms to windows naming conventions. 
-				while (files.userDirectoryExists (userProfile.user))
-				{
-					MessageBox.Show ("Sorry, that username is already taken.\nPlease try again with a different username.");
-					userProfile.user.name = promptForNewUserProfile ();
-				}
+			// No user data exists
+			if (String.IsNullOrEmpty (userProfile.user.name))
+			{
+				userProfile = promptForNewUserProfile ();
 
 				files.createNewUserDirectory (userProfile);
 				files.updateUserProfile (userProfile);
@@ -97,47 +92,82 @@ namespace KnowYourFacts
 			else
 			{
 				files.updateCurrentUser (userProfile.user.name);
-				files.loadUserProfile (ref userProfile);
+				userProfile = files.loadUserProfile ();
 			}
 		}
 
 		/*
 		 * Prompt for and obtain a new username, or use "Guest" for default.
 		 */
-		private String promptForNewUserProfile ()
+		private static UserProfile promptForNewUserProfile () // TODO Test that the dialog does not close before all valid data is entered.
 		{
-			String username = "";
+			UserProfile profile = GUEST_PROFILE;
 
 			InputDialog inputDialog = new InputDialog ();
-			if (inputDialog.ShowDialog () == DialogResult.OK)
-			{
-				username = inputDialog.inputMaskedTextbox.Text;
+			bool keepDialogShowing = true;
 
-				if (username == "")
+			do {
+				if (inputDialog.ShowDialog () == DialogResult.OK)
 				{
-					var confirmResult = MessageBox.Show ("You didn't enter a username to create. Continue without creating a username?\nYour progress will not be saved.",
-							"Confirm Cancel", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
-					if (confirmResult == DialogResult.Yes)
+					String username = inputDialog.usernameMaskedTextBox.Text;
+					String maxFactNumber = inputDialog.maxFactNumberMaskedTextBox.Text;
+					// Check that a username was entered.
+					if (String.IsNullOrEmpty (username))
 					{
-						username = "Guest";
+						MessageBox.Show ("You didn't enter a username to create.\nPlease enter a username before continuing.",
+							"No Username", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					}
+
+					// Ensure the username does not exist.
+					else if (files.userDirectoryExists (new User(username)))
+					{
+						// TODO Need to ensure name conforms to windows naming conventions. 
+						MessageBox.Show ("Sorry, that username is already taken.\nPlease try again with a different username.",
+								"Duplicate Username", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						inputDialog.usernameMaskedTextBox.Text = "";
+					}
+
+					// Check that a maxFactNumber was entered.
+					else if (String.IsNullOrEmpty (maxFactNumber))
+					{
+						MessageBox.Show ("You didn't enter a maximum fact number to create.\nPlease enter a number before continuing.",
+												"No Maximum Fact Number", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					}
+					
+					// Check that the number is greater than 0.
+					else if ((profile.maxFactNumber = Convert.ToInt32 (maxFactNumber)) <= 0)
+					{
+						MessageBox.Show ("Please enter a number greater than 0.",
+												"Invalid Maximum Fact Number", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						inputDialog.maxFactNumberMaskedTextBox.Text = "";
+					}
+					
+					// Valid data was entered.
+					else 
+					{
+						profile.user.name = username;
+						keepDialogShowing = false;
 					}
 				}
-			}
-			else
-			{
-				var confirmResult = MessageBox.Show ("Are you sure you don't want to create a username?\nYour progress will not be saved.",
-				"Confirm Cancel", MessageBoxButtons.YesNo);
-				if (confirmResult == DialogResult.Yes)
+
+				// The user chose "Cancel"
+				else 
 				{
-					username = "Guest";
+					var confirmResult = MessageBox.Show ("Are you sure you don't want to create a username?\nYour progress will not be saved.",
+						"Confirm Cancel", MessageBoxButtons.YesNo);
+					if (confirmResult == DialogResult.Yes)
+					{
+						keepDialogShowing = false;
+					}
 				}
-			}
+			} while (keepDialogShowing);
 
 			if (inputDialog != null)
 			{
 				inputDialog.Dispose ();
 			}
-			return username;
+
+			return profile;
 		}
 
 		public static void changeUser ()
@@ -147,10 +177,24 @@ namespace KnowYourFacts
 
 			if (changeUserDialog.ShowDialog () == DialogResult.OK)
 			{
-				userProfile.user.name = changeUserDialog.getSelectedUser ();
-				files.updateCurrentUser (userProfile.user.name);
-				m_mainMenuControl.setUserButtonText ("Welcome " + userProfile.user.name + "!" + "\nNot " + userProfile.user.name + "?\nClick here to change users");
-				reference.maxFactNumber = userProfile.maxFactNumber;
+				String selectedUser = changeUserDialog.getSelectedUser ();
+				if (selectedUser == "<New User>")
+				{
+					userProfile = promptForNewUserProfile ();
+					if (userProfile.user.name != "Guest")
+					{
+						files.createNewUserDirectory (userProfile);
+						files.updateUserProfile (userProfile);
+					}
+				}
+				else 
+				{
+					files.updateCurrentUser (selectedUser);
+					userProfile = files.loadUserProfile (); 
+				}
+
+				reference.maxFactNumber = userProfile.maxFactNumber; // HACK will not need to set this once I phase out this variable in MathFacts
+				m_mainMenuControl.setUserButtonText ("Welcome " + userProfile.user.name + "!" + "\nNot " + userProfile.user.name + "?\nClick Here to Change Users.");
 			}
 
 			if (changeUserDialog != null)

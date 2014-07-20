@@ -110,6 +110,7 @@ namespace KnowYourFacts
 		 */ 
 		public void createNewUserDirectory (UserProfile newUserProfile)
 		{
+			Console.WriteLine ("in createNewUserDirectory " + newUserProfile.user.name);
 			// Create the individual user directories.
 			userPath = System.IO.Path.Combine (usersPath, newUserProfile.user.name);
 			paths.Add (userPath);
@@ -171,7 +172,8 @@ namespace KnowYourFacts
 			{
 				if (!System.IO.File.Exists (file))
 				{
-					System.IO.File.Create (file);
+					System.IO.File.Create (file).Close ();
+					
 				}
 			}
 		}
@@ -191,7 +193,7 @@ namespace KnowYourFacts
 		 */
 		public bool userDirectoryExists (User user)
 		{
-			return (System.IO.File.Exists (System.IO.Path.Combine (usersPath, user.name)));
+			return (System.IO.Directory.Exists (System.IO.Path.Combine (usersPath, user.name)));
 		}
 
 		/*
@@ -203,7 +205,6 @@ namespace KnowYourFacts
 
 			if (currentUser != "Guest")
 			{
-
 				userPath = System.IO.Path.Combine (usersPath, currentUser);
 
 				dailyFactsPath = System.IO.Path.Combine (userPath, "dailyFactsData");
@@ -315,8 +316,12 @@ namespace KnowYourFacts
 		{
 			try
 			{
+				Console.WriteLine (userFilename);
 				using (System.IO.StreamWriter file = new System.IO.StreamWriter (userFilename))
 				{
+					Console.WriteLine ("in updateUserProfile " + profile.user.name);
+
+					file.WriteLine (profile.user.name);
 					file.WriteLine (profile.maxFactNumber);
 					file.WriteLine (profile.hasCustomSpeedFacts.ToString());
 				}
@@ -437,19 +442,21 @@ namespace KnowYourFacts
 			}
 		}
 
-		public void loadUserProfile (ref UserProfile profile)
+		public UserProfile loadUserProfile ()
 		{
 			try
 			{
 				using (System.IO.StreamReader file = new System.IO.StreamReader (userFilename))
 				{
-					profile.maxFactNumber = Convert.ToInt32(file.ReadLine ());
-					profile.hasCustomSpeedFacts = Convert.ToBoolean (file.ReadLine ());
+					String username = file.ReadLine ();
+					int maxFactNumber = Convert.ToInt32(file.ReadLine ());
+					Boolean hasCustomSpeedFacts = Convert.ToBoolean (file.ReadLine ());
+					return new UserProfile (new User (username), maxFactNumber, hasCustomSpeedFacts);
 				}
 			}
-			catch (Exception e)
+			catch (Exception)
 			{
-				Console.WriteLine (e);
+				return new UserProfile();
 			}
 		}
 

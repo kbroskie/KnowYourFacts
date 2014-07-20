@@ -30,11 +30,12 @@
 		{
 			this.button1 = new System.Windows.Forms.Button();
 			this.button2 = new System.Windows.Forms.Button();
-			this.inputMaskedTextbox = new System.Windows.Forms.MaskedTextBox();
-			this.label1 = new System.Windows.Forms.Label();
+			this.usernameMaskedTextBox = new System.Windows.Forms.MaskedTextBox();
+			this.usernameLabel = new System.Windows.Forms.Label();
 			this.maxFactNumberLabel = new System.Windows.Forms.Label();
 			this.factNumberHelpButton = new System.Windows.Forms.Button();
 			this.maxFactNumberMaskedTextBox = new System.Windows.Forms.MaskedTextBox();
+			this.usernameHelpButton = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// button1
@@ -57,25 +58,25 @@
 			this.button2.Text = "Cancel";
 			this.button2.UseVisualStyleBackColor = true;
 			// 
-			// inputMaskedTextbox
+			// usernameMaskedTextBox
 			// 
-			this.inputMaskedTextbox.HidePromptOnLeave = true;
-			this.inputMaskedTextbox.Location = new System.Drawing.Point(52, 49);
-			this.inputMaskedTextbox.Mask = "aaaaaaaaaaaaaaaaaaaaaaaaa";
-			this.inputMaskedTextbox.Name = "inputMaskedTextbox";
-			this.inputMaskedTextbox.PromptChar = ' ';
-			this.inputMaskedTextbox.Size = new System.Drawing.Size(185, 20);
-			this.inputMaskedTextbox.TabIndex = 2;
-			this.inputMaskedTextbox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.usernameMaskedTextBox.HidePromptOnLeave = true;
+			this.usernameMaskedTextBox.Location = new System.Drawing.Point(73, 45);
+			this.usernameMaskedTextBox.Mask = "aaaaaaaaaaaaaaaaaaaaaaaaa";
+			this.usernameMaskedTextBox.Name = "usernameMaskedTextBox";
+			this.usernameMaskedTextBox.PromptChar = ' ';
+			this.usernameMaskedTextBox.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+			this.usernameMaskedTextBox.Size = new System.Drawing.Size(139, 20);
+			this.usernameMaskedTextBox.TabIndex = 0;
 			// 
-			// label1
+			// usernameLabel
 			// 
-			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(31, 22);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(222, 13);
-			this.label1.TabIndex = 3;
-			this.label1.Text = "Enter any combination of letters and numbers.";
+			this.usernameLabel.AutoSize = true;
+			this.usernameLabel.Location = new System.Drawing.Point(31, 16);
+			this.usernameLabel.Name = "usernameLabel";
+			this.usernameLabel.Size = new System.Drawing.Size(58, 13);
+			this.usernameLabel.TabIndex = 3;
+			this.usernameLabel.Text = "Username:";
 			// 
 			// maxFactNumberLabel
 			// 
@@ -105,20 +106,32 @@
 			this.maxFactNumberMaskedTextBox.Mask = "##0";
 			this.maxFactNumberMaskedTextBox.Name = "maxFactNumberMaskedTextBox";
 			this.maxFactNumberMaskedTextBox.PromptChar = ' ';
+			this.maxFactNumberMaskedTextBox.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
 			this.maxFactNumberMaskedTextBox.Size = new System.Drawing.Size(50, 20);
-			this.maxFactNumberMaskedTextBox.TabIndex = 6;
-			this.maxFactNumberMaskedTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.maxFactNumberMaskedTextBox.TabIndex = 1;
+			// 
+			// usernameHelpButton
+			// 
+			this.usernameHelpButton.Location = new System.Drawing.Point(179, 13);
+			this.usernameHelpButton.Name = "usernameHelpButton";
+			this.usernameHelpButton.Size = new System.Drawing.Size(38, 20);
+			this.usernameHelpButton.TabIndex = 7;
+			this.usernameHelpButton.TabStop = false;
+			this.usernameHelpButton.Text = "Help";
+			this.usernameHelpButton.UseVisualStyleBackColor = true;
+			this.usernameHelpButton.Click += new System.EventHandler(this.usernameHelpButton_Click);
 			// 
 			// InputDialog
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(284, 197);
+			this.Controls.Add(this.usernameHelpButton);
 			this.Controls.Add(this.maxFactNumberMaskedTextBox);
 			this.Controls.Add(this.factNumberHelpButton);
 			this.Controls.Add(this.maxFactNumberLabel);
-			this.Controls.Add(this.label1);
-			this.Controls.Add(this.inputMaskedTextbox);
+			this.Controls.Add(this.usernameLabel);
+			this.Controls.Add(this.usernameMaskedTextBox);
 			this.Controls.Add(this.button2);
 			this.Controls.Add(this.button1);
 			this.Name = "InputDialog";
@@ -133,10 +146,11 @@
 
 		private System.Windows.Forms.Button button1;
 		private System.Windows.Forms.Button button2;
-		private System.Windows.Forms.Label label1;
-		public System.Windows.Forms.MaskedTextBox inputMaskedTextbox;
+		private System.Windows.Forms.Label usernameLabel;
+		public System.Windows.Forms.MaskedTextBox usernameMaskedTextBox;
 		private System.Windows.Forms.Label maxFactNumberLabel;
 		private System.Windows.Forms.Button factNumberHelpButton;
-		private System.Windows.Forms.MaskedTextBox maxFactNumberMaskedTextBox;
+		private System.Windows.Forms.Button usernameHelpButton;
+		public System.Windows.Forms.MaskedTextBox maxFactNumberMaskedTextBox;
 	}
 }
