@@ -11,12 +11,10 @@ namespace KnowYourFacts
 {
 	public class MathFacts
 	{
-		
-
 		#region Variables and Constants
 
 		// Max number of facts to go up to
-		const int MAX_NUM = 5;
+		public int maxFactNumber = 5;
 
 		public List<long> factResponseTime;
 		public int maxResponseTime;
@@ -53,7 +51,7 @@ namespace KnowYourFacts
 		 * Fill the List with newly generated facts if no known facts exist; 
 		 * otherwise, fill with unknown facts.
 		 */
-		void generateFactsList (ref FactsQueue facts, MathOperation oper)
+		void generateFactsList (ref FactsQueue facts, MathOperation oper, UserProfile userProfile)
 		{
 			FactsList mathFactsList = new FactsList ();
 
@@ -64,7 +62,7 @@ namespace KnowYourFacts
 			}
 			else
 			{
-				generateAndStoreNewFacts (ref mathFactsList, oper);
+				generateAndStoreNewFacts (ref mathFactsList, oper, userProfile);
 			}
 
 			// Determine the number of facts and obtain a set of random numbers for displaying of the facts
@@ -147,16 +145,16 @@ namespace KnowYourFacts
 		/*
 		 * Generate and stores the facts.
 		 */
-		static void generateAndStoreNewFacts (ref FactsList factsList, MathOperation operation)
+		static void generateAndStoreNewFacts (ref FactsList factsList, MathOperation operation, UserProfile userProfile)
 		{
 			Fact newFact;
 			newFact.operation = operation;
 			MathOperationTypeEnum operationType = operation.operationType;
 
 			// Generate facts starting from 0 to the max number.
-			for (int i = 0; i <= MAX_NUM; ++i)
+			for (int i = 0; i <= userProfile.maxFactNumber; ++i)
 			{
-				for (int j = 0; j <= MAX_NUM; ++j)
+				for (int j = 0; j <= userProfile.maxFactNumber; ++j)
 				{
 					if (operationType == MathOperationTypeEnum.ADDITION ||
 						 operationType == MathOperationTypeEnum.MULTIPLICATION)
@@ -256,8 +254,8 @@ namespace KnowYourFacts
 		/*
 		 * Handles starting the daily facts and speed test.
 		 */
-		public void startProcessingFacts (bool speedTest, MathOperation operation,
-													 FactsDisplayControl displayControl, bool processingAllDailyFacts)
+		public void startProcessingFacts (bool speedTest, MathOperation operation, FactsDisplayControl displayControl, 
+													 bool processingAllDailyFacts, UserProfile userProfile)
 		{
 			MathOperationTypeEnum opType = MathFactsForm.operationType.operationType;
 			// Suppress messages if all daily facts are being processed.
@@ -280,7 +278,7 @@ namespace KnowYourFacts
 
 			if (!speedTest)
 			{
-				generateFactsList (ref queueOfFacts, operation);
+				generateFactsList (ref queueOfFacts, operation, userProfile);
 			}
 			else
 			{

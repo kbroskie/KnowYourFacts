@@ -76,6 +76,7 @@
 			this.inputMaskedTextBox.Location = new System.Drawing.Point(112, 148);
 			this.inputMaskedTextBox.Mask = "000";
 			this.inputMaskedTextBox.Name = "inputMaskedTextBox";
+			this.inputMaskedTextBox.PromptChar = ' ';
 			this.inputMaskedTextBox.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
 			this.inputMaskedTextBox.Size = new System.Drawing.Size(72, 51);
 			this.inputMaskedTextBox.TabIndex = 9;
@@ -122,6 +123,7 @@
 			this.Size = new System.Drawing.Size(291, 280);
 			this.ResumeLayout(false);
 			this.PerformLayout();
+
 		}
 
 		#endregion

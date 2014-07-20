@@ -32,7 +32,7 @@ namespace KnowYourFacts
 		public const string COMPLETION_CONTINUE_PROMPT = "\nPress the spacebar to continue.";
 		private const String CONTINUE_DAILY_FACTS_PROMPT = "\nPress the spacebar to continue your facts.";
 
-		private static User user;
+		private static UserProfile userProfile;
 
 		/*
 		 * Constructor to create a form object with a menu control and display control.
@@ -54,7 +54,7 @@ namespace KnowYourFacts
 			// Need to change where this is called. If no user data is present, the input dialog appears
 			// before the form shows.
 			loadLastUserOrPromptForNewUser ();
-			m_mainMenuControl.setUserButtonText ("Welcome " + user.name + "!" + "\nNot " + user.name + "?\nClick here to change users");
+			m_mainMenuControl.setUserButtonText ("Welcome " + userProfile.user.name + "!" + "\nNot " + userProfile.user.name + "?\nClick here to change users");
 		}
 
 		private void initializeAndAddMainMenuControl ()
@@ -77,32 +77,34 @@ namespace KnowYourFacts
 
 		private void loadLastUserOrPromptForNewUser () 
 		{
-			user.name = files.loadCurrentUsername ();
+			userProfile.user.name = files.loadCurrentUsername ();
 			
 			// No user data exists
-			if (user.name == null)
+			if (userProfile.user.name == null)
 			{
-				user.name = promptForNewUsername ();
+				userProfile.user.name = promptForNewUserProfile ();
 
 				// Need to ensure name conforms to windows naming conventions. 
-				while (files.userDirectoryExists (user))
+				while (files.userDirectoryExists (userProfile.user))
 				{
 					MessageBox.Show ("Sorry, that username is already taken.\nPlease try again with a different username.");
-					user.name = promptForNewUsername ();
+					userProfile.user.name = promptForNewUserProfile ();
 				}
 
-				files.createNewUserDirectory (user);
+				files.createNewUserDirectory (userProfile);
+				files.updateUserProfile (userProfile);
 			}
 			else
 			{
-				files.updateCurrentUser (user.name);
+				files.updateCurrentUser (userProfile.user.name);
+				files.loadUserProfile (ref userProfile);
 			}
 		}
 
 		/*
 		 * Prompt for and obtain a new username, or use "Guest" for default.
 		 */
-		private String promptForNewUsername ()
+		private String promptForNewUserProfile ()
 		{
 			String username = "";
 
@@ -114,7 +116,7 @@ namespace KnowYourFacts
 				if (username == "")
 				{
 					var confirmResult = MessageBox.Show ("You didn't enter a username to create. Continue without creating a username?\nYour progress will not be saved.",
-							"Confirm Cancel", MessageBoxButtons.YesNo);
+							"Confirm Cancel", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
 					if (confirmResult == DialogResult.Yes)
 					{
 						username = "Guest";
@@ -145,9 +147,10 @@ namespace KnowYourFacts
 
 			if (changeUserDialog.ShowDialog () == DialogResult.OK)
 			{
-				user.name = changeUserDialog.getSelectedUser ();
-				files.updateCurrentUser (user.name);
-				m_mainMenuControl.setUserButtonText ("Welcome " + user.name + "!" + "\nNot " + user.name + "?\nClick here to change users");
+				userProfile.user.name = changeUserDialog.getSelectedUser ();
+				files.updateCurrentUser (userProfile.user.name);
+				m_mainMenuControl.setUserButtonText ("Welcome " + userProfile.user.name + "!" + "\nNot " + userProfile.user.name + "?\nClick here to change users");
+				reference.maxFactNumber = userProfile.maxFactNumber;
 			}
 
 			if (changeUserDialog != null)
@@ -346,12 +349,21 @@ namespace KnowYourFacts
 			operationType = new MathOperation (sign);
 
 			// Determine if the user has already used the daily facts today.
-			if (files.readDailyFactsDateDataFromFile(operationType.operationType) == DateTime.Today.ToString ("d"))
+			String dateData = files.readDailyFactsDateDataFromFile(operationType.operationType);
+			if (dateData == "MAX_TIME_ELAPSED")
+			{
+				MessageBox.Show ("A month or more has passed since your last speed test.\nPlease retake the " + operationType.ToString () + 
+									 "Facts speed test.", "New Speed Test Needed");
+				
+				return;
+			}
+			else if (dateData == DateTime.Today.ToString ("d"))
 			{
 				saveProgress = false;
 
-				var continueWithoutSavingResponse = MessageBox.Show ("Oops! It looks like you have already practiced your " + operationType.ToString () + " facts today.\nYou can practice them again, but your progress will not be saved.\n\n Continue anyway?",
-				"Progress Will Not Be Saved", MessageBoxButtons.YesNo);
+				var continueWithoutSavingResponse = MessageBox.Show ("Oops! It looks like you have already practiced your " + operationType.ToString () + 
+					"facts today.\nYou can practice them again, but your progress will not be saved.\n\n Continue anyway?",
+					"Progress Will Not Be Saved", MessageBoxButtons.YesNo);
 				if (continueWithoutSavingResponse == DialogResult.No)
 				{
 					return;
@@ -377,7 +389,7 @@ namespace KnowYourFacts
 				processingAllDailyFacts = !processingAllDailyFacts;
 			}
 
-			reference.startProcessingFacts (speedTest, operationType, m_factsDisplayControl, processingAllDailyFacts);
+			reference.startProcessingFacts (speedTest, operationType, m_factsDisplayControl, processingAllDailyFacts, userProfile);
 		}
 
 		/*

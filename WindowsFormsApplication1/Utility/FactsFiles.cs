@@ -47,6 +47,8 @@ namespace KnowYourFacts
 		public const String USER__PROFILE = "profile.txt";
 		public const String USER_DATA = "usersData.txt";
 
+		public const int MAX_DAYS_BETWEEN_SPEED_TEST = 30;
+
 		#endregion
 
 		#region Singleton
@@ -106,10 +108,10 @@ namespace KnowYourFacts
 		/*
 		 * Creates files and directories for a new user.
 		 */ 
-		public void createNewUserDirectory (User newUser)
+		public void createNewUserDirectory (UserProfile newUserProfile)
 		{
 			// Create the individual user directories.
-			userPath = System.IO.Path.Combine (usersPath, newUser.name);
+			userPath = System.IO.Path.Combine (usersPath, newUserProfile.user.name);
 			paths.Add (userPath);
 
 			// Create the individual user subdirectories.
@@ -152,7 +154,7 @@ namespace KnowYourFacts
 			files.Add (speedDivisionFactsDataFilename);
 
 			createFilesAndDirectories ();
-			updateUsersData (newUser.name);
+			updateUsersData (newUserProfile.user.name);
 		}
 
 		private void createFilesAndDirectories ()
@@ -309,6 +311,22 @@ namespace KnowYourFacts
 
 		#region File write operations
 
+ 		public void updateUserProfile (UserProfile profile)
+		{
+			try
+			{
+				using (System.IO.StreamWriter file = new System.IO.StreamWriter (userFilename))
+				{
+					file.WriteLine (profile.maxFactNumber);
+					file.WriteLine (profile.hasCustomSpeedFacts.ToString());
+				}
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine (e);
+			}
+		}
+		
 		/*
 		 * Updates the current user in the file system.
 		 */
@@ -397,11 +415,41 @@ namespace KnowYourFacts
 		{
 			try
 			{
-				return System.IO.File.ReadLines (getDailyFactsDataFilename (operation)).Last ();
+				String dateLog = getDailyFactsDataFilename (operation);
+				
+				// Check if more than 1 month has elapsed since the last speed test.
+				using (System.IO.StreamReader file = new System.IO.StreamReader (dateLog))
+				{
+					DateTime dateOfFirstSpeedTest = Convert.ToDateTime (file.ReadLine ());
+					if (DateTime.Today.AddMonths (1) <= dateOfFirstSpeedTest)
+					{
+						// Overwrite the current file to avoid saving more than 30 days of data at a time.
+						System.IO.File.Create (dateLog);
+						return "MAX_TIME_ELAPSED";
+					}
+
+					return System.IO.File.ReadLines (dateLog).Last ();
+				}
 			}
 			catch (Exception)
 			{
 				return "";
+			}
+		}
+
+		public void loadUserProfile (ref UserProfile profile)
+		{
+			try
+			{
+				using (System.IO.StreamReader file = new System.IO.StreamReader (userFilename))
+				{
+					profile.maxFactNumber = Convert.ToInt32(file.ReadLine ());
+					profile.hasCustomSpeedFacts = Convert.ToBoolean (file.ReadLine ());
+				}
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine (e);
 			}
 		}
 
