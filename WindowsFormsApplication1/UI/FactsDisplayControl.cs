@@ -37,8 +37,6 @@ namespace KnowYourFacts
 			{
 				messageLabel.Text = "";
 				MathFactsForm.logUserInput ("space");
-				Console.WriteLine ("messageLabel_PreviewKeyDown**************");
-
 			}
 		}
 
@@ -77,14 +75,19 @@ namespace KnowYourFacts
 		}
 
 		public event EventHandler<InputDetectedEventArgs> InputDetected;
+
+		private void inputMaskedTextBox_KeyPress (object sender, KeyPressEventArgs e)
+		{
+			// Suppress the sound generated when the user presses enter.
+			if (e.KeyChar == (char) Keys.Enter)
+			{
+				e.Handled = true;
+			}
+		}
 	}
 
 	public class InputDetectedEventArgs : EventArgs
 	{
-		public string input
-		{
-			get;
-			set;
-		}
+		public string input { get; set; }
 	}
 }

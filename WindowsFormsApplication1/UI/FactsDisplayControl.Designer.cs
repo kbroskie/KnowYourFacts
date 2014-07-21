@@ -80,6 +80,7 @@
 			this.inputMaskedTextBox.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
 			this.inputMaskedTextBox.Size = new System.Drawing.Size(72, 51);
 			this.inputMaskedTextBox.TabIndex = 9;
+			this.inputMaskedTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.inputMaskedTextBox_KeyPress);
 			this.inputMaskedTextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.maskedTextBoxKeyUpEvent);
 			// 
 			// lineLabel
