@@ -118,16 +118,16 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="AdditionSpeedFacts" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>resources\additionspeedfacts.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="Addition" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Addition.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="DivisionSpeedFacts" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>resources\divisionspeedfacts.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="Division" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Division.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="MultiplicationSpeedFacts" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>resources\multiplicationspeedfacts.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="Multiplication" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Multiplication.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="SubtractionSpeedFacts" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>resources\subtractionspeedfacts.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="Subtraction" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Subtraction.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
 </root>

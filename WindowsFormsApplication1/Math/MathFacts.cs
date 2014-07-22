@@ -2,8 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Resources;
 using System.Windows.Forms;
-
 using FactsList = System.Collections.Generic.List<KnowYourFacts.Fact>;
 using FactsQueue = System.Collections.Generic.Queue<KnowYourFacts.Fact>;
 
@@ -69,7 +69,7 @@ namespace KnowYourFacts
 			// Determine the number of facts and obtain a set of random numbers for displaying of the facts
 			if (mathFactsList != null)
 			{
-				randomizeFacts (ref facts, ref mathFactsList);
+				randomizeFacts (ref facts, mathFactsList);
 			}
 		}
 
@@ -115,32 +115,9 @@ namespace KnowYourFacts
 		/*
 		 * Fills facts queue with simple facts for testing input speed.
 		 */
-		public static void getFactsForSpeedTest (ref FactsQueue facts, MathOperation operationType)
+		public static void getFactsForSpeedTest (ref FactsQueue facts, MathOperation operation)
 		{
-			FactsList mathFactsList;				// Later consider asking for certain range of numbers from user to be used.
-
-			MathOperationTypeEnum operation = operationType.operationType;
-			if (operation == MathOperationTypeEnum.ADDITION)
-			{
-				mathFactsList = new FactsList (new Fact[] {new Fact(1, 1, operationType), new Fact(2, 2, operationType), 
-														 new Fact(0, 1, operationType), new Fact(0, 2, operationType)});
-			}
-			else if (operation == MathOperationTypeEnum.SUBTRACTION)
-			{
-				mathFactsList = new FactsList (new Fact[] {new Fact(1, 1, operationType), new Fact(2, 1, operationType), 
-									 new Fact(1, 0, operationType), new Fact(3, 2, operationType)});
-			}
-			else if (operation == MathOperationTypeEnum.MULTIPLICATION)
-			{
-				mathFactsList = new FactsList (new Fact[] {new Fact(1, 1, operationType), new Fact(2, 2, operationType), 
-									 new Fact(0, 1, operationType), new Fact(2, 1, operationType)});
-			}
-			else
-			{
-				mathFactsList = new FactsList (new Fact[] {new Fact(1, 1,  operationType), new Fact(2, 2, operationType), 
-									 new Fact(0, 1, operationType), new Fact(4, 2, operationType)});
-			}
-			randomizeFacts (ref facts, ref mathFactsList);
+			
 		}
 
 		/*
@@ -181,7 +158,7 @@ namespace KnowYourFacts
 		 * Fills the List with random numbers equivalent to the number of facts to 
 		 * display them in a random order.
 		 */
-		static void randomizeFacts (ref FactsQueue facts, ref FactsList factsList)
+		static void randomizeFacts (ref FactsQueue facts, FactsList factsList)
 		{
 			Random random = new Random ();
 			int randomNumber;
@@ -283,7 +260,7 @@ namespace KnowYourFacts
 			}
 			else
 			{
-				getFactsForSpeedTest (ref queueOfFacts, operation);
+				randomizeFacts (ref queueOfFacts, FactsFiles.loadDefaultSpeedFacts (operation));
 			}
 
 			if (queueOfFacts.Count () == 0)

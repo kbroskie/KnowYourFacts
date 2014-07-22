@@ -7,8 +7,8 @@
     <ProjectGuid>{F2658AC5-D9FD-4524-9D5C-79CFD627F6EB}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Broskie.KnowYourFacts.NewNamespace</RootNamespace>
-    <AssemblyName>Broskie.KnowYourFacts</AssemblyName>
+    <RootNamespace>KnowYourFacts</RootNamespace>
+    <AssemblyName>KnowYourFacts</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <IsWebBootstrapper>false</IsWebBootstrapper>
@@ -85,6 +85,11 @@
     <Compile Include="Dialogs\InputDialog.Designer.cs">
       <DependentUpon>InputDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Utility\FactsFiles.cs" />
     <Compile Include="Unused\FactsMvc\Controller.cs" />
     <Compile Include="UI\FactsDisplayControl.cs">
@@ -134,14 +139,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <None Include="KnowYourFacts_TemporaryKey.pfx" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -158,6 +158,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Extras\ChangesToMake.txt" />
+    <None Include="Properties\Resources\SubtractionSpeedFacts.txt" />
+    <None Include="Properties\Resources\MultiplicationSpeedFacts.txt" />
+    <None Include="Properties\Resources\DivisionSpeedFacts.txt" />
+    <None Include="Properties\Resources\AdditionSpeedFacts.txt" />
+    <None Include="Resources\Addition.txt.txt" />
+    <None Include="Resources\Subtraction.txt" />
+    <None Include="Resources\Addition.txt" />
+    <None Include="Resources\Multiplication.txt" />
+    <None Include="Resources\Division.txt" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">

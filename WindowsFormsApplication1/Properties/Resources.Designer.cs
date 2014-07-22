@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Broskie.KnowYourFacts.NewNamespace.Properties {
+namespace KnowYourFacts.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Broskie.KnowYourFacts.NewNamespace.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Broskie.KnowYourFacts.NewNamespace.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("KnowYourFacts.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -57,6 +57,54 @@ namespace Broskie.KnowYourFacts.NewNamespace.Properties {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1 1
+        ///2 2
+        ///0 1
+        ///0 2.
+        /// </summary>
+        internal static string AdditionSpeedFacts {
+            get {
+                return ResourceManager.GetString("AdditionSpeedFacts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1 1
+        ///2 2
+        ///0 1
+        ///4 2.
+        /// </summary>
+        internal static string DivisionSpeedFacts {
+            get {
+                return ResourceManager.GetString("DivisionSpeedFacts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1 1
+        ///2 2
+        ///0 1
+        ///2 1.
+        /// </summary>
+        internal static string MultiplicationSpeedFacts {
+            get {
+                return ResourceManager.GetString("MultiplicationSpeedFacts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1 1
+        ///2 1
+        ///1 0
+        ///3 2.
+        /// </summary>
+        internal static string SubtractionSpeedFacts {
+            get {
+                return ResourceManager.GetString("SubtractionSpeedFacts", resourceCulture);
             }
         }
     }

@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Resources;
 
 namespace KnowYourFacts
 {	
@@ -73,7 +75,6 @@ namespace KnowYourFacts
 			usersPath = System.IO.Path.Combine (topLevelDirectory, "Users");
 			speedFactsPath = System.IO.Path.Combine (topLevelDirectory, "SpeedFacts");
 			usersDataFilename = System.IO.Path.Combine (usersPath, USER_DATA);
-
 		}
 
 		#endregion
@@ -446,6 +447,7 @@ namespace KnowYourFacts
 		{
 			try
 			{
+				
 				using (System.IO.StreamReader file = new System.IO.StreamReader (userFilename))
 				{
 					String username = file.ReadLine ();
@@ -458,6 +460,42 @@ namespace KnowYourFacts
 			{
 				return new UserProfile();
 			}
+		}
+
+		public static List<Fact> loadDefaultSpeedFacts (MathOperation operation)
+		{
+			List<Fact> speedFactsList = new List<Fact> ();
+			String speedFactsString = "";
+			
+			switch (operation.operationType)
+			{
+				case MathOperationTypeEnum.ADDITION:
+					speedFactsString = Properties.Resources.AdditionSpeedFacts;
+					break;
+				case MathOperationTypeEnum.SUBTRACTION:
+					speedFactsString = Properties.Resources.SubtractionSpeedFacts;
+					break;
+				case MathOperationTypeEnum.MULTIPLICATION:
+					speedFactsString = Properties.Resources.MultiplicationSpeedFacts;
+					break;
+				case MathOperationTypeEnum.DIVISION:
+					speedFactsString = Properties.Resources.DivisionSpeedFacts;
+					break;
+			}
+
+			int[] speedFactDataArray = speedFactsString.Split (' ', '\n').Select (n => Convert.ToInt32 (n)).ToArray ();
+
+			Fact speedFact = new Fact ();
+			speedFact.operation = operation;
+
+			for (int index = 0; index < speedFactDataArray.Count (); ++index)
+			{
+				speedFact.leftNum = speedFactDataArray[index++];
+				speedFact.rightNum = speedFactDataArray[index];
+				speedFactsList.Add (speedFact);
+			}
+			
+			return speedFactsList;
 		}
 
 		#endregion
