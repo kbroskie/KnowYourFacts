@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace KnowYourFacts
+namespace KnowYourFacts.Dialogs
 {
 	public partial class InputDialog : Form
 	{
@@ -28,6 +28,14 @@ namespace KnowYourFacts
 		{
 			MessageBox.Show ("Your username can be any combination of letters and numbers.", "Username Help", 
 								  MessageBoxButtons.OK, MessageBoxIcon.Information);
-		}	
+		}
+
+		private void maskedTextBoxKeyUpEvent (object sender, KeyEventArgs e)
+		{
+			if (e.KeyCode == Keys.Return)
+			{
+				okButton.PerformClick ();
+			}
+		}
 	}
 }

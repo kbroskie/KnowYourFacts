@@ -3,7 +3,12 @@ using System.Windows.Forms;
 using Microsoft.VisualBasic;
 using System.Collections.Generic;
 
-namespace KnowYourFacts
+using KnowYourFacts.Dialogs;
+using KnowYourFacts.Math;
+using KnowYourFacts.Utility;
+using KnowYourFacts.Users;
+
+namespace KnowYourFacts.UI
 {
 	public partial class MathFactsForm : Form, IView
 	{
@@ -53,7 +58,7 @@ namespace KnowYourFacts
 				files.createDefaultProgramDirectory ();
 			}
 
-			// Need to change where this is called. If no user data is present, the input dialog appears
+			// TODO Need to change where this is called. If no user data is present, the input dialog appears
 			// before the form shows.
 			loadLastUserOrPromptForNewUser ();
 			m_mainMenuControl.setUserButtonText ("Welcome " + userProfile.user.name + "!" + "\nNot " + userProfile.user.name + "?\nClick here to change users");
@@ -383,13 +388,18 @@ namespace KnowYourFacts
 		 */
 		private void optionsMenuItemClick (object sender, EventArgs e)
 		{
-			if (sender.Equals (editSpeedFactsMenuItem))
+			if (sender.Equals (editProfileMenuItem))
 			{
-				// TODO Open custom facts file for editing. If never edited, file should have default custom speed facts.
-			}
-			else
-			{
-				//TODO Open userprofile and toggle speed facts to on if checked
+				EditProfileDialog editProfileDialog = new EditProfileDialog ();
+
+				if (editProfileDialog.ShowDialog () == DialogResult.OK)
+				{
+
+				}
+				if (editProfileDialog != null)
+				{
+					editProfileDialog.Dispose ();
+				}
 			}
 		}
 

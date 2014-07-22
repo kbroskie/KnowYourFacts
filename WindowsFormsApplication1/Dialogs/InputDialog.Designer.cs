@@ -1,4 +1,4 @@
-﻿namespace KnowYourFacts
+﻿namespace KnowYourFacts.Dialogs
 {
 	partial class InputDialog
 	{
@@ -28,7 +28,7 @@
 		/// </summary>
 		private void InitializeComponent ()
 		{
-			this.button1 = new System.Windows.Forms.Button();
+			this.okButton = new System.Windows.Forms.Button();
 			this.button2 = new System.Windows.Forms.Button();
 			this.usernameMaskedTextBox = new System.Windows.Forms.MaskedTextBox();
 			this.usernameLabel = new System.Windows.Forms.Label();
@@ -38,15 +38,15 @@
 			this.usernameHelpButton = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
-			// button1
+			// okButton
 			// 
-			this.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.button1.Location = new System.Drawing.Point(62, 160);
-			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(75, 23);
-			this.button1.TabIndex = 0;
-			this.button1.Text = "OK";
-			this.button1.UseVisualStyleBackColor = true;
+			this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
+			this.okButton.Location = new System.Drawing.Point(62, 160);
+			this.okButton.Name = "okButton";
+			this.okButton.Size = new System.Drawing.Size(75, 23);
+			this.okButton.TabIndex = 0;
+			this.okButton.Text = "OK";
+			this.okButton.UseVisualStyleBackColor = true;
 			// 
 			// button2
 			// 
@@ -68,6 +68,7 @@
 			this.usernameMaskedTextBox.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
 			this.usernameMaskedTextBox.Size = new System.Drawing.Size(139, 20);
 			this.usernameMaskedTextBox.TabIndex = 0;
+			this.usernameMaskedTextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.maskedTextBoxKeyUpEvent);
 			// 
 			// usernameLabel
 			// 
@@ -109,6 +110,7 @@
 			this.maxFactNumberMaskedTextBox.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
 			this.maxFactNumberMaskedTextBox.Size = new System.Drawing.Size(50, 20);
 			this.maxFactNumberMaskedTextBox.TabIndex = 1;
+			this.maxFactNumberMaskedTextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.maskedTextBoxKeyUpEvent);
 			// 
 			// usernameHelpButton
 			// 
@@ -133,7 +135,7 @@
 			this.Controls.Add(this.usernameLabel);
 			this.Controls.Add(this.usernameMaskedTextBox);
 			this.Controls.Add(this.button2);
-			this.Controls.Add(this.button1);
+			this.Controls.Add(this.okButton);
 			this.Name = "InputDialog";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "New User Profile";
@@ -144,7 +146,7 @@
 
 		#endregion
 
-		private System.Windows.Forms.Button button1;
+		private System.Windows.Forms.Button okButton;
 		private System.Windows.Forms.Button button2;
 		private System.Windows.Forms.Label usernameLabel;
 		public System.Windows.Forms.MaskedTextBox usernameMaskedTextBox;

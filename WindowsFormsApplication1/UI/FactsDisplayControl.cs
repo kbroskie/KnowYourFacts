@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace KnowYourFacts
+namespace KnowYourFacts.UI
 {
 	public partial class FactsDisplayControl : UserControl
 	{

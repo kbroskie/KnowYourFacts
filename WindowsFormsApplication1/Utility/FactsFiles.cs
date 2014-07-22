@@ -4,7 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Resources;
 
-namespace KnowYourFacts
+using KnowYourFacts.Users;
+using KnowYourFacts.Math;
+
+namespace KnowYourFacts.Utility
 {	
 	public class FactsFiles
 	{

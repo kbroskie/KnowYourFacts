@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace KnowYourFacts
+namespace KnowYourFacts.Dialogs
 {
 	public partial class ChangeUserDialog : Form
 	{

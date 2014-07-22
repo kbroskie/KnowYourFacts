@@ -1,4 +1,4 @@
-﻿namespace KnowYourFacts
+﻿namespace KnowYourFacts.UI
 {
 	partial class FactsDisplayControl
 	{

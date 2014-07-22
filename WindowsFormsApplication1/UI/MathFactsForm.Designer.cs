@@ -1,4 +1,4 @@
-﻿namespace KnowYourFacts
+﻿namespace KnowYourFacts.UI
 {
 	partial class MathFactsForm
 	{
@@ -41,9 +41,8 @@
 			this.multiplicationTestMenuItem = new System.Windows.Forms.MenuItem();
 			this.divisionTestMenuItem = new System.Windows.Forms.MenuItem();
 			this.optionsMenuItem = new System.Windows.Forms.MenuItem();
+			this.editProfileMenuItem = new System.Windows.Forms.MenuItem();
 			this.helpMenuItem = new System.Windows.Forms.MenuItem();
-			this.editSpeedFactsMenuItem = new System.Windows.Forms.MenuItem();
-			this.useCustomSpeedFactsMenuItem = new System.Windows.Forms.MenuItem();
 			this.SuspendLayout();
 			// 
 			// mainMenu
@@ -130,9 +129,14 @@
 			// 
 			this.optionsMenuItem.Index = 2;
 			this.optionsMenuItem.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.editSpeedFactsMenuItem,
-            this.useCustomSpeedFactsMenuItem});
+            this.editProfileMenuItem});
 			this.optionsMenuItem.Text = "Options";
+			// 
+			// editProfileMenuItem
+			// 
+			this.editProfileMenuItem.Index = 0;
+			this.editProfileMenuItem.Text = "Edit Profile";
+			this.editProfileMenuItem.Click += new System.EventHandler(this.optionsMenuItemClick);
 			// 
 			// helpMenuItem
 			// 
@@ -140,22 +144,12 @@
 			this.helpMenuItem.Shortcut = System.Windows.Forms.Shortcut.CtrlH;
 			this.helpMenuItem.Text = "Help";
 			// 
-			// editSpeedFactsMenuItem
-			// 
-			this.editSpeedFactsMenuItem.Index = 0;
-			this.editSpeedFactsMenuItem.Text = "Edit Custom Speed Facts";
-			// 
-			// useCustomSpeedFactsMenuItem
-			// 
-			this.useCustomSpeedFactsMenuItem.Index = 1;
-			this.useCustomSpeedFactsMenuItem.Text = "Use Custom Speed Facts";
-			// 
 			// MathFactsForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
-			this.ClientSize = new System.Drawing.Size(290, 215);
+			this.ClientSize = new System.Drawing.Size(290, 255);
 			this.Menu = this.mainMenu;
 			this.Name = "MathFactsForm";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -179,8 +173,7 @@
 		private System.Windows.Forms.MenuItem divisionTestMenuItem;
 		private System.Windows.Forms.MenuItem optionsMenuItem;
 		private System.Windows.Forms.MenuItem helpMenuItem;
-		private System.Windows.Forms.MenuItem editSpeedFactsMenuItem;
-		private System.Windows.Forms.MenuItem useCustomSpeedFactsMenuItem;
+		private System.Windows.Forms.MenuItem editProfileMenuItem;
 	}
 }
 

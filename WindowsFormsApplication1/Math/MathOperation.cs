@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace KnowYourFacts
+namespace KnowYourFacts.Math
 {
 	public struct MathOperation
 	{

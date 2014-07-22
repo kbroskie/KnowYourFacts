@@ -1,4 +1,4 @@
-﻿namespace KnowYourFacts
+﻿namespace KnowYourFacts.Users
 {
 	/*
 	 * A struct to hold the first name of a user.

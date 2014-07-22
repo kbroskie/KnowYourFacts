@@ -4,10 +4,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Resources;
 using System.Windows.Forms;
-using FactsList = System.Collections.Generic.List<KnowYourFacts.Fact>;
-using FactsQueue = System.Collections.Generic.Queue<KnowYourFacts.Fact>;
 
-namespace KnowYourFacts
+using KnowYourFacts.Users;
+using KnowYourFacts.Utility;
+using KnowYourFacts.UI;
+
+using FactsList = System.Collections.Generic.List<KnowYourFacts.Math.Fact>;
+using FactsQueue = System.Collections.Generic.Queue<KnowYourFacts.Math.Fact>;
+
+namespace KnowYourFacts.Math
 {
 	public class MathFacts
 	{

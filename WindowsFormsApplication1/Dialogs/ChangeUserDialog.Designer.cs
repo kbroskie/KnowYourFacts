@@ -1,4 +1,4 @@
-﻿namespace KnowYourFacts
+﻿namespace KnowYourFacts.Dialogs
 {
 	partial class ChangeUserDialog
 	{

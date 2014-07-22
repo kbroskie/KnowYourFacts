@@ -13,7 +13,7 @@ namespace KnowYourFacts
 		{
 			Application.EnableVisualStyles ();
 			Application.SetCompatibleTextRenderingDefault (false);
-			Application.Run (new MathFactsForm ());
+			Application.Run (new UI.MathFactsForm ());
 		}
 	}
 }

@@ -1,4 +1,4 @@
-﻿namespace KnowYourFacts
+﻿namespace KnowYourFacts.Math
 {
 	// Holds two integers and a MathOperation associated with a math fact.
 	public struct Fact

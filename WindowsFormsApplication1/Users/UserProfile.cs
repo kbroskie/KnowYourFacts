@@ -1,4 +1,4 @@
-﻿namespace KnowYourFacts
+﻿namespace KnowYourFacts.Users
 {		
 	/*
 	 * Struct for storing & retrieving user profiles.

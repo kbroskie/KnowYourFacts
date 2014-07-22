@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace KnowYourFacts
+using KnowYourFacts.Math;
+
+namespace KnowYourFacts.UI
 {
 	public partial class MainMenuControl : UserControl
 	{
