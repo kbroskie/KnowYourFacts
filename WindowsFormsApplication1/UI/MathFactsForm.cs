@@ -106,7 +106,8 @@ namespace KnowYourFacts
 			InputDialog inputDialog = new InputDialog ();
 			bool keepDialogShowing = true;
 
-			do {
+			do 
+			{
 				if (inputDialog.ShowDialog () == DialogResult.OK)
 				{
 					String username = inputDialog.usernameMaskedTextBox.Text;
@@ -382,7 +383,14 @@ namespace KnowYourFacts
 		 */
 		private void optionsMenuItemClick (object sender, EventArgs e)
 		{
-
+			if (sender.Equals (editSpeedFactsMenuItem))
+			{
+				// TODO Open custom facts file for editing. If never edited, file should have default custom speed facts.
+			}
+			else
+			{
+				//TODO Open userprofile and toggle speed facts to on if checked
+			}
 		}
 
 		/*

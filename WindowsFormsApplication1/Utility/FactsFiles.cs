@@ -369,6 +369,20 @@ namespace KnowYourFacts
 			}	
 		}
 
+		public void saveCustomSpeedFacts (MathOperation operation, List<Fact> speedFacts)
+		{
+			String speedFactsFilename = System.IO.Path.Combine (speedTestPath, operation.ToString () + ".txt");
+
+			using (System.IO.StreamWriter file = new System.IO.StreamWriter (speedFactsFilename))
+			{
+				foreach (Fact speedFact in speedFacts)
+				{
+					file.WriteLine (speedFact.leftNum);
+					file.WriteLine (speedFact.rightNum);
+				}
+			}
+		}
+
 		#endregion
 
 		#region File read operations
@@ -495,6 +509,32 @@ namespace KnowYourFacts
 				speedFactsList.Add (speedFact);
 			}
 			
+			return speedFactsList;
+		}
+
+		public static List<Fact> loadCustomSpeedFacts (MathOperation operation)
+		{
+			List<Fact> speedFactsList = new List<Fact> ();
+			Fact speedFact = new Fact ();
+			speedFact.operation = operation;
+
+			String speedFactsFilename = System.IO.Path.Combine (speedTestPath, operation.ToString () + ".txt");
+
+			using (System.IO.StreamReader file = new System.IO.StreamReader (speedFactsFilename))
+			{
+				String speedFactNumber;
+				while ((speedFactNumber = file.ReadLine ()) != null)
+				{
+					speedFact.leftNum = System.Convert.ToInt32 (speedFactNumber);
+
+					if ((speedFactNumber = file.ReadLine ()) != null)
+					{
+						speedFact.rightNum = System.Convert.ToInt32 (speedFactNumber);
+						speedFactsList.Add (speedFact);
+					}
+				}
+			}
+
 			return speedFactsList;
 		}
 

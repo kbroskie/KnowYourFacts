@@ -260,7 +260,14 @@ namespace KnowYourFacts
 			}
 			else
 			{
-				randomizeFacts (ref queueOfFacts, FactsFiles.loadDefaultSpeedFacts (operation));
+				if (userProfile.hasCustomSpeedFacts)
+				{
+					randomizeFacts (ref queueOfFacts, FactsFiles.loadCustomSpeedFacts (operation));
+				}
+				else
+				{
+					randomizeFacts (ref queueOfFacts, FactsFiles.loadDefaultSpeedFacts (operation));
+				}
 			}
 
 			if (queueOfFacts.Count () == 0)
