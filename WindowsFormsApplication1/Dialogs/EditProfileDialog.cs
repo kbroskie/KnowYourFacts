@@ -12,6 +12,8 @@ namespace KnowYourFacts.Dialogs
 {
 	public partial class EditProfileDialog : Form
 	{
+		private BindingSource bindingSource = new BindingSource ();
+
 		public EditProfileDialog ()
 		{
 			InitializeComponent ();
@@ -38,6 +40,23 @@ namespace KnowYourFacts.Dialogs
 		private void customFactsCheckBox_CheckedChanged (object sender, EventArgs e)
 		{
 			// TODO toggle speedfacts usage. If toggled off, prompt for editing. Then update user profile bool.
+			if (customFactsCheckBox.Checked)
+			{	
+				SpeedFactEditDialog speedFactEditDialog = new SpeedFactEditDialog ();
+
+				speedFactEditDialog.speedFactsDataGridView.DataSource = bindingSource;
+
+				if (speedFactEditDialog.ShowDialog () == DialogResult.OK)
+				{
+					// TODO: update the speed facts files.
+				}
+
+				if (speedFactEditDialog != null)
+				{
+					speedFactEditDialog.Dispose ();
+				}
+			}
 		}
 	}
 }
+ 
