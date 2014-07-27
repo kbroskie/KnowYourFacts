@@ -34,13 +34,14 @@
 			this.inputMaskedTextBox = new System.Windows.Forms.MaskedTextBox();
 			this.lineLabel = new System.Windows.Forms.Label();
 			this.messageLabel = new System.Windows.Forms.Label();
+			this.factsProgressBar = new System.Windows.Forms.ProgressBar();
 			this.SuspendLayout();
 			// 
 			// num2Label
 			// 
 			this.num2Label.CausesValidation = false;
 			this.num2Label.Font = new System.Drawing.Font("Cambria", 27.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.num2Label.Location = new System.Drawing.Point(117, 84);
+			this.num2Label.Location = new System.Drawing.Point(117, 71);
 			this.num2Label.Name = "num2Label";
 			this.num2Label.Size = new System.Drawing.Size(75, 43);
 			this.num2Label.TabIndex = 11;
@@ -51,7 +52,7 @@
 			// 
 			this.factSignLabel.CausesValidation = false;
 			this.factSignLabel.Font = new System.Drawing.Font("Cambria", 27.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.factSignLabel.Location = new System.Drawing.Point(82, 84);
+			this.factSignLabel.Location = new System.Drawing.Point(82, 71);
 			this.factSignLabel.Name = "factSignLabel";
 			this.factSignLabel.Padding = new System.Windows.Forms.Padding(1);
 			this.factSignLabel.Size = new System.Drawing.Size(46, 45);
@@ -62,7 +63,7 @@
 			// num1Label
 			// 
 			this.num1Label.Font = new System.Drawing.Font("Cambria", 27.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.num1Label.Location = new System.Drawing.Point(41, 24);
+			this.num1Label.Location = new System.Drawing.Point(41, 11);
 			this.num1Label.Name = "num1Label";
 			this.num1Label.Size = new System.Drawing.Size(151, 43);
 			this.num1Label.TabIndex = 10;
@@ -73,7 +74,7 @@
 			// 
 			this.inputMaskedTextBox.Font = new System.Drawing.Font("Cambria", 27.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.inputMaskedTextBox.HidePromptOnLeave = true;
-			this.inputMaskedTextBox.Location = new System.Drawing.Point(112, 148);
+			this.inputMaskedTextBox.Location = new System.Drawing.Point(112, 135);
 			this.inputMaskedTextBox.Mask = "000";
 			this.inputMaskedTextBox.Name = "inputMaskedTextBox";
 			this.inputMaskedTextBox.PromptChar = ' ';
@@ -88,7 +89,7 @@
 			this.lineLabel.AutoSize = true;
 			this.lineLabel.CausesValidation = false;
 			this.lineLabel.Font = new System.Drawing.Font("Cambria", 27.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.lineLabel.Location = new System.Drawing.Point(85, 93);
+			this.lineLabel.Location = new System.Drawing.Point(85, 80);
 			this.lineLabel.Name = "lineLabel";
 			this.lineLabel.Size = new System.Drawing.Size(117, 43);
 			this.lineLabel.TabIndex = 13;
@@ -110,10 +111,19 @@
 			this.messageLabel.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
 			this.messageLabel.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.messageLabel_PreviewKeyDown);
 			// 
+			// factsProgressBar
+			// 
+			this.factsProgressBar.ForeColor = System.Drawing.Color.Fuchsia;
+			this.factsProgressBar.Location = new System.Drawing.Point(4, 205);
+			this.factsProgressBar.Name = "factsProgressBar";
+			this.factsProgressBar.Size = new System.Drawing.Size(282, 10);
+			this.factsProgressBar.TabIndex = 15;
+			// 
 			// FactsDisplayControl
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.Controls.Add(this.factsProgressBar);
 			this.Controls.Add(this.num2Label);
 			this.Controls.Add(this.factSignLabel);
 			this.Controls.Add(this.num1Label);
@@ -135,5 +145,6 @@
 		public System.Windows.Forms.MaskedTextBox inputMaskedTextBox;
 		public System.Windows.Forms.Label lineLabel;
 		public System.Windows.Forms.Label messageLabel;
+		public System.Windows.Forms.ProgressBar factsProgressBar;
 	}
 }

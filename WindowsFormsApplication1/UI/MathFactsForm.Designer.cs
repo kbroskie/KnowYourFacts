@@ -149,7 +149,9 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
-			this.ClientSize = new System.Drawing.Size(290, 255);
+			this.ClientSize = new System.Drawing.Size(290, 256);
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+			this.MaximizeBox = false;
 			this.Menu = this.mainMenu;
 			this.Name = "MathFactsForm";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

@@ -85,11 +85,11 @@
     <Compile Include="Dialogs\EditProfileDialog.Designer.cs">
       <DependentUpon>EditProfileDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Dialogs\InputDialog.cs">
+    <Compile Include="Dialogs\NewUserProfileDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Dialogs\InputDialog.Designer.cs">
-      <DependentUpon>InputDialog.cs</DependentUpon>
+    <Compile Include="Dialogs\NewUserProfileDialog.Designer.cs">
+      <DependentUpon>NewUserProfileDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\SpeedFactEditDialog.cs">
       <SubType>Form</SubType>
@@ -146,8 +146,8 @@
     <EmbeddedResource Include="UI\FactsDisplayControl.resx">
       <DependentUpon>FactsDisplayControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\InputDialog.resx">
-      <DependentUpon>InputDialog.cs</DependentUpon>
+    <EmbeddedResource Include="Dialogs\NewUserProfileDialog.resx">
+      <DependentUpon>NewUserProfileDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\MainMenuControl.resx">
       <DependentUpon>MainMenuControl.cs</DependentUpon>
@@ -161,6 +161,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="KnowYourFacts_TemporaryKey.pfx" />
+    <None Include="Properties\DataSources\KnowYourFacts.Math.Fact.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

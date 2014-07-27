@@ -320,14 +320,15 @@ namespace KnowYourFacts.Utility
 		{
 			try
 			{
-				Console.WriteLine (userFilename);
 				using (System.IO.StreamWriter file = new System.IO.StreamWriter (userFilename))
 				{
-					Console.WriteLine ("in updateUserProfile " + profile.user.name);
-
 					file.WriteLine (profile.user.name);
-					file.WriteLine (profile.maxFactNumber);
+					for (int index = 0; index < profile.maxFactNumbers.Count (); ++index)
+					{
+						file.WriteLine (profile.maxFactNumbers[index]);
+					}
 					file.WriteLine (profile.hasCustomSpeedFacts.ToString());
+					file.WriteLine (profile.maxDaysBetweenSpeedTests);
 				}
 			}
 			catch (Exception e)
@@ -464,13 +465,18 @@ namespace KnowYourFacts.Utility
 		{
 			try
 			{
-				
 				using (System.IO.StreamReader file = new System.IO.StreamReader (userFilename))
 				{
 					String username = file.ReadLine ();
-					int maxFactNumber = Convert.ToInt32(file.ReadLine ());
+					int[] maxFactNumbers = new int[4]; 
+					for (int index = 0; index < maxFactNumbers.Count (); ++index)
+					{
+						maxFactNumbers[index] = Convert.ToInt32 (file.ReadLine ());
+					}
+
 					Boolean hasCustomSpeedFacts = Convert.ToBoolean (file.ReadLine ());
-					return new UserProfile (new User (username), maxFactNumber, hasCustomSpeedFacts);
+					int maxDaysBetweenSpeedTests = Convert.ToInt32 (file.ReadLine ());
+					return new UserProfile (new User (username), maxFactNumbers, hasCustomSpeedFacts, maxDaysBetweenSpeedTests);
 				}
 			}
 			catch (Exception)

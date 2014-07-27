@@ -1,12 +1,10 @@
-﻿using System;
-using System.Windows.Forms;
-using Microsoft.VisualBasic;
-using System.Collections.Generic;
-
-using KnowYourFacts.Dialogs;
+﻿using KnowYourFacts.Dialogs;
 using KnowYourFacts.Math;
-using KnowYourFacts.Utility;
 using KnowYourFacts.Users;
+using KnowYourFacts.Utility;
+
+using System;
+using System.Windows.Forms;
 
 namespace KnowYourFacts.UI
 {
@@ -37,7 +35,7 @@ namespace KnowYourFacts.UI
 		public const string COMPLETION_CONTINUE_PROMPT = "\nPress the spacebar to continue.";
 		private const String CONTINUE_DAILY_FACTS_PROMPT = "\nPress the spacebar to continue your facts.";
 
-		private static UserProfile userProfile;
+		public static UserProfile userProfile;
 
 		readonly static UserProfile GUEST_PROFILE = new UserProfile (new User ("Guest"));
 
@@ -51,7 +49,6 @@ namespace KnowYourFacts.UI
 			initializeAndAddFactsDisplayControl ();
 
 			reference = new MathFacts ();
-			//	factSource.DataSource = FactsModel.Instance.Facts;
 
 			if (!files.mainDirectoryExists())
 			{
@@ -108,7 +105,7 @@ namespace KnowYourFacts.UI
 		{
 			UserProfile profile = GUEST_PROFILE;
 
-			InputDialog inputDialog = new InputDialog ();
+			NewUserProfileDialog inputDialog = new NewUserProfileDialog ();
 			bool keepDialogShowing = true;
 
 			do 
@@ -141,7 +138,7 @@ namespace KnowYourFacts.UI
 					}
 					
 					// Check that the number is greater than 0.
-					else if ((profile.maxFactNumber = Convert.ToInt32 (maxFactNumber)) <= 0)
+					else if ((profile.maxFactNumbers[System.Convert.ToInt16 (operationType)] = Convert.ToInt32 (maxFactNumber)) <= 0)
 					{
 						MessageBox.Show ("Please enter a number greater than 0.",
 												"Invalid Maximum Fact Number", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -199,7 +196,7 @@ namespace KnowYourFacts.UI
 					userProfile = files.loadUserProfile (); 
 				}
 
-				reference.maxFactNumber = userProfile.maxFactNumber; // HACK will not need to set this once I phase out this variable in MathFacts
+				reference.maxFactNumber = userProfile.maxFactNumbers[System.Convert.ToInt16 (operationType)]; // HACK will not need to set this once I phase out this variable in MathFacts
 				m_mainMenuControl.setUserButtonText ("Welcome " + userProfile.user.name + "!" + "\nNot " + userProfile.user.name + "?\nClick Here to Change Users.");
 			}
 
@@ -460,6 +457,7 @@ namespace KnowYourFacts.UI
 		public void processInput ()
 		{
 			timer.Stop();
+			m_factsDisplayControl.factsProgressBar.Increment (1);
 
 			long secondsElapsed;
 		

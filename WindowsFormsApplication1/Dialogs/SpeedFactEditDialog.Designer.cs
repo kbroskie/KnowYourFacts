@@ -33,7 +33,7 @@
 			this.saveChangesButton = new System.Windows.Forms.Button();
 			this.speedFactsDataGridView = new System.Windows.Forms.DataGridView();
 			this.topNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.bottomNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.BottomNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			((System.ComponentModel.ISupportInitialize)(this.speedFactsDataGridView)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -64,7 +64,7 @@
 			this.speedFactsDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.speedFactsDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.topNumber,
-            this.bottomNumber});
+            this.BottomNumber});
 			dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
 			dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
 			dataGridViewCellStyle1.Font = new System.Drawing.Font("Cambria", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -76,13 +76,14 @@
 			dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
 			this.speedFactsDataGridView.DefaultCellStyle = dataGridViewCellStyle1;
 			this.speedFactsDataGridView.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnKeystroke;
-			this.speedFactsDataGridView.Location = new System.Drawing.Point(36, 27);
+			this.speedFactsDataGridView.Location = new System.Drawing.Point(26, 27);
 			this.speedFactsDataGridView.Name = "speedFactsDataGridView";
 			this.speedFactsDataGridView.RightToLeft = System.Windows.Forms.RightToLeft.No;
 			this.speedFactsDataGridView.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
 			this.speedFactsDataGridView.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.speedFactsDataGridView.Size = new System.Drawing.Size(213, 174);
+			this.speedFactsDataGridView.Size = new System.Drawing.Size(232, 174);
 			this.speedFactsDataGridView.TabIndex = 0;
+			this.speedFactsDataGridView.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.speedFactsDataGridView_KeyPress);
 			// 
 			// topNumber
 			// 
@@ -91,16 +92,16 @@
 			this.topNumber.Name = "topNumber";
 			this.topNumber.Resizable = System.Windows.Forms.DataGridViewTriState.False;
 			this.topNumber.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-			this.topNumber.Width = 85;
+			this.topNumber.Width = 95;
 			// 
-			// bottomNumber
+			// BottomNumber
 			// 
-			this.bottomNumber.HeaderText = "Bottom Number";
-			this.bottomNumber.MaxInputLength = 3;
-			this.bottomNumber.Name = "bottomNumber";
-			this.bottomNumber.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-			this.bottomNumber.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-			this.bottomNumber.Width = 85;
+			this.BottomNumber.HeaderText = "Bottom Number";
+			this.BottomNumber.MaxInputLength = 3;
+			this.BottomNumber.Name = "BottomNumber";
+			this.BottomNumber.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+			this.BottomNumber.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+			this.BottomNumber.Width = 95;
 			// 
 			// SpeedFactEditDialog
 			// 
@@ -111,6 +112,7 @@
 			this.Controls.Add(this.speedFactsDataGridView);
 			this.Controls.Add(this.cancelButton);
 			this.Controls.Add(this.saveChangesButton);
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "SpeedFactEditDialog";
@@ -126,8 +128,8 @@
 
 		private System.Windows.Forms.Button cancelButton;
 		private System.Windows.Forms.Button saveChangesButton;
-		private System.Windows.Forms.DataGridViewTextBoxColumn topNumber;
-		private System.Windows.Forms.DataGridViewTextBoxColumn bottomNumber;
 		public System.Windows.Forms.DataGridView speedFactsDataGridView;
+		private System.Windows.Forms.DataGridViewTextBoxColumn topNumber;
+		private System.Windows.Forms.DataGridViewTextBoxColumn BottomNumber;
 	}
 }

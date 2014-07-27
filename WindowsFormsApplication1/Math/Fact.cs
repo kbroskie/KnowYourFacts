@@ -7,7 +7,7 @@
 		public int rightNum;
 		public MathOperation operation;
 
-		public Fact(int leftNum, int rightNum, MathOperation operation)
+		public Fact (int leftNum, int rightNum, MathOperation operation)
 		{
 			this.leftNum = leftNum;
 			this.rightNum = rightNum;

@@ -31,7 +31,7 @@
 			this.customFactsCheckBox = new System.Windows.Forms.CheckBox();
 			this.saveChangesButton = new System.Windows.Forms.Button();
 			this.label1 = new System.Windows.Forms.Label();
-			this.maskedTextBox1 = new System.Windows.Forms.MaskedTextBox();
+			this.speedTestDaysMaskedTextBox = new System.Windows.Forms.MaskedTextBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.divisionMaxFactNumberLabel = new System.Windows.Forms.Label();
 			this.divisionMaxFactNumberMaskedTextBox = new System.Windows.Forms.MaskedTextBox();
@@ -40,10 +40,12 @@
 			this.subtractionMaxFactNumberLabel = new System.Windows.Forms.Label();
 			this.subtractionMaxFactNumberMaskedTextBox = new System.Windows.Forms.MaskedTextBox();
 			this.additionMaxFactNumberLabel = new System.Windows.Forms.Label();
-			this.additonMaxFactNumberMaskedTextBox = new System.Windows.Forms.MaskedTextBox();
+			this.additionMaxFactNumberMaskedTextBox = new System.Windows.Forms.MaskedTextBox();
 			this.cancelButton = new System.Windows.Forms.Button();
 			this.usernameLabel = new System.Windows.Forms.Label();
 			this.usernameMaskedTextBox = new System.Windows.Forms.MaskedTextBox();
+			this.editSpeedFactsButton = new System.Windows.Forms.Button();
+			this.speedTestComboBox = new System.Windows.Forms.ComboBox();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -52,19 +54,19 @@
 			this.customFactsCheckBox.AutoSize = true;
 			this.customFactsCheckBox.Location = new System.Drawing.Point(12, 63);
 			this.customFactsCheckBox.Name = "customFactsCheckBox";
-			this.customFactsCheckBox.Size = new System.Drawing.Size(185, 17);
-			this.customFactsCheckBox.TabIndex = 0;
-			this.customFactsCheckBox.Text = "Use Custom Facts for Speed Test";
+			this.customFactsCheckBox.Size = new System.Drawing.Size(146, 17);
+			this.customFactsCheckBox.TabIndex = 2;
+			this.customFactsCheckBox.Text = "Use Custom Speed Facts";
 			this.customFactsCheckBox.UseVisualStyleBackColor = true;
 			this.customFactsCheckBox.CheckedChanged += new System.EventHandler(this.customFactsCheckBox_CheckedChanged);
 			// 
 			// saveChangesButton
 			// 
 			this.saveChangesButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.saveChangesButton.Location = new System.Drawing.Point(12, 227);
+			this.saveChangesButton.Location = new System.Drawing.Point(12, 255);
 			this.saveChangesButton.Name = "saveChangesButton";
 			this.saveChangesButton.Size = new System.Drawing.Size(111, 24);
-			this.saveChangesButton.TabIndex = 1;
+			this.saveChangesButton.TabIndex = 9;
 			this.saveChangesButton.Text = "Save Changes";
 			this.saveChangesButton.UseVisualStyleBackColor = true;
 			// 
@@ -77,14 +79,14 @@
 			this.label1.TabIndex = 3;
 			this.label1.Text = "Max. Days Between Speed Tests";
 			// 
-			// maskedTextBox1
+			// speedTestDaysMaskedTextBox
 			// 
-			this.maskedTextBox1.Location = new System.Drawing.Point(212, 37);
-			this.maskedTextBox1.Name = "maskedTextBox1";
-			this.maskedTextBox1.Size = new System.Drawing.Size(55, 20);
-			this.maskedTextBox1.TabIndex = 2;
-			this.maskedTextBox1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.inputMaskedTextBox_KeyPress);
-			this.maskedTextBox1.KeyUp += new System.Windows.Forms.KeyEventHandler(this.maskedTextBoxKeyUpEvent);
+			this.speedTestDaysMaskedTextBox.Location = new System.Drawing.Point(212, 37);
+			this.speedTestDaysMaskedTextBox.Name = "speedTestDaysMaskedTextBox";
+			this.speedTestDaysMaskedTextBox.Size = new System.Drawing.Size(55, 20);
+			this.speedTestDaysMaskedTextBox.TabIndex = 1;
+			this.speedTestDaysMaskedTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.inputMaskedTextBox_KeyPress);
+			this.speedTestDaysMaskedTextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.maskedTextBoxKeyUpEvent);
 			// 
 			// groupBox1
 			// 
@@ -95,8 +97,8 @@
 			this.groupBox1.Controls.Add(this.subtractionMaxFactNumberLabel);
 			this.groupBox1.Controls.Add(this.subtractionMaxFactNumberMaskedTextBox);
 			this.groupBox1.Controls.Add(this.additionMaxFactNumberLabel);
-			this.groupBox1.Controls.Add(this.additonMaxFactNumberMaskedTextBox);
-			this.groupBox1.Location = new System.Drawing.Point(18, 88);
+			this.groupBox1.Controls.Add(this.additionMaxFactNumberMaskedTextBox);
+			this.groupBox1.Location = new System.Drawing.Point(18, 116);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(249, 125);
 			this.groupBox1.TabIndex = 6;
@@ -121,7 +123,8 @@
 			this.divisionMaxFactNumberMaskedTextBox.Name = "divisionMaxFactNumberMaskedTextBox";
 			this.divisionMaxFactNumberMaskedTextBox.PromptChar = ' ';
 			this.divisionMaxFactNumberMaskedTextBox.Size = new System.Drawing.Size(55, 20);
-			this.divisionMaxFactNumberMaskedTextBox.TabIndex = 12;
+			this.divisionMaxFactNumberMaskedTextBox.TabIndex = 8;
+			this.divisionMaxFactNumberMaskedTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			this.divisionMaxFactNumberMaskedTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.inputMaskedTextBox_KeyPress);
 			this.divisionMaxFactNumberMaskedTextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.maskedTextBoxKeyUpEvent);
 			// 
@@ -143,7 +146,8 @@
 			this.multiplicationMaxFactNumberMaskedTextBox.Name = "multiplicationMaxFactNumberMaskedTextBox";
 			this.multiplicationMaxFactNumberMaskedTextBox.PromptChar = ' ';
 			this.multiplicationMaxFactNumberMaskedTextBox.Size = new System.Drawing.Size(55, 20);
-			this.multiplicationMaxFactNumberMaskedTextBox.TabIndex = 10;
+			this.multiplicationMaxFactNumberMaskedTextBox.TabIndex = 7;
+			this.multiplicationMaxFactNumberMaskedTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			this.multiplicationMaxFactNumberMaskedTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.inputMaskedTextBox_KeyPress);
 			this.multiplicationMaxFactNumberMaskedTextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.maskedTextBoxKeyUpEvent);
 			// 
@@ -165,7 +169,8 @@
 			this.subtractionMaxFactNumberMaskedTextBox.Name = "subtractionMaxFactNumberMaskedTextBox";
 			this.subtractionMaxFactNumberMaskedTextBox.PromptChar = ' ';
 			this.subtractionMaxFactNumberMaskedTextBox.Size = new System.Drawing.Size(55, 20);
-			this.subtractionMaxFactNumberMaskedTextBox.TabIndex = 8;
+			this.subtractionMaxFactNumberMaskedTextBox.TabIndex = 6;
+			this.subtractionMaxFactNumberMaskedTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			this.subtractionMaxFactNumberMaskedTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.inputMaskedTextBox_KeyPress);
 			this.subtractionMaxFactNumberMaskedTextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.maskedTextBoxKeyUpEvent);
 			// 
@@ -179,25 +184,26 @@
 			this.additionMaxFactNumberLabel.TabIndex = 7;
 			this.additionMaxFactNumberLabel.Text = "Addition";
 			// 
-			// additonMaxFactNumberMaskedTextBox
+			// additionMaxFactNumberMaskedTextBox
 			// 
-			this.additonMaxFactNumberMaskedTextBox.CausesValidation = false;
-			this.additonMaxFactNumberMaskedTextBox.Location = new System.Drawing.Point(154, 16);
-			this.additonMaxFactNumberMaskedTextBox.Mask = "##0";
-			this.additonMaxFactNumberMaskedTextBox.Name = "additonMaxFactNumberMaskedTextBox";
-			this.additonMaxFactNumberMaskedTextBox.PromptChar = ' ';
-			this.additonMaxFactNumberMaskedTextBox.Size = new System.Drawing.Size(55, 20);
-			this.additonMaxFactNumberMaskedTextBox.TabIndex = 6;
-			this.additonMaxFactNumberMaskedTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.inputMaskedTextBox_KeyPress);
-			this.additonMaxFactNumberMaskedTextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.maskedTextBoxKeyUpEvent);
+			this.additionMaxFactNumberMaskedTextBox.CausesValidation = false;
+			this.additionMaxFactNumberMaskedTextBox.Location = new System.Drawing.Point(154, 16);
+			this.additionMaxFactNumberMaskedTextBox.Mask = "##0";
+			this.additionMaxFactNumberMaskedTextBox.Name = "additionMaxFactNumberMaskedTextBox";
+			this.additionMaxFactNumberMaskedTextBox.PromptChar = ' ';
+			this.additionMaxFactNumberMaskedTextBox.Size = new System.Drawing.Size(55, 20);
+			this.additionMaxFactNumberMaskedTextBox.TabIndex = 5;
+			this.additionMaxFactNumberMaskedTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+			this.additionMaxFactNumberMaskedTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.inputMaskedTextBox_KeyPress);
+			this.additionMaxFactNumberMaskedTextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.maskedTextBoxKeyUpEvent);
 			// 
 			// cancelButton
 			// 
 			this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.cancelButton.Location = new System.Drawing.Point(161, 227);
+			this.cancelButton.Location = new System.Drawing.Point(161, 255);
 			this.cancelButton.Name = "cancelButton";
 			this.cancelButton.Size = new System.Drawing.Size(111, 24);
-			this.cancelButton.TabIndex = 7;
+			this.cancelButton.TabIndex = 10;
 			this.cancelButton.Text = "Cancel";
 			this.cancelButton.UseVisualStyleBackColor = true;
 			// 
@@ -215,23 +221,49 @@
 			this.usernameMaskedTextBox.Location = new System.Drawing.Point(151, 10);
 			this.usernameMaskedTextBox.Name = "usernameMaskedTextBox";
 			this.usernameMaskedTextBox.Size = new System.Drawing.Size(116, 20);
-			this.usernameMaskedTextBox.TabIndex = 8;
+			this.usernameMaskedTextBox.TabIndex = 0;
 			this.usernameMaskedTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.inputMaskedTextBox_KeyPress);
 			this.usernameMaskedTextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.maskedTextBoxKeyUpEvent);
+			// 
+			// editSpeedFactsButton
+			// 
+			this.editSpeedFactsButton.Location = new System.Drawing.Point(167, 87);
+			this.editSpeedFactsButton.Name = "editSpeedFactsButton";
+			this.editSpeedFactsButton.Size = new System.Drawing.Size(100, 23);
+			this.editSpeedFactsButton.TabIndex = 4;
+			this.editSpeedFactsButton.Text = "Edit Speed Facts";
+			this.editSpeedFactsButton.UseVisualStyleBackColor = true;
+			this.editSpeedFactsButton.MouseClick += new System.Windows.Forms.MouseEventHandler(this.editSpeedFactsButton_MouseClick);
+			// 
+			// speedTestComboBox
+			// 
+			this.speedTestComboBox.FormattingEnabled = true;
+			this.speedTestComboBox.Items.AddRange(new object[] {
+            "Addition",
+            "Subtraction",
+            "Multiplication",
+            "Division"});
+			this.speedTestComboBox.Location = new System.Drawing.Point(18, 87);
+			this.speedTestComboBox.Name = "speedTestComboBox";
+			this.speedTestComboBox.Size = new System.Drawing.Size(121, 21);
+			this.speedTestComboBox.TabIndex = 3;
 			// 
 			// EditProfileDialog
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(284, 261);
+			this.ClientSize = new System.Drawing.Size(284, 289);
+			this.Controls.Add(this.speedTestComboBox);
+			this.Controls.Add(this.editSpeedFactsButton);
 			this.Controls.Add(this.usernameLabel);
 			this.Controls.Add(this.usernameMaskedTextBox);
 			this.Controls.Add(this.cancelButton);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.label1);
-			this.Controls.Add(this.maskedTextBox1);
+			this.Controls.Add(this.speedTestDaysMaskedTextBox);
 			this.Controls.Add(this.saveChangesButton);
 			this.Controls.Add(this.customFactsCheckBox);
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
 			this.Name = "EditProfileDialog";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Edit Profile";
@@ -247,10 +279,10 @@
 		private System.Windows.Forms.CheckBox customFactsCheckBox;
 		private System.Windows.Forms.Button saveChangesButton;
 		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.MaskedTextBox maskedTextBox1;
+		private System.Windows.Forms.MaskedTextBox speedTestDaysMaskedTextBox;
 		private System.Windows.Forms.GroupBox groupBox1;
 		private System.Windows.Forms.Label additionMaxFactNumberLabel;
-		private System.Windows.Forms.MaskedTextBox additonMaxFactNumberMaskedTextBox;
+		private System.Windows.Forms.MaskedTextBox additionMaxFactNumberMaskedTextBox;
 		private System.Windows.Forms.Label divisionMaxFactNumberLabel;
 		private System.Windows.Forms.MaskedTextBox divisionMaxFactNumberMaskedTextBox;
 		private System.Windows.Forms.Label multiplicationMaxFactNumberLabel;
@@ -260,5 +292,7 @@
 		private System.Windows.Forms.Button cancelButton;
 		private System.Windows.Forms.Label usernameLabel;
 		private System.Windows.Forms.MaskedTextBox usernameMaskedTextBox;
+		private System.Windows.Forms.Button editSpeedFactsButton;
+		private System.Windows.Forms.ComboBox speedTestComboBox;
 	}
 }

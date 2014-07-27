@@ -1,6 +1,6 @@
 ﻿namespace KnowYourFacts.Dialogs
 {
-	partial class InputDialog
+	partial class NewUserProfileDialog
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -136,6 +136,7 @@
 			this.Controls.Add(this.usernameMaskedTextBox);
 			this.Controls.Add(this.button2);
 			this.Controls.Add(this.okButton);
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
 			this.Name = "InputDialog";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "New User Profile";

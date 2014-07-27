@@ -135,9 +135,9 @@ namespace KnowYourFacts.Math
 			MathOperationTypeEnum operationType = operation.operationType;
 
 			// Generate facts starting from 0 to the max number.
-			for (int i = 0; i <= userProfile.maxFactNumber; ++i)
+			for (int i = 0; i <= userProfile.maxFactNumbers[System.Convert.ToInt16 (operation.operationType)]; ++i)
 			{
-				for (int j = 0; j <= userProfile.maxFactNumber; ++j)
+				for (int j = 0; j <= userProfile.maxFactNumbers[System.Convert.ToInt16 (operation.operationType)]; ++j)
 				{
 					if (operationType == MathOperationTypeEnum.ADDITION ||
 						 operationType == MathOperationTypeEnum.MULTIPLICATION)
@@ -286,6 +286,11 @@ namespace KnowYourFacts.Math
 			}
 			else
 			{
+				// Set up the progress bar.
+				FactsDisplayControl reference = FactsDisplayControl.Instance;
+				reference.factsProgressBar.Maximum = queueOfFacts.Count ();
+				reference.factsProgressBar.Increment (1);
+				
 				// Display the first fact.
 				displayControl.factSignLabel.Text = operation.getOperationSign ();
 				displayControl.num1Label.Text = System.Convert.ToString (queueOfFacts.First ().leftNum);
@@ -297,8 +302,7 @@ namespace KnowYourFacts.Math
 		}
 
 		/*
-		 * The writeToFile function opens the file, erases the current 
-		 * in the file, and then prints the new results.
+		 * Saves the results, overwriting any existing data.
 		 */
 		public void writeResultsToFile (ref int correctResponseCount, ref Stack<Fact> unknown, ref Stack<Fact> known,
 										MathOperation operatorType, List<long> factResponseTime)
