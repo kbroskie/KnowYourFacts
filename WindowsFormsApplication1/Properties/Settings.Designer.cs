@@ -22,5 +22,50 @@ namespace KnowYourFacts.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(LocalDB)\\v11.0;AttachDbFilename=C:\\Users\\kbroskie\\Documents\\Database" +
+            ".mdf;Integrated Security=True;Connect Timeout=30")]
+        public string DatabaseConnectionString1 {
+            get {
+                return ((string)(this["DatabaseConnectionString1"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(LocalDB)\\v11.0;AttachDbFilename=\"C:\\Users\\kbroskie\\Documents\\Visual " +
+            "Studio 2013\\Projects\\WindowsFormsApplication1\\WindowsFormsApplication1\\Propertie" +
+            "s\\Resources\\KnowYourFactsDatabase.mdf\";Integrated Security=True")]
+        public string KnowYourFactsDatabaseConnectionString {
+            get {
+                return ((string)(this["KnowYourFactsDatabaseConnectionString"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(LocalDB)\\v11.0;AttachDbFilename=|DataDirectory|\\Properties\\Resources" +
+            "\\KnowYourFactsDatabase.mdf;Integrated Security=True")]
+        public string KnowYourFactsDatabaseConnectionString1 {
+            get {
+                return ((string)(this["KnowYourFactsDatabaseConnectionString1"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(localdb)\\Projects;Initial Catalog=KnowYourFactsDatabase;Integrated S" +
+            "ecurity=True;Pooling=False;Connect Timeout=30")]
+        public string TestConnection {
+            get {
+                return ((string)(this["TestConnection"]));
+            }
+        }
     }
 }

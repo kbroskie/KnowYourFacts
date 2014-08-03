@@ -5,10 +5,17 @@ using KnowYourFacts.Utility;
 
 using System;
 using System.Windows.Forms;
+using System.Security.Cryptography;
+
+using System.Text;
+using System.Globalization;
+
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace KnowYourFacts.UI
 {
-	public partial class MathFactsForm : Form, IView
+	public partial class MathFactsForm : Form
 	{
 		private static MainMenuControl m_mainMenuControl;
 		public static FactsDisplayControl m_factsDisplayControl;
@@ -172,6 +179,9 @@ namespace KnowYourFacts.UI
 
 			return profile;
 		}
+
+
+		
 
 		public static void changeUser ()
 		{
@@ -391,7 +401,9 @@ namespace KnowYourFacts.UI
 
 				if (editProfileDialog.ShowDialog () == DialogResult.OK)
 				{
-
+					editProfileDialog.saveChanges ();
+					
+					
 				}
 				if (editProfileDialog != null)
 				{
@@ -579,22 +591,6 @@ namespace KnowYourFacts.UI
 		static void c_InputDetected (object sender, InputDetectedEventArgs e)
 		{
 			((MathFactsForm) m_factsDisplayControl.FindForm ()).processInput ();
-		}
-
-		/*
-		 * Update the factsdisplayControl with the new fact.
-		 */
-		public void FactsModelChange (object sender, FactsModelChangeEventArgs e)
-		{
-			if (!e.fact.Equals (null))
-			{
-				FactsModel.Instance.AddFact (e.fact.leftNum, e.fact.rightNum, e.fact.operation);
-				m_factsDisplayControl.num1Label.Text = System.Convert.ToString (e.fact.leftNum);
-				m_factsDisplayControl.num2Label.Text = System.Convert.ToString (e.fact.rightNum);
-				m_factsDisplayControl.factSignLabel.Text = System.Convert.ToString 
-																			(e.fact.operation.getOperationSign ());
-				m_factsDisplayControl.inputMaskedTextBox.Text = "";
-			}
 		}
 	}
 }

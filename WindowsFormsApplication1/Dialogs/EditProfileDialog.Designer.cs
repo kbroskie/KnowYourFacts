@@ -46,6 +46,10 @@
 			this.usernameMaskedTextBox = new System.Windows.Forms.MaskedTextBox();
 			this.editSpeedFactsButton = new System.Windows.Forms.Button();
 			this.speedTestComboBox = new System.Windows.Forms.ComboBox();
+			this.passwordTextBox = new System.Windows.Forms.TextBox();
+			this.passwordConfirmTextBox = new System.Windows.Forms.TextBox();
+			this.passwordLabel = new System.Windows.Forms.Label();
+			this.passwordConfirmLabel = new System.Windows.Forms.Label();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -58,15 +62,14 @@
 			this.customFactsCheckBox.TabIndex = 2;
 			this.customFactsCheckBox.Text = "Use Custom Speed Facts";
 			this.customFactsCheckBox.UseVisualStyleBackColor = true;
-			this.customFactsCheckBox.CheckedChanged += new System.EventHandler(this.customFactsCheckBox_CheckedChanged);
 			// 
 			// saveChangesButton
 			// 
 			this.saveChangesButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.saveChangesButton.Location = new System.Drawing.Point(12, 255);
+			this.saveChangesButton.Location = new System.Drawing.Point(12, 311);
 			this.saveChangesButton.Name = "saveChangesButton";
 			this.saveChangesButton.Size = new System.Drawing.Size(111, 24);
-			this.saveChangesButton.TabIndex = 9;
+			this.saveChangesButton.TabIndex = 11;
 			this.saveChangesButton.Text = "Save Changes";
 			this.saveChangesButton.UseVisualStyleBackColor = true;
 			// 
@@ -200,10 +203,10 @@
 			// cancelButton
 			// 
 			this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.cancelButton.Location = new System.Drawing.Point(161, 255);
+			this.cancelButton.Location = new System.Drawing.Point(161, 311);
 			this.cancelButton.Name = "cancelButton";
 			this.cancelButton.Size = new System.Drawing.Size(111, 24);
-			this.cancelButton.TabIndex = 10;
+			this.cancelButton.TabIndex = 11;
 			this.cancelButton.Text = "Cancel";
 			this.cancelButton.UseVisualStyleBackColor = true;
 			// 
@@ -248,11 +251,48 @@
 			this.speedTestComboBox.Size = new System.Drawing.Size(121, 21);
 			this.speedTestComboBox.TabIndex = 3;
 			// 
+			// passwordTextBox
+			// 
+			this.passwordTextBox.Location = new System.Drawing.Point(167, 252);
+			this.passwordTextBox.Name = "passwordTextBox";
+			this.passwordTextBox.PasswordChar = '*';
+			this.passwordTextBox.Size = new System.Drawing.Size(100, 20);
+			this.passwordTextBox.TabIndex = 9;
+			// 
+			// passwordConfirmTextBox
+			// 
+			this.passwordConfirmTextBox.Location = new System.Drawing.Point(167, 280);
+			this.passwordConfirmTextBox.Name = "passwordConfirmTextBox";
+			this.passwordConfirmTextBox.PasswordChar = '*';
+			this.passwordConfirmTextBox.Size = new System.Drawing.Size(100, 20);
+			this.passwordConfirmTextBox.TabIndex = 10;
+			// 
+			// passwordLabel
+			// 
+			this.passwordLabel.AutoSize = true;
+			this.passwordLabel.Location = new System.Drawing.Point(18, 252);
+			this.passwordLabel.Name = "passwordLabel";
+			this.passwordLabel.Size = new System.Drawing.Size(87, 13);
+			this.passwordLabel.TabIndex = 12;
+			this.passwordLabel.Text = "Parent Password";
+			// 
+			// passwordConfirmLabel
+			// 
+			this.passwordConfirmLabel.Location = new System.Drawing.Point(15, 273);
+			this.passwordConfirmLabel.Name = "passwordConfirmLabel";
+			this.passwordConfirmLabel.Size = new System.Drawing.Size(109, 27);
+			this.passwordConfirmLabel.TabIndex = 13;
+			this.passwordConfirmLabel.Text = "Confirm Password (Change Password)";
+			// 
 			// EditProfileDialog
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(284, 289);
+			this.ClientSize = new System.Drawing.Size(284, 347);
+			this.Controls.Add(this.passwordConfirmLabel);
+			this.Controls.Add(this.passwordLabel);
+			this.Controls.Add(this.passwordConfirmTextBox);
+			this.Controls.Add(this.passwordTextBox);
 			this.Controls.Add(this.speedTestComboBox);
 			this.Controls.Add(this.editSpeedFactsButton);
 			this.Controls.Add(this.usernameLabel);
@@ -294,5 +334,9 @@
 		private System.Windows.Forms.MaskedTextBox usernameMaskedTextBox;
 		private System.Windows.Forms.Button editSpeedFactsButton;
 		private System.Windows.Forms.ComboBox speedTestComboBox;
+		private System.Windows.Forms.TextBox passwordTextBox;
+		private System.Windows.Forms.TextBox passwordConfirmTextBox;
+		private System.Windows.Forms.Label passwordLabel;
+		private System.Windows.Forms.Label passwordConfirmLabel;
 	}
 }

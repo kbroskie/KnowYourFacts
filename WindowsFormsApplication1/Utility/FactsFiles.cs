@@ -114,7 +114,6 @@ namespace KnowYourFacts.Utility
 		 */ 
 		public void createNewUserDirectory (UserProfile newUserProfile)
 		{
-			Console.WriteLine ("in createNewUserDirectory " + newUserProfile.user.name);
 			// Create the individual user directories.
 			userPath = System.IO.Path.Combine (usersPath, newUserProfile.user.name);
 			paths.Add (userPath);
@@ -232,7 +231,7 @@ namespace KnowYourFacts.Utility
 		}
 
 		#region Filename accessors
-		private static String getDailyFactsDataFilename (MathOperationTypeEnum operation)
+		public static String getDailyFactsDataFilename (MathOperationTypeEnum operation)
 		{
 			switch (operation)
 			{
@@ -385,6 +384,12 @@ namespace KnowYourFacts.Utility
 					file.WriteLine (speedFact.rightNum);
 				}
 			}
+		}
+
+		public void updateUserDirectoryName (String newUsername)
+		{
+			String newUserPath = System.IO.Path.Combine (usersPath, newUsername);
+			System.IO.Directory.Move (userPath, newUserPath);
 		}
 
 		#endregion
