@@ -15,8 +15,7 @@ namespace KnowYourFacts.Dialogs
 	public partial class EditProfileDialog : Form
 	{
 		FactsFiles files = FactsFiles.Instance;
-		//String connString = System.Configuration.ConfigurationManager.ConnectionStrings["KnowYourFacts.Properties.Settings.DatabaseConnectionString1"].ConnectionString;
-		String connString = System.Configuration.ConfigurationManager.ConnectionStrings["KnowYourFacts.Properties.Settings.TestConnection"].ConnectionString;
+		String connString = System.Configuration.ConfigurationManager.ConnectionStrings["KnowYourFacts.Properties.Settings.KnowYourFactsDatabaseConnectionString"].ConnectionString;
 		
 		public EditProfileDialog ()
 		{
@@ -157,7 +156,6 @@ namespace KnowYourFacts.Dialogs
 
 		public void saveChanges ()
 		{
-			savePassword (passwordTextBox.Text);
 			bool updateUserProfile = false;
 
 			if (!String.IsNullOrEmpty(passwordTextBox.Text) && validatePassword (passwordTextBox.Text))
@@ -226,11 +224,12 @@ namespace KnowYourFacts.Dialogs
 				}
 
 				// Check if the password should be updated
-				if (!String.IsNullOrEmpty (passwordConfirmTextBox.Text))
+				if (!String.IsNullOrEmpty (changePasswordTextBox.Text) 
+					&& !String.IsNullOrEmpty (passwordConfirmTextBox.Text))
 				{
-					if (passwordTextBox.Text == passwordConfirmTextBox.Text)
+					if (changePasswordTextBox.Text == passwordConfirmTextBox.Text)
 					{
-						savePassword (passwordTextBox.Text);
+						savePassword (changePasswordTextBox.Text);
 					}
 					else
 					{
@@ -258,7 +257,7 @@ namespace KnowYourFacts.Dialogs
 			byte[] salt = null;
 			byte[] key = null;
 
-			string cmdString = "SELECT [Salt],[Key] FROM [dbo].[Users] WHERE (Username = @Username)";
+			string cmdString = "SELECT [Salt],[Key] FROM [dbo].[UserData] WHERE (Username = @Username)";
 
 			using (SqlConnection conn = new SqlConnection (connString))
 			{
@@ -301,7 +300,7 @@ namespace KnowYourFacts.Dialogs
 
 		private void updateUsernameInDatabase (String newUsername, String oldUsername)
 		{
-			string cmdString = "UPDATE [dbo].[Users] SET Username = @NewUsername WHERE Username = @OldUsername";
+			string cmdString = "UPDATE [dbo].[UserData] SET Username = @NewUsername WHERE Username = @OldUsername";
 	
 			using (SqlConnection conn = new SqlConnection (connString))
 			{
@@ -369,7 +368,7 @@ namespace KnowYourFacts.Dialogs
 				byte[] generatedKey = deriveBytes.GetBytes (20);
 				string username = MathFactsForm.userProfile.user.name;
 
-				string cmdString = "INSERT INTO [dbo].[Users] ([Username], [Salt], [Key]) VALUES (@Username, @Salt, @Key)";
+				string cmdString = "INSERT INTO [dbo].[UserData] ([Username], [Salt], [Key]) VALUES (@Username, @Salt, @Key)";
 			
 				using (SqlConnection conn = new SqlConnection (connString))
 				{
@@ -391,7 +390,6 @@ namespace KnowYourFacts.Dialogs
 						}
 					}
 				}
-				MessageBox.Show (null, (validatePassword (passwordConfirmTextBox.Text)).ToString (), "test");
 			}
 		}
 	}

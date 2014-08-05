@@ -23,7 +23,7 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <AutorunEnabled>true</AutorunEnabled>
-    <ApplicationRevision>3</ApplicationRevision>
+    <ApplicationRevision>5</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -74,10 +74,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DatabaseDataSet.Designer.cs">
+    <Compile Include="Data\UserDataSet.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>DatabaseDataSet.xsd</DependentUpon>
+      <DependentUpon>UserDataSet.xsd</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\ChangeUserDialog.cs">
       <SubType>Form</SubType>
@@ -102,6 +102,11 @@
     </Compile>
     <Compile Include="Dialogs\SpeedFactEditDialog.Designer.cs">
       <DependentUpon>SpeedFactEditDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Data\KnowYourFactsDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>KnowYourFactsDataSet.xsd</DependentUpon>
     </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -162,16 +167,27 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="DatabaseDataSet.xsc">
-      <DependentUpon>DatabaseDataSet.xsd</DependentUpon>
+    <None Include="Data\KnowYourFactsDataSet.xsc">
+      <DependentUpon>KnowYourFactsDataSet.xsd</DependentUpon>
     </None>
-    <None Include="DatabaseDataSet.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>DatabaseDataSet.Designer.cs</LastGenOutput>
+    <None Include="Data\KnowYourFactsDataSet.xsd">
       <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>KnowYourFactsDataSet.Designer.cs</LastGenOutput>
     </None>
-    <None Include="DatabaseDataSet.xss">
-      <DependentUpon>DatabaseDataSet.xsd</DependentUpon>
+    <None Include="Data\KnowYourFactsDataSet.xss">
+      <DependentUpon>KnowYourFactsDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="Data\UserDataSet.xsc">
+      <DependentUpon>UserDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="Data\UserDataSet.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>UserDataSet.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Data\UserDataSet.xss">
+      <DependentUpon>UserDataSet.xsd</DependentUpon>
     </None>
     <None Include="KnowYourFacts_TemporaryKey.pfx" />
     <None Include="Properties\Settings.settings">
@@ -189,6 +205,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Extras\ChangesToMake.txt" />
+    <Content Include="Data\KnowYourFactsDatabase.mdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\KnowYourFactsDatabase_log.ldf">
+      <DependentUpon>KnowYourFactsDatabase.mdf</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Properties\Resources\SubtractionSpeedFacts.txt" />
     <None Include="Properties\Resources\MultiplicationSpeedFacts.txt" />
     <None Include="Properties\Resources\DivisionSpeedFacts.txt" />

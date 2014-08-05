@@ -149,7 +149,7 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
-			this.ClientSize = new System.Drawing.Size(290, 256);
+			this.ClientSize = new System.Drawing.Size(290, 236);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
 			this.Menu = this.mainMenu;
@@ -175,7 +175,7 @@
 		private System.Windows.Forms.MenuItem divisionTestMenuItem;
 		private System.Windows.Forms.MenuItem optionsMenuItem;
 		private System.Windows.Forms.MenuItem helpMenuItem;
-		private System.Windows.Forms.MenuItem editProfileMenuItem;
+		public System.Windows.Forms.MenuItem editProfileMenuItem;
 	}
 }
 

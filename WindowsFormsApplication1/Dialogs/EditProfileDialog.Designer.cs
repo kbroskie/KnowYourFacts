@@ -50,7 +50,11 @@
 			this.passwordConfirmTextBox = new System.Windows.Forms.TextBox();
 			this.passwordLabel = new System.Windows.Forms.Label();
 			this.passwordConfirmLabel = new System.Windows.Forms.Label();
+			this.changePasswordLabel = new System.Windows.Forms.Label();
+			this.changePasswordTextBox = new System.Windows.Forms.TextBox();
+			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.groupBox1.SuspendLayout();
+			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// customFactsCheckBox
@@ -66,10 +70,10 @@
 			// saveChangesButton
 			// 
 			this.saveChangesButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.saveChangesButton.Location = new System.Drawing.Point(12, 311);
+			this.saveChangesButton.Location = new System.Drawing.Point(12, 352);
 			this.saveChangesButton.Name = "saveChangesButton";
 			this.saveChangesButton.Size = new System.Drawing.Size(111, 24);
-			this.saveChangesButton.TabIndex = 11;
+			this.saveChangesButton.TabIndex = 12;
 			this.saveChangesButton.Text = "Save Changes";
 			this.saveChangesButton.UseVisualStyleBackColor = true;
 			// 
@@ -203,10 +207,10 @@
 			// cancelButton
 			// 
 			this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.cancelButton.Location = new System.Drawing.Point(161, 311);
+			this.cancelButton.Location = new System.Drawing.Point(161, 352);
 			this.cancelButton.Name = "cancelButton";
 			this.cancelButton.Size = new System.Drawing.Size(111, 24);
-			this.cancelButton.TabIndex = 11;
+			this.cancelButton.TabIndex = 13;
 			this.cancelButton.Text = "Cancel";
 			this.cancelButton.UseVisualStyleBackColor = true;
 			// 
@@ -253,46 +257,74 @@
 			// 
 			// passwordTextBox
 			// 
-			this.passwordTextBox.Location = new System.Drawing.Point(167, 252);
+			this.passwordTextBox.Location = new System.Drawing.Point(147, 19);
 			this.passwordTextBox.Name = "passwordTextBox";
 			this.passwordTextBox.PasswordChar = '*';
-			this.passwordTextBox.Size = new System.Drawing.Size(100, 20);
+			this.passwordTextBox.Size = new System.Drawing.Size(96, 20);
 			this.passwordTextBox.TabIndex = 9;
 			// 
 			// passwordConfirmTextBox
 			// 
-			this.passwordConfirmTextBox.Location = new System.Drawing.Point(167, 280);
+			this.passwordConfirmTextBox.Location = new System.Drawing.Point(147, 79);
 			this.passwordConfirmTextBox.Name = "passwordConfirmTextBox";
 			this.passwordConfirmTextBox.PasswordChar = '*';
-			this.passwordConfirmTextBox.Size = new System.Drawing.Size(100, 20);
-			this.passwordConfirmTextBox.TabIndex = 10;
+			this.passwordConfirmTextBox.Size = new System.Drawing.Size(96, 20);
+			this.passwordConfirmTextBox.TabIndex = 11;
 			// 
 			// passwordLabel
 			// 
 			this.passwordLabel.AutoSize = true;
-			this.passwordLabel.Location = new System.Drawing.Point(18, 252);
+			this.passwordLabel.Location = new System.Drawing.Point(1, 22);
 			this.passwordLabel.Name = "passwordLabel";
-			this.passwordLabel.Size = new System.Drawing.Size(87, 13);
+			this.passwordLabel.Size = new System.Drawing.Size(139, 13);
 			this.passwordLabel.TabIndex = 12;
-			this.passwordLabel.Text = "Parent Password";
+			this.passwordLabel.Text = "Parent Password (Required)";
 			// 
 			// passwordConfirmLabel
 			// 
-			this.passwordConfirmLabel.Location = new System.Drawing.Point(15, 273);
+			this.passwordConfirmLabel.AutoSize = true;
+			this.passwordConfirmLabel.Location = new System.Drawing.Point(3, 83);
 			this.passwordConfirmLabel.Name = "passwordConfirmLabel";
-			this.passwordConfirmLabel.Size = new System.Drawing.Size(109, 27);
+			this.passwordConfirmLabel.Size = new System.Drawing.Size(91, 13);
 			this.passwordConfirmLabel.TabIndex = 13;
-			this.passwordConfirmLabel.Text = "Confirm Password (Change Password)";
+			this.passwordConfirmLabel.Text = "Confirm Password";
+			// 
+			// changePasswordLabel
+			// 
+			this.changePasswordLabel.AutoSize = true;
+			this.changePasswordLabel.Location = new System.Drawing.Point(3, 54);
+			this.changePasswordLabel.Name = "changePasswordLabel";
+			this.changePasswordLabel.Size = new System.Drawing.Size(93, 13);
+			this.changePasswordLabel.TabIndex = 15;
+			this.changePasswordLabel.Text = "Change Password";
+			// 
+			// changePasswordTextBox
+			// 
+			this.changePasswordTextBox.Location = new System.Drawing.Point(147, 50);
+			this.changePasswordTextBox.Name = "changePasswordTextBox";
+			this.changePasswordTextBox.PasswordChar = '*';
+			this.changePasswordTextBox.Size = new System.Drawing.Size(96, 20);
+			this.changePasswordTextBox.TabIndex = 10;
+			// 
+			// groupBox2
+			// 
+			this.groupBox2.Controls.Add(this.passwordLabel);
+			this.groupBox2.Controls.Add(this.changePasswordLabel);
+			this.groupBox2.Controls.Add(this.passwordTextBox);
+			this.groupBox2.Controls.Add(this.changePasswordTextBox);
+			this.groupBox2.Controls.Add(this.passwordConfirmTextBox);
+			this.groupBox2.Controls.Add(this.passwordConfirmLabel);
+			this.groupBox2.Location = new System.Drawing.Point(18, 239);
+			this.groupBox2.Name = "groupBox2";
+			this.groupBox2.Size = new System.Drawing.Size(249, 106);
+			this.groupBox2.TabIndex = 16;
+			this.groupBox2.TabStop = false;
 			// 
 			// EditProfileDialog
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(284, 347);
-			this.Controls.Add(this.passwordConfirmLabel);
-			this.Controls.Add(this.passwordLabel);
-			this.Controls.Add(this.passwordConfirmTextBox);
-			this.Controls.Add(this.passwordTextBox);
+			this.ClientSize = new System.Drawing.Size(284, 384);
 			this.Controls.Add(this.speedTestComboBox);
 			this.Controls.Add(this.editSpeedFactsButton);
 			this.Controls.Add(this.usernameLabel);
@@ -301,6 +333,7 @@
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.speedTestDaysMaskedTextBox);
+			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.saveChangesButton);
 			this.Controls.Add(this.customFactsCheckBox);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
@@ -309,6 +342,8 @@
 			this.Text = "Edit Profile";
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox1.PerformLayout();
+			this.groupBox2.ResumeLayout(false);
+			this.groupBox2.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -316,27 +351,30 @@
 
 		#endregion
 
-		private System.Windows.Forms.CheckBox customFactsCheckBox;
 		private System.Windows.Forms.Button saveChangesButton;
 		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.MaskedTextBox speedTestDaysMaskedTextBox;
 		private System.Windows.Forms.GroupBox groupBox1;
 		private System.Windows.Forms.Label additionMaxFactNumberLabel;
-		private System.Windows.Forms.MaskedTextBox additionMaxFactNumberMaskedTextBox;
 		private System.Windows.Forms.Label divisionMaxFactNumberLabel;
-		private System.Windows.Forms.MaskedTextBox divisionMaxFactNumberMaskedTextBox;
 		private System.Windows.Forms.Label multiplicationMaxFactNumberLabel;
-		private System.Windows.Forms.MaskedTextBox multiplicationMaxFactNumberMaskedTextBox;
 		private System.Windows.Forms.Label subtractionMaxFactNumberLabel;
-		private System.Windows.Forms.MaskedTextBox subtractionMaxFactNumberMaskedTextBox;
 		private System.Windows.Forms.Button cancelButton;
 		private System.Windows.Forms.Label usernameLabel;
-		private System.Windows.Forms.MaskedTextBox usernameMaskedTextBox;
 		private System.Windows.Forms.Button editSpeedFactsButton;
 		private System.Windows.Forms.ComboBox speedTestComboBox;
-		private System.Windows.Forms.TextBox passwordTextBox;
-		private System.Windows.Forms.TextBox passwordConfirmTextBox;
-		private System.Windows.Forms.Label passwordLabel;
 		private System.Windows.Forms.Label passwordConfirmLabel;
+		private System.Windows.Forms.GroupBox groupBox2;
+		public System.Windows.Forms.CheckBox customFactsCheckBox;
+		public System.Windows.Forms.MaskedTextBox speedTestDaysMaskedTextBox;
+		public System.Windows.Forms.MaskedTextBox additionMaxFactNumberMaskedTextBox;
+		public System.Windows.Forms.MaskedTextBox divisionMaxFactNumberMaskedTextBox;
+		public System.Windows.Forms.MaskedTextBox multiplicationMaxFactNumberMaskedTextBox;
+		public System.Windows.Forms.MaskedTextBox subtractionMaxFactNumberMaskedTextBox;
+		public System.Windows.Forms.MaskedTextBox usernameMaskedTextBox;
+		public System.Windows.Forms.TextBox passwordTextBox;
+		public System.Windows.Forms.TextBox passwordConfirmTextBox;
+		public System.Windows.Forms.TextBox changePasswordTextBox;
+		public System.Windows.Forms.Label changePasswordLabel;
+		private System.Windows.Forms.Label passwordLabel;
 	}
 }

@@ -62,9 +62,7 @@ namespace KnowYourFacts.UI
 				files.createDefaultProgramDirectory ();
 			}
 
-			// TODO Need to change where this is called. If no user data is present, the input dialog appears
-			// before the form shows.
-			loadLastUserOrPromptForNewUser ();
+			loadLastUser ();
 			m_mainMenuControl.setUserButtonText ("Welcome " + userProfile.user.name + "!" + "\nNot " + userProfile.user.name + "?\nClick here to change users");
 		}
 
@@ -86,17 +84,15 @@ namespace KnowYourFacts.UI
 			this.Controls.Add (m_factsDisplayControl);
 		}
 
-		private void loadLastUserOrPromptForNewUser () 
+		private void loadLastUser () 
 		{
 			userProfile.user.name = files.loadCurrentUsername ();
 
-			// No user data exists
+			// No user data exists. Load a sample guest profile.
 			if (String.IsNullOrEmpty (userProfile.user.name))
 			{
-				userProfile = promptForNewUserProfile ();
-
-				files.createNewUserDirectory (userProfile);
-				files.updateUserProfile (userProfile);
+				userProfile = GUEST_PROFILE;
+				editProfileMenuItem.Enabled = false;
 			}
 			else
 			{
@@ -106,21 +102,30 @@ namespace KnowYourFacts.UI
 		}
 
 		/*
-		 * Prompt for and obtain a new username, or use "Guest" for default.
+		 * Prompt for and obtain a new user profile.
 		 */
-		private static UserProfile promptForNewUserProfile () // TODO Test that the dialog does not close before all valid data is entered.
+		private static bool createNewUserProfile () 
+		// TODO Test that the dialog does not close before all valid data is entered.
 		{
-			UserProfile profile = GUEST_PROFILE;
-
-			NewUserProfileDialog inputDialog = new NewUserProfileDialog ();
+			EditProfileDialog newProfileDialog = new EditProfileDialog ();
+			newProfileDialog.Text = "New User Profile";
+			newProfileDialog.changePasswordTextBox.Visible = false;
+			newProfileDialog.changePasswordLabel.Visible = false;
+			newProfileDialog.usernameMaskedTextBox.Text = "";
 			bool keepDialogShowing = true;
+			bool newProfileCreated = true;
 
 			do 
 			{
-				if (inputDialog.ShowDialog () == DialogResult.OK)
+				if (newProfileDialog.ShowDialog () == DialogResult.OK)
 				{
-					String username = inputDialog.usernameMaskedTextBox.Text;
-					String maxFactNumber = inputDialog.maxFactNumberMaskedTextBox.Text;
+					String username = newProfileDialog.usernameMaskedTextBox.Text;
+					String[] maxFactNumbers = { "", "", "", "" };
+					maxFactNumbers[0] = newProfileDialog.additionMaxFactNumberMaskedTextBox.Text;
+					maxFactNumbers[1] = newProfileDialog.subtractionMaxFactNumberMaskedTextBox.Text;
+					maxFactNumbers[2] = newProfileDialog.multiplicationMaxFactNumberMaskedTextBox.Text;
+					maxFactNumbers[3] = newProfileDialog.divisionMaxFactNumberMaskedTextBox.Text;
+
 					// Check that a username was entered.
 					if (String.IsNullOrEmpty (username))
 					{
@@ -134,28 +139,47 @@ namespace KnowYourFacts.UI
 						// TODO Need to ensure name conforms to windows naming conventions. 
 						MessageBox.Show ("Sorry, that username is already taken.\nPlease try again with a different username.",
 								"Duplicate Username", MessageBoxButtons.OK, MessageBoxIcon.Error);
-						inputDialog.usernameMaskedTextBox.Text = "";
+						newProfileDialog.usernameMaskedTextBox.Text = "";
 					}
 
 					// Check that a maxFactNumber was entered.
-					else if (String.IsNullOrEmpty (maxFactNumber))
+					else if (String.IsNullOrEmpty (maxFactNumbers[0]) || String.IsNullOrEmpty (maxFactNumbers[1]) 
+						|| String.IsNullOrEmpty (maxFactNumbers[2]) || String.IsNullOrEmpty (maxFactNumbers[3]))
 					{
-						MessageBox.Show ("You didn't enter a maximum fact number to create.\nPlease enter a number before continuing.",
-												"No Maximum Fact Number", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						MessageBox.Show ("One or more maximum fact numbers were left blank.\nPlease enter a number for all four fields before continuing.",
+												"Missing Maximum Fact Number(s)", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					}
 					
 					// Check that the number is greater than 0.
-					else if ((profile.maxFactNumbers[System.Convert.ToInt16 (operationType)] = Convert.ToInt32 (maxFactNumber)) <= 0)
+					else if ((userProfile.maxFactNumbers[0] = Convert.ToInt32 (maxFactNumbers[0])) <= 0)
 					{
 						MessageBox.Show ("Please enter a number greater than 0.",
 												"Invalid Maximum Fact Number", MessageBoxButtons.OK, MessageBoxIcon.Error);
-						inputDialog.maxFactNumberMaskedTextBox.Text = "";
+						newProfileDialog.additionMaxFactNumberMaskedTextBox.Text = "";
 					}
-					
+					else if ((userProfile.maxFactNumbers[1] = Convert.ToInt32 (maxFactNumbers[1])) <= 0)
+					{
+						MessageBox.Show ("Please enter a number greater than 0.",
+												"Invalid Maximum Fact Number", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						newProfileDialog.subtractionMaxFactNumberMaskedTextBox.Text = "";
+					}
+					else if ((userProfile.maxFactNumbers[2] = Convert.ToInt32 (maxFactNumbers[2])) <= 0)
+					{
+						MessageBox.Show ("Please enter a number greater than 0.",
+												"Invalid Maximum Fact Number", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						newProfileDialog.multiplicationMaxFactNumberMaskedTextBox.Text = "";
+					}
+					else if ((userProfile.maxFactNumbers[3] = Convert.ToInt32 (maxFactNumbers[3])) <= 0)
+					{
+						MessageBox.Show ("Please enter a number greater than 0.",
+												"Invalid Maximum Fact Number", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						newProfileDialog.divisionMaxFactNumberMaskedTextBox.Text = "";
+					}
+
 					// Valid data was entered.
 					else 
 					{
-						profile.user.name = username;
+						userProfile.user.name = username;
 						keepDialogShowing = false;
 					}
 				}
@@ -168,22 +192,19 @@ namespace KnowYourFacts.UI
 					if (confirmResult == DialogResult.Yes)
 					{
 						keepDialogShowing = false;
+						newProfileCreated = false;
 					}
 				}
 			} while (keepDialogShowing);
 
-			if (inputDialog != null)
+			if (newProfileDialog != null)
 			{
-				inputDialog.Dispose ();
+				newProfileDialog.Dispose ();
 			}
-
-			return profile;
+			return newProfileCreated;
 		}
 
-
-		
-
-		public static void changeUser ()
+		public void changeUser ()
 		{
 			ChangeUserDialog changeUserDialog = new ChangeUserDialog ();
 			changeUserDialog.setUserChoices (FactsFiles.loadUsers ());
@@ -193,8 +214,7 @@ namespace KnowYourFacts.UI
 				String selectedUser = changeUserDialog.getSelectedUser ();
 				if (selectedUser == "<New User>")
 				{
-					userProfile = promptForNewUserProfile ();
-					if (userProfile.user.name != "Guest")
+					if (createNewUserProfile ())
 					{
 						files.createNewUserDirectory (userProfile);
 						files.updateUserProfile (userProfile);
@@ -206,8 +226,12 @@ namespace KnowYourFacts.UI
 					userProfile = files.loadUserProfile (); 
 				}
 
-				reference.maxFactNumber = userProfile.maxFactNumbers[System.Convert.ToInt16 (operationType)]; // HACK will not need to set this once I phase out this variable in MathFacts
 				m_mainMenuControl.setUserButtonText ("Welcome " + userProfile.user.name + "!" + "\nNot " + userProfile.user.name + "?\nClick Here to Change Users.");
+			}
+
+			if (!userProfile.Equals(GUEST_PROFILE))
+			{
+				editProfileMenuItem.Enabled = true;
 			}
 
 			if (changeUserDialog != null)

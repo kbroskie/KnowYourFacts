@@ -18,10 +18,6 @@ namespace KnowYourFacts.Math
 	{
 		#region Variables and Constants
 
-		// Max number of facts to go up to
-		// HACK The maxFactNumber should not be hard-coded. It should be retrieved from the current user profile.
-		public int maxFactNumber = 5;
-
 		public List<long> factResponseTime;
 		public int maxResponseTime;
 		public double time;

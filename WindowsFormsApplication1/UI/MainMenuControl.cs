@@ -38,7 +38,8 @@ namespace KnowYourFacts.UI
 
 		private void createNewUserButtonClick (object sender, EventArgs e)
 		{
-			MathFactsForm.changeUser ();
+			//(this.Parent as MathFactsForm).editProfileMenuItem.Enabled = false;
+			(this.Parent as MathFactsForm).changeUser ();
 		}
 
 		private void exitButtonClick (object sender, EventArgs e)
