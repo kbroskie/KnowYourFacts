@@ -104,104 +104,12 @@ namespace KnowYourFacts.UI
 		/*
 		 * Prompt for and obtain a new user profile.
 		 */
-		private static bool createNewUserProfile () 
+		private void createNewUserProfile ()
 		// TODO Test that the dialog does not close before all valid data is entered.
 		{
 			EditProfileDialog newProfileDialog = new EditProfileDialog ();
-			newProfileDialog.Text = "New User Profile";
-			newProfileDialog.changePasswordTextBox.Visible = false;
-			newProfileDialog.changePasswordLabel.Visible = false;
-			newProfileDialog.usernameMaskedTextBox.Text = "";
-			bool keepDialogShowing = true;
-			bool newProfileCreated = true;
-
-			do 
-			{
-				if (newProfileDialog.ShowDialog () == DialogResult.OK)
-				{
-					String username = newProfileDialog.usernameMaskedTextBox.Text;
-					String[] maxFactNumbers = { "", "", "", "" };
-					maxFactNumbers[0] = newProfileDialog.additionMaxFactNumberMaskedTextBox.Text;
-					maxFactNumbers[1] = newProfileDialog.subtractionMaxFactNumberMaskedTextBox.Text;
-					maxFactNumbers[2] = newProfileDialog.multiplicationMaxFactNumberMaskedTextBox.Text;
-					maxFactNumbers[3] = newProfileDialog.divisionMaxFactNumberMaskedTextBox.Text;
-
-					// Check that a username was entered.
-					if (String.IsNullOrEmpty (username))
-					{
-						MessageBox.Show ("You didn't enter a username to create.\nPlease enter a username before continuing.",
-							"No Username", MessageBoxButtons.OK, MessageBoxIcon.Error);
-					}
-
-					// Ensure the username does not exist.
-					else if (files.userDirectoryExists (new User(username)))
-					{
-						// TODO Need to ensure name conforms to windows naming conventions. 
-						MessageBox.Show ("Sorry, that username is already taken.\nPlease try again with a different username.",
-								"Duplicate Username", MessageBoxButtons.OK, MessageBoxIcon.Error);
-						newProfileDialog.usernameMaskedTextBox.Text = "";
-					}
-
-					// Check that a maxFactNumber was entered.
-					else if (String.IsNullOrEmpty (maxFactNumbers[0]) || String.IsNullOrEmpty (maxFactNumbers[1]) 
-						|| String.IsNullOrEmpty (maxFactNumbers[2]) || String.IsNullOrEmpty (maxFactNumbers[3]))
-					{
-						MessageBox.Show ("One or more maximum fact numbers were left blank.\nPlease enter a number for all four fields before continuing.",
-												"Missing Maximum Fact Number(s)", MessageBoxButtons.OK, MessageBoxIcon.Error);
-					}
-					
-					// Check that the number is greater than 0.
-					else if ((userProfile.maxFactNumbers[0] = Convert.ToInt32 (maxFactNumbers[0])) <= 0)
-					{
-						MessageBox.Show ("Please enter a number greater than 0.",
-												"Invalid Maximum Fact Number", MessageBoxButtons.OK, MessageBoxIcon.Error);
-						newProfileDialog.additionMaxFactNumberMaskedTextBox.Text = "";
-					}
-					else if ((userProfile.maxFactNumbers[1] = Convert.ToInt32 (maxFactNumbers[1])) <= 0)
-					{
-						MessageBox.Show ("Please enter a number greater than 0.",
-												"Invalid Maximum Fact Number", MessageBoxButtons.OK, MessageBoxIcon.Error);
-						newProfileDialog.subtractionMaxFactNumberMaskedTextBox.Text = "";
-					}
-					else if ((userProfile.maxFactNumbers[2] = Convert.ToInt32 (maxFactNumbers[2])) <= 0)
-					{
-						MessageBox.Show ("Please enter a number greater than 0.",
-												"Invalid Maximum Fact Number", MessageBoxButtons.OK, MessageBoxIcon.Error);
-						newProfileDialog.multiplicationMaxFactNumberMaskedTextBox.Text = "";
-					}
-					else if ((userProfile.maxFactNumbers[3] = Convert.ToInt32 (maxFactNumbers[3])) <= 0)
-					{
-						MessageBox.Show ("Please enter a number greater than 0.",
-												"Invalid Maximum Fact Number", MessageBoxButtons.OK, MessageBoxIcon.Error);
-						newProfileDialog.divisionMaxFactNumberMaskedTextBox.Text = "";
-					}
-
-					// Valid data was entered.
-					else 
-					{
-						userProfile.user.name = username;
-						keepDialogShowing = false;
-					}
-				}
-
-				// The user chose "Cancel"
-				else 
-				{
-					var confirmResult = MessageBox.Show ("Are you sure you don't want to create a username?\nYour progress will not be saved.",
-						"Confirm Cancel", MessageBoxButtons.YesNo);
-					if (confirmResult == DialogResult.Yes)
-					{
-						keepDialogShowing = false;
-						newProfileCreated = false;
-					}
-				}
-			} while (keepDialogShowing);
-
-			if (newProfileDialog != null)
-			{
-				newProfileDialog.Dispose ();
-			}
-			return newProfileCreated;
+			newProfileDialog.prepareFieldsForNewProfileEntry ();
+			newProfileDialog.ShowDialog ();
 		}
 
 		public void changeUser ()
@@ -214,11 +122,7 @@ namespace KnowYourFacts.UI
 				String selectedUser = changeUserDialog.getSelectedUser ();
 				if (selectedUser == "<New User>")
 				{
-					if (createNewUserProfile ())
-					{
-						files.createNewUserDirectory (userProfile);
-						files.updateUserProfile (userProfile);
-					}
+					createNewUserProfile ();
 				}
 				else 
 				{
@@ -244,7 +148,7 @@ namespace KnowYourFacts.UI
 		 * Updates the last value entered by the user, or toggles the display 
 		 * if the spacebar was pressed to clear a status bar message.
 		 */
-		public static void logUserInput (String userInput)
+		public void logUserInput (String userInput)
 		{
 			if (userInput == "space" && reference.queueOfFacts.Count == 0)
 			{
@@ -269,7 +173,7 @@ namespace KnowYourFacts.UI
 		/*
 		 * Used to cycle through all the facts when the user selects the option to start all daily facts.
 		 */ 
-		private static void continueProcessingDailyFacts ()
+		private void continueProcessingDailyFacts ()
 		{
 			MathOperationTypeEnum lastOperation = operationType.operationType;
 
@@ -422,26 +326,25 @@ namespace KnowYourFacts.UI
 			if (sender.Equals (editProfileMenuItem))
 			{
 				EditProfileDialog editProfileDialog = new EditProfileDialog ();
-
-				if (editProfileDialog.ShowDialog () == DialogResult.OK)
-				{
-					editProfileDialog.saveChanges ();
-					
-					
-				}
-				if (editProfileDialog != null)
-				{
-					editProfileDialog.Dispose ();
-				}
+				editProfileDialog.ShowDialog ();
 			}
 		}
 
 		/*
 		 * Starts the chosen daily facts or speed test
 		 */
-		public static void startTheFacts (MathOperationTypeEnum sign, Boolean isSpeedTest, Boolean processAllDailyFacts)
+		public void startTheFacts (MathOperationTypeEnum sign, Boolean isSpeedTest, Boolean processAllDailyFacts)
 		{
 			operationType = new MathOperation (sign);
+
+			if (userProfile.Equals (GUEST_PROFILE))
+			{
+				var confirmResult = MessageBox.Show ("Would you like to create a profile before continuing?\nA profile is required for your progress to be saved.", "Confirm Cancel", MessageBoxButtons.YesNo);
+				if (confirmResult == DialogResult.Yes)
+				{
+					createNewUserProfile ();
+				}
+			}
 
 			// Determine if the user has already used the daily facts today.
 			String dateData = files.readDailyFactsDateDataFromFile(operationType.operationType);

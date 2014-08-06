@@ -36,7 +36,7 @@ namespace KnowYourFacts.UI
 			if (e.KeyCode == Keys.Space)
 			{
 				messageLabel.Text = "";
-				MathFactsForm.logUserInput ("space");
+				(this.Parent as MathFactsForm).logUserInput ("space");
 			}
 		}
 

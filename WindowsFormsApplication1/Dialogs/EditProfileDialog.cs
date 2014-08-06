@@ -1,4 +1,5 @@
-﻿using KnowYourFacts.Math;
+﻿using KnowYourFacts.Data;
+using KnowYourFacts.Math;
 using KnowYourFacts.UI;
 using KnowYourFacts.Users;
 using KnowYourFacts.Utility;
@@ -16,11 +17,17 @@ namespace KnowYourFacts.Dialogs
 	{
 		FactsFiles files = FactsFiles.Instance;
 		String connString = System.Configuration.ConfigurationManager.ConnectionStrings["KnowYourFacts.Properties.Settings.KnowYourFactsDatabaseConnectionString"].ConnectionString;
+		readonly private String SAVE_NEW_PROFILE_BUTTON_TEXT = "Save Profile";
+		private List<MaskedTextBox> maxFactNumberMaskedTextBoxes;
+		private UserDataSet userDataSet;
+		private KnowYourFacts.Data.UserDataSetTableAdapters.UserDataTableAdapter userDataTableAdapter;
 		
 		public EditProfileDialog ()
 		{
 			InitializeComponent ();
 			loadUserProfileData ();
+			userDataSet = new UserDataSet ();
+			userDataTableAdapter = new Data.UserDataSetTableAdapters.UserDataTableAdapter ();
 		}
 
 		private void loadUserProfileData ()
@@ -53,6 +60,30 @@ namespace KnowYourFacts.Dialogs
 			divisionMaxFactNumberMaskedTextBox.Text = 
 				profile.maxFactNumbers[(int) MathOperationTypeEnum.DIVISION].ToString ();
 			divisionMaxFactNumberMaskedTextBox.Tag = divisionMaxFactNumberMaskedTextBox.Text;
+
+			maxFactNumberMaskedTextBoxes = new List <MaskedTextBox> {additionMaxFactNumberMaskedTextBox, subtractionMaxFactNumberMaskedTextBox, multiplicationMaxFactNumberMaskedTextBox, divisionMaxFactNumberMaskedTextBox };
+		}
+
+		public void prepareFieldsForNewProfileEntry ()
+		{
+			// Prepare the dialog to create a profile rather than editing an existing one.
+			this.Text = "New User Profile";
+			saveChangesButton.Text = SAVE_NEW_PROFILE_BUTTON_TEXT;
+
+			changePasswordTextBox.Visible = false;
+			changePasswordLabel.Visible = false;
+
+			passwordConfirmTextBox.TabIndex = 10;
+			saveChangesButton.TabIndex = 11;
+			saveChangesButton.TabIndex = 12;
+
+			usernameMaskedTextBox.Clear ();
+			additionMaxFactNumberMaskedTextBox.Clear ();
+			subtractionMaxFactNumberMaskedTextBox.Clear ();
+			multiplicationMaxFactNumberMaskedTextBox.Clear ();
+			divisionMaxFactNumberMaskedTextBox.Clear ();
+			customFactsCheckBox.Checked = false;
+			speedTestDaysMaskedTextBox.Text = "30";
 		}
 
 		private void maskedTextBoxKeyUpEvent (object sender, KeyEventArgs e)
@@ -154,9 +185,9 @@ namespace KnowYourFacts.Dialogs
 			}
 		}
 
-		public void saveChanges ()
+		private void saveProfileChanges ()
 		{
-			bool updateUserProfile = false;
+			bool updateUserProfileData = false;
 
 			if (!String.IsNullOrEmpty(passwordTextBox.Text) && validatePassword (passwordTextBox.Text))
 			{
@@ -173,54 +204,50 @@ namespace KnowYourFacts.Dialogs
 					else
 					{
 						updateUsernameInFilesAndSettings (newUser.name);
+						updateUserProfileData = true;
 					}
 				}
 
 				// Update usage of custom speed facts.
 				if (!customFactsCheckBox.Checked.ToString ().Equals (customFactsCheckBox.Tag))
 				{
-					updateUseOfCustomFacts ();
+					MathFactsForm.userProfile.hasCustomSpeedFacts = customFactsCheckBox.Checked;
 					customFactsCheckBox.Tag = customFactsCheckBox.Checked.ToString ();
+					updateUserProfileData = true;
 				}
 
 				// Update the duration between speed tests
 				if (!speedTestDaysMaskedTextBox.Text.Equals (speedTestDaysMaskedTextBox.Tag))
 				{
-					MathFactsForm.userProfile.maxDaysBetweenSpeedTests 
-						= System.Convert.ToInt16 (speedTestDaysMaskedTextBox.Text);
+					// TODO Call func to assign val
 					speedTestDaysMaskedTextBox.Tag = speedTestDaysMaskedTextBox.Text;
-					updateUserProfile = true;
+					updateUserProfileData = true;
 				}
 
 				// Update max fact numbers
 				if (!additionMaxFactNumberMaskedTextBox.Text.Equals (additionMaxFactNumberMaskedTextBox.Tag))
 				{
 					updateFactFiles (MathOperationTypeEnum.ADDITION, System.Convert.ToInt16 (additionMaxFactNumberMaskedTextBox.Text));
-					updateUserProfile = true;
+					updateUserProfileData = true;
 					additionMaxFactNumberMaskedTextBox.Tag = additionMaxFactNumberMaskedTextBox.Text;
 				}
 				if (!subtractionMaxFactNumberMaskedTextBox.Text.Equals (subtractionMaxFactNumberMaskedTextBox.Tag))
 				{
 					updateFactFiles(MathOperationTypeEnum.SUBTRACTION, System.Convert.ToInt16 (subtractionMaxFactNumberMaskedTextBox.Text));
-					updateUserProfile = true;
+					updateUserProfileData = true;
 					subtractionMaxFactNumberMaskedTextBox.Tag = subtractionMaxFactNumberMaskedTextBox.Text;
 				}
 				if (!multiplicationMaxFactNumberMaskedTextBox.Text.Equals (multiplicationMaxFactNumberMaskedTextBox.Tag))
 				{
 					updateFactFiles (MathOperationTypeEnum.MULTIPLICATION, System.Convert.ToInt16 (multiplicationMaxFactNumberMaskedTextBox.Text));
-					updateUserProfile = true;
+					updateUserProfileData = true;
 					multiplicationMaxFactNumberMaskedTextBox.Tag = multiplicationMaxFactNumberMaskedTextBox.Text;
 				}
 				if (!divisionMaxFactNumberMaskedTextBox.Text.Equals (divisionMaxFactNumberMaskedTextBox.Tag))
 				{
 					updateFactFiles (MathOperationTypeEnum.DIVISION, System.Convert.ToInt16 (divisionMaxFactNumberMaskedTextBox.Text));
-					updateUserProfile = true;
+					updateUserProfileData = true;
 					divisionMaxFactNumberMaskedTextBox.Tag = divisionMaxFactNumberMaskedTextBox.Text;
-				}
-
-				if (updateUserProfile)
-				{
-					files.updateUserProfile (MathFactsForm.userProfile);
 				}
 
 				// Check if the password should be updated
@@ -229,17 +256,29 @@ namespace KnowYourFacts.Dialogs
 				{
 					if (changePasswordTextBox.Text == passwordConfirmTextBox.Text)
 					{
-						savePassword (changePasswordTextBox.Text);
+						if (!updatePassword (MathFactsForm.userProfile.user.name))
+						{
+							MessageBox.Show ("An error occurred and your password could not be updated. Please try again", "Password Not Updated", MessageBoxButtons.OK, MessageBoxIcon.Error);
+							return;
+						}
 					}
 					else
 					{
 						// TODO Make this check happen automatically once the confirm box loses focus
 						MessageBox.Show ("The passwords you entered do not match.",
-						"Password Do Not Match", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						"Passwords Do Not Match", MessageBoxButtons.OK, MessageBoxIcon.Error);
 						passwordTextBox.Clear ();
 						passwordConfirmTextBox.Clear ();
 						passwordTextBox.Focus ();
 					}
+				}
+
+				if (updateUserProfileData)
+				{
+					files.updateUserProfile (MathFactsForm.userProfile);
+					MessageBox.Show ("Your profile has been successfully updated!",
+					"Changes Saved", MessageBoxButtons.OK, MessageBoxIcon.None);
+					this.Close ();
 				}
 			}
 			else
@@ -249,31 +288,156 @@ namespace KnowYourFacts.Dialogs
 			}
 		}
 
-		/*
-		 * Check if the entered password matches the stored password.
-		 */
-		public bool validatePassword (string input)
+		private void saveNewProfile ()
 		{
-			byte[] salt = null;
-			byte[] key = null;
+			String username = usernameMaskedTextBox.Text;
+			UserProfile newUserProfile = new UserProfile (new User ());
+			bool fieldProcessed;
 
-			string cmdString = "SELECT [Salt],[Key] FROM [dbo].[UserData] WHERE (Username = @Username)";
-
-			using (SqlConnection conn = new SqlConnection (connString))
+			newUserProfile.user.name = processUsernameField (out fieldProcessed);
+			if (!fieldProcessed)
 			{
-				using (SqlCommand command = new SqlCommand (cmdString, conn))
-				{
-					command.Parameters.AddWithValue ("@Username", MathFactsForm.userProfile.user.name);
+				return;
+			}
 
-					conn.Open ();
-					SqlDataReader reader = command.ExecuteReader ();
-					if (reader.Read ())
+			newUserProfile.hasCustomSpeedFacts = customFactsCheckBox.Checked;
+
+			newUserProfile.maxDaysBetweenSpeedTests = processMaxDaysBetweenSpeedTestField (out fieldProcessed);
+			if (!fieldProcessed)
+			{
+				return;
+			}
+
+			newUserProfile.maxFactNumbers = processMaxFactNumberFields (out fieldProcessed);
+			if (!fieldProcessed)
+			{
+				return;
+			}
+
+			if (passwordTextBox != passwordConfirmTextBox)
+			{
+				if (!processNewPassword (newUserProfile.user.name))
+				{
+					return;
+				}
+			}
+			else
+			{
+				MessageBox.Show ("The passwords you entered do not match.",	"Passwords Do Not Match", 
+					MessageBoxButtons.OK, MessageBoxIcon.Error);
+				return;
+			}
+
+			// Valid data was entered.
+			MathFactsForm.userProfile = newUserProfile;
+			files.createNewUserDirectory (newUserProfile);
+			files.updateUserProfile (newUserProfile);
+			MessageBox.Show ("Your profile has been successfully created!", "Profile Created", MessageBoxButtons.OK, MessageBoxIcon.None);
+			this.Close ();
+		}
+
+		private String processUsernameField (out bool fieldProcessed)
+		{
+			String username = usernameMaskedTextBox.Text;
+			fieldProcessed = false;
+
+			// Check that a username was entered.
+			if (String.IsNullOrEmpty (username))
+			{
+				MessageBox.Show ("You didn't enter a username to create.\nPlease enter a username before continuing.", "No Username", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			}
+
+			// Ensure the username does not exist.
+			else if (files.userDirectoryExists (new User (username)))
+			{
+				// TODO Need to ensure name conforms to windows naming conventions. 
+				MessageBox.Show ("Sorry, that username is already taken.\nPlease try again with a different username.", "Duplicate Username", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				usernameMaskedTextBox.SelectAll ();
+			}
+			else 
+			{
+				fieldProcessed = true;
+			}
+
+			return username;
+		}
+
+		private int processMaxDaysBetweenSpeedTestField (out bool fieldsProcessed)
+		{
+			int maxDays = 0;
+			fieldsProcessed = false;
+
+			if (String.IsNullOrEmpty (speedTestDaysMaskedTextBox.Text))
+			{
+				MessageBox.Show ("You didn't enter the maximum number of days between speed tests.\nPlease enter a value before continuing.", "No Speed Test Interval", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			}
+			else
+			{
+				maxDays = System.Convert.ToInt16 (speedTestDaysMaskedTextBox.Text);
+				fieldsProcessed = true;
+			}
+
+			return maxDays;
+		}
+
+		// Check that non-negative values were entered for all max fact number fields.
+		private int[] processMaxFactNumberFields (out bool fieldsProcessed)
+		{
+			fieldsProcessed = true;
+			int[] maxFactNumbers = { 0,0,0,0 };
+			if (String.IsNullOrEmpty (maxFactNumberMaskedTextBoxes[0].Text) || String.IsNullOrEmpty (maxFactNumberMaskedTextBoxes[1].Text)
+				|| String.IsNullOrEmpty (maxFactNumberMaskedTextBoxes[2].Text) || String.IsNullOrEmpty (maxFactNumberMaskedTextBoxes[3].Text))
+			{
+				MessageBox.Show ("One or more maximum fact numbers were left blank.\nPlease enter a number for all four fields before continuing.", "Missing Maximum Fact Number(s)", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				fieldsProcessed = false;
+			}
+			else
+			{
+				for (int index = 0; index < maxFactNumbers.Count (); ++index)
+				{
+					if ((maxFactNumbers[index] = Convert.ToInt32 (maxFactNumberMaskedTextBoxes[index].Text)) <= 0)
 					{
-						salt = (byte[]) reader["Salt"];
-						key = (byte[]) reader["Key"];
+						MessageBox.Show ("Please enter a number greater than 0.", "Invalid Maximum Fact Number",
+							MessageBoxButtons.OK, MessageBoxIcon.Error);
+						maxFactNumberMaskedTextBoxes[index].SelectAll ();
+						fieldsProcessed = false;
 					}
 				}
 			}
+
+			return maxFactNumbers;
+		}
+
+		// Add a new entry for the password.
+		private bool processNewPassword (String username)
+		{
+			using (var deriveBytes = new Rfc2898DeriveBytes (passwordConfirmTextBox.Text, 20))
+			{
+				byte[] salt = deriveBytes.Salt;
+				byte[] generatedKey = deriveBytes.GetBytes (20);
+
+				try
+				{
+						
+					userDataTableAdapter.Insert (username, salt, generatedKey);
+				   return true;
+				}
+				catch (Exception e)
+				{
+					// TODO Handle exceptions
+					Console.WriteLine (e.StackTrace);
+					return false;
+				}
+			}
+		}
+
+		/*
+		 * Check if the entered password matches the stored password.
+		 */
+		private bool validatePassword (string input)
+		{
+			byte[] key = userDataTableAdapter.GetData ().FindByUsername (MathFactsForm.userProfile.user.name).Key;
+			byte[] salt = userDataTableAdapter.GetData ().FindByUsername (MathFactsForm.userProfile.user.name).Salt;
 
 			// Determine if the stored key matches the key generated by the input.
 			using (var deriveBytes = new Rfc2898DeriveBytes (input, salt))
@@ -289,8 +453,6 @@ namespace KnowYourFacts.Dialogs
 			updateUsernameInDatabase (newUsername, MathFactsForm.userProfile.user.name);
 			MathFactsForm.userProfile.user.name = newUsername;
 			files.updateCurrentUser (newUsername);
-			files.updateUserProfile (MathFactsForm.userProfile);
-			files.updateCurrentUser (newUsername);
 
 			MainMenuControl mainMenuControl = MainMenuControl.Instance;
 			mainMenuControl.setUserButtonText ("Welcome " + newUsername + "!" + "\nNot " + newUsername + "?\nClick here to change users");
@@ -300,41 +462,46 @@ namespace KnowYourFacts.Dialogs
 
 		private void updateUsernameInDatabase (String newUsername, String oldUsername)
 		{
-			string cmdString = "UPDATE [dbo].[UserData] SET Username = @NewUsername WHERE Username = @OldUsername";
-	
-			using (SqlConnection conn = new SqlConnection (connString))
-			{
-				using (SqlCommand comm = new SqlCommand (cmdString, conn))
-				{
-					comm.Parameters.AddWithValue ("@NewUsername", newUsername);
-					comm.Parameters.AddWithValue ("@OldUsername", oldUsername);
-
-					try
-					{
-						conn.Open ();
-						comm.ExecuteNonQuery ();
-					}
-					catch (SqlException e)
-					{
-						// TODO Handle exceptions
-						Console.WriteLine (e.ToString ());
-					}
-				}
-			}
+			 try
+			 {
+				 using (var deriveBytes = new Rfc2898DeriveBytes (passwordTextBox.Text, 20))
+				 {
+					 byte[] salt = deriveBytes.Salt;
+					 byte[] key = deriveBytes.GetBytes (20);
+					 userDataTableAdapter.Update (newUsername, salt, key, oldUsername, salt, key);
+				 }
+			 }
+			 catch (Exception e)
+			 {
+				 // TODO Handle exceptions
+				 Console.WriteLine (e.StackTrace);
+			 }
 		}
 
-		private void updateUseOfCustomFacts ()
+		// TODO test this function
+		private bool updatePassword (String username)
 		{
-			if (customFactsCheckBox.Checked)
+			try
 			{
-				MathFactsForm.userProfile.hasCustomSpeedFacts = true;
+				using (var deriveBytes = new Rfc2898DeriveBytes (passwordConfirmTextBox.Text, 20))
+				{
+					byte[] salt = deriveBytes.Salt;
+					byte[] key = deriveBytes.GetBytes (20);
+			
+					using (var deriveBytes2 = new Rfc2898DeriveBytes (passwordTextBox.Text, 20))
+					{
+						byte[] oldSalt = deriveBytes2.Salt;
+						byte[] oldKey = deriveBytes2.GetBytes (20);
+						userDataTableAdapter.Update (username, salt, key, username, oldSalt, oldKey);
+					}
+				}
+				return true;
 			}
-			else
+			catch (Exception e)
 			{
-				MathFactsForm.userProfile.hasCustomSpeedFacts = false;
+				Console.WriteLine (e.StackTrace);
+				return false;
 			}
-
-			files.updateUserProfile (MathFactsForm.userProfile);
 		}
 
 		private void updateFactFiles (MathOperationTypeEnum operationType, int maxFactNumber)
@@ -359,37 +526,15 @@ namespace KnowYourFacts.Dialogs
 			System.IO.File.Create (dailyFactsDataFile);
 		}
 
-		// Add a new entry for the password.
-		private void savePassword (String password)
+		private void saveChanges_Click (object sender, EventArgs e)
 		{
-			using (var deriveBytes = new Rfc2898DeriveBytes (password, 20))
+			if (saveChangesButton.Text == SAVE_NEW_PROFILE_BUTTON_TEXT)
 			{
-				byte[] salt = deriveBytes.Salt;
-				byte[] generatedKey = deriveBytes.GetBytes (20);
-				string username = MathFactsForm.userProfile.user.name;
-
-				string cmdString = "INSERT INTO [dbo].[UserData] ([Username], [Salt], [Key]) VALUES (@Username, @Salt, @Key)";
-			
-				using (SqlConnection conn = new SqlConnection (connString))
-				{
-					using (SqlCommand comm = new SqlCommand (cmdString, conn))
-					{
-						comm.Parameters.AddWithValue ("@Username", username);
-						comm.Parameters.AddWithValue ("@Salt", salt);
-						comm.Parameters.AddWithValue ("@Key", generatedKey);
-
-						try
-						{
-							conn.Open ();
-							comm.ExecuteNonQuery ();
-						}
-						catch (SqlException e)
-						{
-							// TODO Handle exceptions
-							Console.WriteLine (e.ToString ());
-						}
-					}
-				}
+				saveNewProfile ();
+			}
+			else
+			{
+				saveProfileChanges ();
 			}
 		}
 	}

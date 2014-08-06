@@ -69,13 +69,13 @@
 			// 
 			// saveChangesButton
 			// 
-			this.saveChangesButton.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.saveChangesButton.Location = new System.Drawing.Point(12, 352);
 			this.saveChangesButton.Name = "saveChangesButton";
 			this.saveChangesButton.Size = new System.Drawing.Size(111, 24);
 			this.saveChangesButton.TabIndex = 12;
 			this.saveChangesButton.Text = "Save Changes";
 			this.saveChangesButton.UseVisualStyleBackColor = true;
+			this.saveChangesButton.Click += new System.EventHandler(this.saveChanges_Click);
 			// 
 			// label1
 			// 
@@ -351,7 +351,6 @@
 
 		#endregion
 
-		private System.Windows.Forms.Button saveChangesButton;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.GroupBox groupBox1;
 		private System.Windows.Forms.Label additionMaxFactNumberLabel;
@@ -364,17 +363,18 @@
 		private System.Windows.Forms.ComboBox speedTestComboBox;
 		private System.Windows.Forms.Label passwordConfirmLabel;
 		private System.Windows.Forms.GroupBox groupBox2;
-		public System.Windows.Forms.CheckBox customFactsCheckBox;
-		public System.Windows.Forms.MaskedTextBox speedTestDaysMaskedTextBox;
-		public System.Windows.Forms.MaskedTextBox additionMaxFactNumberMaskedTextBox;
-		public System.Windows.Forms.MaskedTextBox divisionMaxFactNumberMaskedTextBox;
-		public System.Windows.Forms.MaskedTextBox multiplicationMaxFactNumberMaskedTextBox;
-		public System.Windows.Forms.MaskedTextBox subtractionMaxFactNumberMaskedTextBox;
-		public System.Windows.Forms.MaskedTextBox usernameMaskedTextBox;
-		public System.Windows.Forms.TextBox passwordTextBox;
-		public System.Windows.Forms.TextBox passwordConfirmTextBox;
-		public System.Windows.Forms.TextBox changePasswordTextBox;
 		public System.Windows.Forms.Label changePasswordLabel;
 		private System.Windows.Forms.Label passwordLabel;
+		private System.Windows.Forms.CheckBox customFactsCheckBox;
+		private System.Windows.Forms.MaskedTextBox speedTestDaysMaskedTextBox;
+		private System.Windows.Forms.MaskedTextBox additionMaxFactNumberMaskedTextBox;
+		private System.Windows.Forms.MaskedTextBox divisionMaxFactNumberMaskedTextBox;
+		private System.Windows.Forms.MaskedTextBox multiplicationMaxFactNumberMaskedTextBox;
+		private System.Windows.Forms.MaskedTextBox subtractionMaxFactNumberMaskedTextBox;
+		private System.Windows.Forms.MaskedTextBox usernameMaskedTextBox;
+		private System.Windows.Forms.TextBox passwordTextBox;
+		private System.Windows.Forms.TextBox passwordConfirmTextBox;
+		private System.Windows.Forms.TextBox changePasswordTextBox;
+		private System.Windows.Forms.Button saveChangesButton;
 	}
 }

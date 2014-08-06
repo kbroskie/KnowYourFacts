@@ -103,11 +103,6 @@
     <Compile Include="Dialogs\SpeedFactEditDialog.Designer.cs">
       <DependentUpon>SpeedFactEditDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Data\KnowYourFactsDataSet.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>KnowYourFactsDataSet.xsd</DependentUpon>
-    </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -167,24 +162,13 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="Data\KnowYourFactsDataSet.xsc">
-      <DependentUpon>KnowYourFactsDataSet.xsd</DependentUpon>
-    </None>
-    <None Include="Data\KnowYourFactsDataSet.xsd">
-      <SubType>Designer</SubType>
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>KnowYourFactsDataSet.Designer.cs</LastGenOutput>
-    </None>
-    <None Include="Data\KnowYourFactsDataSet.xss">
-      <DependentUpon>KnowYourFactsDataSet.xsd</DependentUpon>
-    </None>
     <None Include="Data\UserDataSet.xsc">
       <DependentUpon>UserDataSet.xsd</DependentUpon>
     </None>
     <None Include="Data\UserDataSet.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>UserDataSet.Designer.cs</LastGenOutput>
+      <LastGenOutput>UserDataSet1.Designer.cs</LastGenOutput>
     </None>
     <None Include="Data\UserDataSet.xss">
       <DependentUpon>UserDataSet.xsd</DependentUpon>
@@ -206,11 +190,11 @@
   <ItemGroup>
     <Content Include="Extras\ChangesToMake.txt" />
     <Content Include="Data\KnowYourFactsDatabase.mdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Data\KnowYourFactsDatabase_log.ldf">
       <DependentUpon>KnowYourFactsDatabase.mdf</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Properties\Resources\SubtractionSpeedFacts.txt" />
     <None Include="Properties\Resources\MultiplicationSpeedFacts.txt" />

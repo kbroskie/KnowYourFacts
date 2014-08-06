@@ -33,12 +33,11 @@ namespace KnowYourFacts.UI
 			MathFactsForm.toggleMainMenuControl ();
 
 			MathFactsForm.toggleFactsDisplayControl ();
-			MathFactsForm.startTheFacts (MathOperationTypeEnum.ADDITION, false, true);
+			(this.Parent as MathFactsForm).startTheFacts (MathOperationTypeEnum.ADDITION, false, true);
 		}
 
 		private void createNewUserButtonClick (object sender, EventArgs e)
 		{
-			//(this.Parent as MathFactsForm).editProfileMenuItem.Enabled = false;
 			(this.Parent as MathFactsForm).changeUser ();
 		}
 
