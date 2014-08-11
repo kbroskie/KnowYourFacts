@@ -112,7 +112,7 @@ namespace KnowYourFacts.Dialogs
 				return;
 			}
 
-			MathOperation operation = new MathOperation ((MathOperationTypeEnum) Enum.Parse (typeof (MathOperationTypeEnum), speedTestComboBox.Text.ToUpper ()));
+			MathOperation operation = new MathOperation ((MathOperationTypeEnum) Enum.Parse (typeof (MathOperationTypeEnum), speedTestComboBox.Text, true));
 
 			SpeedFactEditDialog speedFactEditDialog = new SpeedFactEditDialog ();
 			speedFactEditDialog.Text = operation.ToString () + speedFactEditDialog.Text;
@@ -191,20 +191,26 @@ namespace KnowYourFacts.Dialogs
 
 			if (!String.IsNullOrEmpty(passwordTextBox.Text) && validatePassword (passwordTextBox.Text))
 			{
+				bool fieldProcessed;
+
 				// Update the username
 				if (!usernameMaskedTextBox.Text.Equals (usernameMaskedTextBox.Tag))
 				{
-					User newUser = new User (usernameMaskedTextBox.Text);
-					if (files.userDirectoryExists (newUser))
+					String newUsername = processUsernameField (out fieldProcessed);
+
+					if (fieldProcessed)
 					{
-						MessageBox.Show ("Sorry, that username is already taken.\nPlease try again with a different username.",
-								"Duplicate Username", MessageBoxButtons.OK, MessageBoxIcon.Error);
-						usernameMaskedTextBox.Text = MathFactsForm.userProfile.user.name;
-					}
-					else
-					{
-						updateUsernameInFilesAndSettings (newUser.name);
-						updateUserProfileData = true;
+						if (files.userDirectoryExists (new User (newUsername)))
+						{
+							MessageBox.Show ("Sorry, that username is already taken.\nPlease try again with a different username.",
+									"Duplicate Username", MessageBoxButtons.OK, MessageBoxIcon.Error);
+							usernameMaskedTextBox.Text = MathFactsForm.userProfile.user.name;
+						}
+						else
+						{
+							updateUsernameInFilesAndSettings (newUsername);
+							updateUserProfileData = true;
+						}
 					}
 				}
 
@@ -219,35 +225,34 @@ namespace KnowYourFacts.Dialogs
 				// Update the duration between speed tests
 				if (!speedTestDaysMaskedTextBox.Text.Equals (speedTestDaysMaskedTextBox.Tag))
 				{
-					// TODO Call func to assign val
-					speedTestDaysMaskedTextBox.Tag = speedTestDaysMaskedTextBox.Text;
-					updateUserProfileData = true;
+					processMaxDaysBetweenSpeedTestField (out fieldProcessed);
+					if (fieldProcessed)
+					{
+						speedTestDaysMaskedTextBox.Tag = speedTestDaysMaskedTextBox.Text;
+						updateUserProfileData = true;
+					}
 				}
 
 				// Update max fact numbers
-				if (!additionMaxFactNumberMaskedTextBox.Text.Equals (additionMaxFactNumberMaskedTextBox.Tag))
+				for (int index = 0; index < maxFactNumberMaskedTextBoxes.Count (); ++index)
 				{
-					updateFactFiles (MathOperationTypeEnum.ADDITION, System.Convert.ToInt16 (additionMaxFactNumberMaskedTextBox.Text));
-					updateUserProfileData = true;
-					additionMaxFactNumberMaskedTextBox.Tag = additionMaxFactNumberMaskedTextBox.Text;
-				}
-				if (!subtractionMaxFactNumberMaskedTextBox.Text.Equals (subtractionMaxFactNumberMaskedTextBox.Tag))
-				{
-					updateFactFiles(MathOperationTypeEnum.SUBTRACTION, System.Convert.ToInt16 (subtractionMaxFactNumberMaskedTextBox.Text));
-					updateUserProfileData = true;
-					subtractionMaxFactNumberMaskedTextBox.Tag = subtractionMaxFactNumberMaskedTextBox.Text;
-				}
-				if (!multiplicationMaxFactNumberMaskedTextBox.Text.Equals (multiplicationMaxFactNumberMaskedTextBox.Tag))
-				{
-					updateFactFiles (MathOperationTypeEnum.MULTIPLICATION, System.Convert.ToInt16 (multiplicationMaxFactNumberMaskedTextBox.Text));
-					updateUserProfileData = true;
-					multiplicationMaxFactNumberMaskedTextBox.Tag = multiplicationMaxFactNumberMaskedTextBox.Text;
-				}
-				if (!divisionMaxFactNumberMaskedTextBox.Text.Equals (divisionMaxFactNumberMaskedTextBox.Tag))
-				{
-					updateFactFiles (MathOperationTypeEnum.DIVISION, System.Convert.ToInt16 (divisionMaxFactNumberMaskedTextBox.Text));
-					updateUserProfileData = true;
-					divisionMaxFactNumberMaskedTextBox.Tag = divisionMaxFactNumberMaskedTextBox.Text;
+					Int16 newMaxFactNumber;
+					if (!maxFactNumberMaskedTextBoxes[index].Tag.ToString() .Equals (maxFactNumberMaskedTextBoxes[index].Text))
+					{
+
+						if ((newMaxFactNumber = Convert.ToInt16 (maxFactNumberMaskedTextBoxes[index].Text)) <= 0)
+						{
+							MessageBox.Show ("Please enter a number greater than 0.", "Invalid Maximum Fact Number",
+								MessageBoxButtons.OK, MessageBoxIcon.Error);
+							maxFactNumberMaskedTextBoxes[index].SelectAll ();
+						}
+						else
+						{
+							updateUserProfileData = true;
+							updateFactFiles ((MathOperationTypeEnum) Enum.Parse (typeof (MathOperationTypeEnum), maxFactNumberMaskedTextBoxes[index].AccessibleDescription, true), System.Convert.ToInt16 (additionMaxFactNumberMaskedTextBox.Text));
+							maxFactNumberMaskedTextBoxes[index].Tag = maxFactNumberMaskedTextBoxes[index].Text;
+						}
+					}
 				}
 
 				// Check if the password should be updated
@@ -261,15 +266,20 @@ namespace KnowYourFacts.Dialogs
 							MessageBox.Show ("An error occurred and your password could not be updated. Please try again", "Password Not Updated", MessageBoxButtons.OK, MessageBoxIcon.Error);
 							return;
 						}
+						else
+						{
+							MessageBox.Show ("Your password was successfully updated!", "Password Updated", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+						}
 					}
 					else
 					{
 						// TODO Make this check happen automatically once the confirm box loses focus
 						MessageBox.Show ("The passwords you entered do not match.",
 						"Passwords Do Not Match", MessageBoxButtons.OK, MessageBoxIcon.Error);
-						passwordTextBox.Clear ();
+						changePasswordTextBox.Clear ();
 						passwordConfirmTextBox.Clear ();
-						passwordTextBox.Focus ();
+						changePasswordTextBox.Focus ();
+						return;
 					}
 				}
 
@@ -278,8 +288,8 @@ namespace KnowYourFacts.Dialogs
 					files.updateUserProfile (MathFactsForm.userProfile);
 					MessageBox.Show ("Your profile has been successfully updated!",
 					"Changes Saved", MessageBoxButtons.OK, MessageBoxIcon.None);
-					this.Close ();
 				}
+				this.Close ();
 			}
 			else
 			{
@@ -308,7 +318,7 @@ namespace KnowYourFacts.Dialogs
 				return;
 			}
 
-			newUserProfile.maxFactNumbers = processMaxFactNumberFields (out fieldProcessed);
+			newUserProfile.maxFactNumbers = processMaxFactNumberFields (out fieldProcessed, true);
 			if (!fieldProcessed)
 			{
 				return;
@@ -381,11 +391,11 @@ namespace KnowYourFacts.Dialogs
 		}
 
 		// Check that non-negative values were entered for all max fact number fields.
-		private int[] processMaxFactNumberFields (out bool fieldsProcessed)
+		private int[] processMaxFactNumberFields (out bool fieldsProcessed, bool isNewProfile)
 		{
 			fieldsProcessed = true;
 			int[] maxFactNumbers = { 0,0,0,0 };
-			if (String.IsNullOrEmpty (maxFactNumberMaskedTextBoxes[0].Text) || String.IsNullOrEmpty (maxFactNumberMaskedTextBoxes[1].Text)
+			if (isNewProfile && String.IsNullOrEmpty (maxFactNumberMaskedTextBoxes[0].Text) || String.IsNullOrEmpty (maxFactNumberMaskedTextBoxes[1].Text)
 				|| String.IsNullOrEmpty (maxFactNumberMaskedTextBoxes[2].Text) || String.IsNullOrEmpty (maxFactNumberMaskedTextBoxes[3].Text))
 			{
 				MessageBox.Show ("One or more maximum fact numbers were left blank.\nPlease enter a number for all four fields before continuing.", "Missing Maximum Fact Number(s)", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -395,7 +405,7 @@ namespace KnowYourFacts.Dialogs
 			{
 				for (int index = 0; index < maxFactNumbers.Count (); ++index)
 				{
-					if ((maxFactNumbers[index] = Convert.ToInt32 (maxFactNumberMaskedTextBoxes[index].Text)) <= 0)
+					if ((maxFactNumbers[index] = Convert.ToInt16 (maxFactNumberMaskedTextBoxes[index].Text)) <= 0)
 					{
 						MessageBox.Show ("Please enter a number greater than 0.", "Invalid Maximum Fact Number",
 							MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -417,9 +427,9 @@ namespace KnowYourFacts.Dialogs
 				byte[] generatedKey = deriveBytes.GetBytes (20);
 
 				try
-				{
-						
+				{	
 					userDataTableAdapter.Insert (username, salt, generatedKey);
+
 				   return true;
 				}
 				catch (Exception e)
@@ -464,11 +474,25 @@ namespace KnowYourFacts.Dialogs
 		{
 			 try
 			 {
-				 using (var deriveBytes = new Rfc2898DeriveBytes (passwordTextBox.Text, 20))
+				 string cmdString = "UPDATE [dbo].[UserData] SET Username = @NewUsername WHERE Username = @OldUsername";
+				 using (SqlConnection conn = new SqlConnection (connString))
 				 {
-					 byte[] salt = deriveBytes.Salt;
-					 byte[] key = deriveBytes.GetBytes (20);
-					 userDataTableAdapter.Update (newUsername, salt, key, oldUsername, salt, key);
+					 using (SqlCommand comm = new SqlCommand (cmdString, conn))
+					 {
+						 comm.Parameters.AddWithValue ("@NewUsername", newUsername);
+						 comm.Parameters.AddWithValue ("@OldUsername", oldUsername);
+
+						 try
+						 {
+							 conn.Open ();
+							 comm.ExecuteNonQuery ();
+						 }
+						 catch (SqlException e)
+						 {
+							 Console.WriteLine (e.StackTrace);
+							 // TODO hande exception
+						 }
+					 }
 				 }
 			 }
 			 catch (Exception e)
@@ -487,15 +511,31 @@ namespace KnowYourFacts.Dialogs
 				{
 					byte[] salt = deriveBytes.Salt;
 					byte[] key = deriveBytes.GetBytes (20);
-			
-					using (var deriveBytes2 = new Rfc2898DeriveBytes (passwordTextBox.Text, 20))
+
+					string cmdString = "UPDATE [dbo].[UserData] SET Salt = @Salt, [Key] = @Key WHERE Username = @Username";
+					using (SqlConnection conn = new SqlConnection (connString))
 					{
-						byte[] oldSalt = deriveBytes2.Salt;
-						byte[] oldKey = deriveBytes2.GetBytes (20);
-						userDataTableAdapter.Update (username, salt, key, username, oldSalt, oldKey);
+						using (SqlCommand comm = new SqlCommand (cmdString, conn))
+						{
+							comm.Parameters.AddWithValue ("@Username", username);
+							comm.Parameters.AddWithValue ("@Salt", salt);
+							comm.Parameters.AddWithValue ("@Key", key);
+
+							try
+							{
+								conn.Open ();
+								comm.ExecuteNonQuery ();
+								return true;
+							}
+							catch (SqlException e)
+							{
+								Console.WriteLine (e.StackTrace);
+								// TODO handle exception
+								return false;
+							}
+						}
 					}
 				}
-				return true;
 			}
 			catch (Exception e)
 			{

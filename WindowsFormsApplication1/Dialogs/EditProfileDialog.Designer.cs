@@ -124,6 +124,7 @@
 			// 
 			// divisionMaxFactNumberMaskedTextBox
 			// 
+			this.divisionMaxFactNumberMaskedTextBox.AccessibleDescription = "division";
 			this.divisionMaxFactNumberMaskedTextBox.CausesValidation = false;
 			this.divisionMaxFactNumberMaskedTextBox.Location = new System.Drawing.Point(154, 97);
 			this.divisionMaxFactNumberMaskedTextBox.Mask = "##0";
@@ -147,6 +148,7 @@
 			// 
 			// multiplicationMaxFactNumberMaskedTextBox
 			// 
+			this.multiplicationMaxFactNumberMaskedTextBox.AccessibleDescription = "multiplication";
 			this.multiplicationMaxFactNumberMaskedTextBox.CausesValidation = false;
 			this.multiplicationMaxFactNumberMaskedTextBox.Location = new System.Drawing.Point(154, 70);
 			this.multiplicationMaxFactNumberMaskedTextBox.Mask = "##0";
@@ -170,6 +172,7 @@
 			// 
 			// subtractionMaxFactNumberMaskedTextBox
 			// 
+			this.subtractionMaxFactNumberMaskedTextBox.AccessibleDescription = "subtraction";
 			this.subtractionMaxFactNumberMaskedTextBox.CausesValidation = false;
 			this.subtractionMaxFactNumberMaskedTextBox.Location = new System.Drawing.Point(154, 43);
 			this.subtractionMaxFactNumberMaskedTextBox.Mask = "##0";
@@ -193,6 +196,7 @@
 			// 
 			// additionMaxFactNumberMaskedTextBox
 			// 
+			this.additionMaxFactNumberMaskedTextBox.AccessibleDescription = "addition";
 			this.additionMaxFactNumberMaskedTextBox.CausesValidation = false;
 			this.additionMaxFactNumberMaskedTextBox.Location = new System.Drawing.Point(154, 16);
 			this.additionMaxFactNumberMaskedTextBox.Mask = "##0";
