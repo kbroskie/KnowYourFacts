@@ -19,6 +19,7 @@ namespace KnowYourFacts.UI
 	{
 		private static MainMenuControl m_mainMenuControl;
 		public static FactsDisplayControl m_factsDisplayControl;
+		private FactsReviewControl factsReviewControl;
 		private static MathFacts reference;
 
 		public static bool speedTest;
@@ -35,6 +36,7 @@ namespace KnowYourFacts.UI
 
 		public static int userResponse;
 		public static String m_userInput;
+		private Stack <int> incorrectResponses;
 
 		public long timeElapsed;
 		public static System.Diagnostics.Stopwatch timer;
@@ -64,6 +66,7 @@ namespace KnowYourFacts.UI
 
 			loadLastUser ();
 			m_mainMenuControl.setUserButtonText ("Welcome " + userProfile.user.name + "!" + "\nNot " + userProfile.user.name + "?\nClick here to change users");
+			factsReviewControl = new FactsReviewControl ();
 		}
 
 		private void initializeAndAddMainMenuControl ()
@@ -150,7 +153,7 @@ namespace KnowYourFacts.UI
 		 */
 		public void logUserInput (String userInput)
 		{
-			if (userInput == "space" && reference.queueOfFacts.Count == 0)
+			if ((userInput == "space" || userInput == "n") && reference.queueOfFacts.Count == 0)
 			{
 				if (processingAllDailyFacts)
 				{
@@ -163,6 +166,24 @@ namespace KnowYourFacts.UI
 					toggleInputDisplay ();
 					toggleMainMenuControl ();
 				}
+			}
+			else if (userInput == "y" && reference.unknownFacts.Count > 0)
+			{
+				toggleFactsDisplayControl ();
+				this.Controls.Add (factsReviewControl);
+				factsReviewControl.incorrectQuestions.AddRange (reference.unknownFacts);
+				factsReviewControl.incorrectResponses.AddRange (incorrectResponses);
+				factsReviewControl.displayFirstFact ();
+				factsReviewControl.Focus ();
+			}
+			else if (userInput == "return to main menu")
+			{
+				toggleInputDisplay ();
+				toggleMainMenuControl ();
+				this.Controls.Remove (factsReviewControl);
+
+				factsReviewControl.incorrectQuestions.Clear ();
+				factsReviewControl.incorrectQuestions.Clear ();
 			}
 			else
 			{
@@ -225,6 +246,9 @@ namespace KnowYourFacts.UI
 
 			m_factsDisplayControl.Visible = factsDisplayControlToggle;
 			m_factsDisplayControl.Enabled = factsDisplayControlToggle;
+
+			m_factsDisplayControl.messageLabel.Text = "";
+			m_factsDisplayControl.factsProgressBar.Value = 0;
 		}
 
 		/*
@@ -358,10 +382,10 @@ namespace KnowYourFacts.UI
 			else if (dateData == DateTime.Today.ToString ("d"))
 			{
 				saveProgress = false;
-
 				var continueWithoutSavingResponse = MessageBox.Show ("Oops! It looks like you have already practiced your " + operationType.ToString () + 
-					"facts today.\nYou can practice them again, but your progress will not be saved.\n\n Continue anyway?",
+					" facts today.\nYou can practice them again, but your progress will not be saved.\n\n Continue anyway?",
 					"Progress Will Not Be Saved", MessageBoxButtons.YesNo);
+
 				if (continueWithoutSavingResponse == DialogResult.No)
 				{
 					return;
@@ -387,6 +411,15 @@ namespace KnowYourFacts.UI
 				processingAllDailyFacts = !processingAllDailyFacts;
 			}
 
+			// Initialize and reset data structures for holding facts data
+			incorrectResponses = new Stack <int> ();
+			reference.unknownFacts.Clear ();
+			reference.knownFacts.Clear ();
+			reference.correctResponseCount = 0;
+			reference.factResponseTime.Clear ();
+			reference.factsOrder.Clear ();
+			incorrectResponses.Clear ();
+			 
 			reference.startProcessingFacts (speedTest, operationType, m_factsDisplayControl, processingAllDailyFacts, userProfile);
 		}
 
@@ -423,6 +456,7 @@ namespace KnowYourFacts.UI
 				else
 				{
 					reference.unknownFacts.Push (new Fact (input.leftNum, input.rightNum, operationType));
+					incorrectResponses.Push (answer);
 				}
 			}
 
@@ -454,8 +488,9 @@ namespace KnowYourFacts.UI
 			{
 				if (saveProgress)
 				{
-					reference.writeResultsToFile (ref reference.correctResponseCount, ref reference.unknownFacts,
-							ref reference.knownFacts, operationType, reference.factResponseTime);
+					reference.writeResultsToFile (reference.correctResponseCount, reference.unknownFacts,
+						reference.knownFacts, operationType, reference.factResponseTime);
+					files.saveResponseData (incorrectResponses, new List <Fact> (reference.unknownFacts));
 				}
 
 				if (reference.correctResponseCount == 0)

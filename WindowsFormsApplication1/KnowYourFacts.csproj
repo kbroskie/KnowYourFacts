@@ -109,6 +109,12 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Settings.cs" />
+    <Compile Include="UI\FactsReviewControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\FactsReviewControl.Designer.cs">
+      <DependentUpon>FactsReviewControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Utility\FactsFiles.cs" />
     <Compile Include="UI\FactsDisplayControl.cs">
       <SubType>UserControl</SubType>
@@ -150,6 +156,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\NewUserProfileDialog.resx">
       <DependentUpon>NewUserProfileDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\FactsReviewControl.resx">
+      <DependentUpon>FactsReviewControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\MainMenuControl.resx">
       <DependentUpon>MainMenuControl.cs</DependentUpon>

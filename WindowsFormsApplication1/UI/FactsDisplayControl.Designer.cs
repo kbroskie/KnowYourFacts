@@ -98,7 +98,7 @@
 			// 
 			// messageLabel
 			// 
-			this.messageLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+			this.messageLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
 			this.messageLabel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
 			this.messageLabel.CausesValidation = false;
 			this.messageLabel.FlatStyle = System.Windows.Forms.FlatStyle.Popup;

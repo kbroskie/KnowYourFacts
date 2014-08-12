@@ -36,9 +36,10 @@
 			// exitButton
 			// 
 			this.exitButton.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-			this.exitButton.Location = new System.Drawing.Point(50, 170);
+			this.exitButton.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.exitButton.Location = new System.Drawing.Point(50, 173);
 			this.exitButton.Name = "exitButton";
-			this.exitButton.Size = new System.Drawing.Size(188, 52);
+			this.exitButton.Size = new System.Drawing.Size(188, 36);
 			this.exitButton.TabIndex = 16;
 			this.exitButton.Text = "Exit";
 			this.exitButton.UseVisualStyleBackColor = true;
@@ -46,9 +47,10 @@
 			// 
 			// startAllDailyFactsButton
 			// 
-			this.startAllDailyFactsButton.Location = new System.Drawing.Point(50, 101);
+			this.startAllDailyFactsButton.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.startAllDailyFactsButton.Location = new System.Drawing.Point(50, 104);
 			this.startAllDailyFactsButton.Name = "startAllDailyFactsButton";
-			this.startAllDailyFactsButton.Size = new System.Drawing.Size(188, 52);
+			this.startAllDailyFactsButton.Size = new System.Drawing.Size(188, 36);
 			this.startAllDailyFactsButton.TabIndex = 15;
 			this.startAllDailyFactsButton.Text = "Start All Daily Facts";
 			this.startAllDailyFactsButton.UseVisualStyleBackColor = true;
@@ -56,9 +58,10 @@
 			// 
 			// userButton
 			// 
-			this.userButton.Location = new System.Drawing.Point(50, 32);
+			this.userButton.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.userButton.Location = new System.Drawing.Point(50, 35);
 			this.userButton.Name = "userButton";
-			this.userButton.Size = new System.Drawing.Size(188, 52);
+			this.userButton.Size = new System.Drawing.Size(188, 36);
 			this.userButton.TabIndex = 14;
 			this.userButton.Text = "Create New User";
 			this.userButton.UseVisualStyleBackColor = true;
@@ -68,7 +71,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+			this.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
 			this.Controls.Add(this.userButton);
 			this.Controls.Add(this.startAllDailyFactsButton);
 			this.Controls.Add(this.exitButton);

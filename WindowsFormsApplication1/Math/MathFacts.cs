@@ -300,7 +300,7 @@ namespace KnowYourFacts.Math
 		/*
 		 * Saves the results, overwriting any existing data.
 		 */
-		public void writeResultsToFile (ref int correctResponseCount, ref Stack<Fact> unknown, ref Stack<Fact> known,
+		public void writeResultsToFile (int correctResponseCount, Stack<Fact> unknown, Stack<Fact> known,
 										MathOperation operatorType, List<long> factResponseTime)
 		{
 			using (System.IO.StreamWriter swU = new System.IO.StreamWriter (FactsFiles.getDailyFactsFilename

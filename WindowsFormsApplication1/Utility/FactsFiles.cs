@@ -392,6 +392,11 @@ namespace KnowYourFacts.Utility
 			System.IO.Directory.Move (userPath, newUserPath);
 		}
 
+		public void	saveResponseData (List <int> incorrectResponses, List <Fact> unknownFacts)
+		{
+			// TODO: Save response data.	
+		}
+
 		#endregion
 
 		#region File read operations

@@ -29,14 +29,20 @@ namespace KnowYourFacts.UI
 
 			//MathFactsForm.processInput(this, e);
 			triggerInputEvent (e);
+
+			Console.WriteLine (sender.ToString ());
 		}
 
 		private void messageLabel_PreviewKeyDown (object sender, PreviewKeyDownEventArgs e)
 		{
-			if (e.KeyCode == Keys.Space)
+			if (e.KeyCode.Equals (Keys.Space))
 			{
 				messageLabel.Text = "";
 				(this.Parent as MathFactsForm).logUserInput ("space");
+			}
+			else if (e.KeyCode.Equals (Keys.Y))
+			{
+				(this.Parent as MathFactsForm).logUserInput ("y");				
 			}
 		}
 
