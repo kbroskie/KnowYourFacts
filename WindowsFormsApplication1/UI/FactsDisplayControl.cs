@@ -29,8 +29,6 @@ namespace KnowYourFacts.UI
 
 			//MathFactsForm.processInput(this, e);
 			triggerInputEvent (e);
-
-			Console.WriteLine (sender.ToString ());
 		}
 
 		private void messageLabel_PreviewKeyDown (object sender, PreviewKeyDownEventArgs e)

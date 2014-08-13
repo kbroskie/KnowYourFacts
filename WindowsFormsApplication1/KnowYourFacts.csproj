@@ -74,7 +74,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data\UserDataSet.Designer.cs">
+    <Compile Include="Data\UserDataSet1.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>UserDataSet.xsd</DependentUpon>
@@ -96,6 +96,12 @@
     </Compile>
     <Compile Include="Dialogs\NewUserProfileDialog.Designer.cs">
       <DependentUpon>NewUserProfileDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\ReviewResponseDataDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\ReviewResponseDataDialog.Designer.cs">
+      <DependentUpon>ReviewResponseDataDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\SpeedFactEditDialog.cs">
       <SubType>Form</SubType>
@@ -147,6 +153,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\EditProfileDialog.resx">
       <DependentUpon>EditProfileDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\ReviewResponseDataDialog.resx">
+      <DependentUpon>ReviewResponseDataDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\SpeedFactEditDialog.resx">
       <DependentUpon>SpeedFactEditDialog.cs</DependentUpon>

@@ -352,6 +352,11 @@ namespace KnowYourFacts.UI
 				EditProfileDialog editProfileDialog = new EditProfileDialog ();
 				editProfileDialog.ShowDialog ();
 			}
+			else
+			{
+				ReviewResponseDataDialog reviewResponseDataDialog = new ReviewResponseDataDialog ();
+				reviewResponseDataDialog.ShowDialog ();
+			}
 		}
 
 		/*
@@ -490,7 +495,7 @@ namespace KnowYourFacts.UI
 				{
 					reference.writeResultsToFile (reference.correctResponseCount, reference.unknownFacts,
 						reference.knownFacts, operationType, reference.factResponseTime);
-					files.saveResponseData (incorrectResponses, new List <Fact> (reference.unknownFacts));
+					files.saveResponseData (incorrectResponses.ToArray (), reference.unknownFacts.ToArray (),userProfile.user.name, operationType.operationType);
 				}
 
 				if (reference.correctResponseCount == 0)

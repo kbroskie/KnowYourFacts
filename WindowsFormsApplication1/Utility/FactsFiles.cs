@@ -392,9 +392,30 @@ namespace KnowYourFacts.Utility
 			System.IO.Directory.Move (userPath, newUserPath);
 		}
 
-		public void	saveResponseData (List <int> incorrectResponses, List <Fact> unknownFacts)
+		public void	saveResponseData (int[] incorrectResponses, Fact[] unknownFacts, String username, MathOperationTypeEnum operation)
 		{
-			// TODO: Save response data.	
+			Data.UserDataSetTableAdapters.ResponseDataTableAdapter responseDataTableAdapter = new Data.UserDataSetTableAdapters.ResponseDataTableAdapter ();
+			DateTime date = DateTime.Today.Date;
+			System.Text.StringBuilder responseStringBuilder = new System.Text.StringBuilder ();
+
+			// Create a formatted response string.
+			for (int index = 0; index < unknownFacts.Count (); ++index)
+			{
+				responseStringBuilder.Append ("\n");
+				responseStringBuilder.Append (unknownFacts[index].ToString ());
+				responseStringBuilder.Append (" = ");
+				responseStringBuilder.Append(incorrectResponses[index].ToString ());
+			}
+
+			try
+			{
+				responseDataTableAdapter.Insert (username, date, (int) operation, responseStringBuilder.ToString ());
+			}
+			catch (Exception e)
+			{
+				// TODO Handle exceptions
+				Console.WriteLine (e.StackTrace);
+			}
 		}
 
 		#endregion

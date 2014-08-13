@@ -43,6 +43,7 @@
 			this.optionsMenuItem = new System.Windows.Forms.MenuItem();
 			this.editProfileMenuItem = new System.Windows.Forms.MenuItem();
 			this.helpMenuItem = new System.Windows.Forms.MenuItem();
+			this.reviewResponseDataMenuItem = new System.Windows.Forms.MenuItem();
 			this.SuspendLayout();
 			// 
 			// mainMenu
@@ -129,7 +130,8 @@
 			// 
 			this.optionsMenuItem.Index = 2;
 			this.optionsMenuItem.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.editProfileMenuItem});
+            this.editProfileMenuItem,
+            this.reviewResponseDataMenuItem});
 			this.optionsMenuItem.Text = "Options";
 			// 
 			// editProfileMenuItem
@@ -144,12 +146,18 @@
 			this.helpMenuItem.Shortcut = System.Windows.Forms.Shortcut.CtrlH;
 			this.helpMenuItem.Text = "Help";
 			// 
+			// reviewResponseDataMenuItem
+			// 
+			this.reviewResponseDataMenuItem.Index = 1;
+			this.reviewResponseDataMenuItem.Text = "Review Response Data";
+			this.reviewResponseDataMenuItem.Click += new System.EventHandler(this.optionsMenuItemClick);
+			// 
 			// MathFactsForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
-			this.ClientSize = new System.Drawing.Size(290, 257);
+			this.ClientSize = new System.Drawing.Size(290, 237);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
 			this.Menu = this.mainMenu;
@@ -176,6 +184,7 @@
 		private System.Windows.Forms.MenuItem optionsMenuItem;
 		private System.Windows.Forms.MenuItem helpMenuItem;
 		public System.Windows.Forms.MenuItem editProfileMenuItem;
+		private System.Windows.Forms.MenuItem reviewResponseDataMenuItem;
 	}
 }
 
