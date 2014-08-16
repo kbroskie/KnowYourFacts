@@ -42,8 +42,8 @@
 			this.divisionTestMenuItem = new System.Windows.Forms.MenuItem();
 			this.optionsMenuItem = new System.Windows.Forms.MenuItem();
 			this.editProfileMenuItem = new System.Windows.Forms.MenuItem();
-			this.helpMenuItem = new System.Windows.Forms.MenuItem();
 			this.reviewResponseDataMenuItem = new System.Windows.Forms.MenuItem();
+			this.helpMenuItem = new System.Windows.Forms.MenuItem();
 			this.SuspendLayout();
 			// 
 			// mainMenu
@@ -140,24 +140,24 @@
 			this.editProfileMenuItem.Text = "Edit Profile";
 			this.editProfileMenuItem.Click += new System.EventHandler(this.optionsMenuItemClick);
 			// 
-			// helpMenuItem
-			// 
-			this.helpMenuItem.Index = 3;
-			this.helpMenuItem.Shortcut = System.Windows.Forms.Shortcut.CtrlH;
-			this.helpMenuItem.Text = "Help";
-			// 
 			// reviewResponseDataMenuItem
 			// 
 			this.reviewResponseDataMenuItem.Index = 1;
 			this.reviewResponseDataMenuItem.Text = "Review Response Data";
 			this.reviewResponseDataMenuItem.Click += new System.EventHandler(this.optionsMenuItemClick);
 			// 
+			// helpMenuItem
+			// 
+			this.helpMenuItem.Index = 3;
+			this.helpMenuItem.Shortcut = System.Windows.Forms.Shortcut.CtrlH;
+			this.helpMenuItem.Text = "Help";
+			// 
 			// MathFactsForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
-			this.ClientSize = new System.Drawing.Size(290, 237);
+			this.ClientSize = new System.Drawing.Size(290, 258);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
 			this.Menu = this.mainMenu;

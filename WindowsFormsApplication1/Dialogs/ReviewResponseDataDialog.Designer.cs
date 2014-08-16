@@ -30,12 +30,12 @@
 		{
 			this.responseDataTabControl = new System.Windows.Forms.TabControl();
 			this.additionTabPage = new System.Windows.Forms.TabPage();
-			this.subtractionTabPage = new System.Windows.Forms.TabPage();
-			this.multiplicationTabPage = new System.Windows.Forms.TabPage();
-			this.divisionTabPage = new System.Windows.Forms.TabPage();
-			this.subtractionListView = new System.Windows.Forms.ListView();
 			this.additionListView = new System.Windows.Forms.ListView();
+			this.subtractionTabPage = new System.Windows.Forms.TabPage();
+			this.subtractionListView = new System.Windows.Forms.ListView();
+			this.multiplicationTabPage = new System.Windows.Forms.TabPage();
 			this.multiplicationListView = new System.Windows.Forms.ListView();
+			this.divisionTabPage = new System.Windows.Forms.TabPage();
 			this.divisionListView = new System.Windows.Forms.ListView();
 			this.responseDataTabControl.SuspendLayout();
 			this.additionTabPage.SuspendLayout();
@@ -68,6 +68,21 @@
 			this.additionTabPage.Text = "Addition";
 			this.additionTabPage.UseVisualStyleBackColor = true;
 			// 
+			// additionListView
+			// 
+			this.additionListView.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.additionListView.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.additionListView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+			this.additionListView.HideSelection = false;
+			this.additionListView.Location = new System.Drawing.Point(3, 3);
+			this.additionListView.Name = "additionListView";
+			this.additionListView.Size = new System.Drawing.Size(272, 225);
+			this.additionListView.Sorting = System.Windows.Forms.SortOrder.Descending;
+			this.additionListView.TabIndex = 0;
+			this.additionListView.TileSize = new System.Drawing.Size(20, 225);
+			this.additionListView.UseCompatibleStateImageBehavior = false;
+			this.additionListView.View = System.Windows.Forms.View.SmallIcon;
+			// 
 			// subtractionTabPage
 			// 
 			this.subtractionTabPage.Controls.Add(this.subtractionListView);
@@ -78,6 +93,18 @@
 			this.subtractionTabPage.TabIndex = 1;
 			this.subtractionTabPage.Text = "Subtraction";
 			this.subtractionTabPage.UseVisualStyleBackColor = true;
+			// 
+			// subtractionListView
+			// 
+			this.subtractionListView.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.subtractionListView.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.subtractionListView.Location = new System.Drawing.Point(3, 3);
+			this.subtractionListView.Name = "subtractionListView";
+			this.subtractionListView.Size = new System.Drawing.Size(272, 225);
+			this.subtractionListView.Sorting = System.Windows.Forms.SortOrder.Descending;
+			this.subtractionListView.TabIndex = 0;
+			this.subtractionListView.UseCompatibleStateImageBehavior = false;
+			this.subtractionListView.View = System.Windows.Forms.View.SmallIcon;
 			// 
 			// multiplicationTabPage
 			// 
@@ -90,39 +117,6 @@
 			this.multiplicationTabPage.Text = "Multiplication";
 			this.multiplicationTabPage.UseVisualStyleBackColor = true;
 			// 
-			// divisionTabPage
-			// 
-			this.divisionTabPage.Controls.Add(this.divisionListView);
-			this.divisionTabPage.Location = new System.Drawing.Point(4, 27);
-			this.divisionTabPage.Name = "divisionTabPage";
-			this.divisionTabPage.Padding = new System.Windows.Forms.Padding(3);
-			this.divisionTabPage.Size = new System.Drawing.Size(278, 228);
-			this.divisionTabPage.TabIndex = 3;
-			this.divisionTabPage.Text = "Division";
-			this.divisionTabPage.UseVisualStyleBackColor = true;
-			// 
-			// subtractionListView
-			// 
-			this.subtractionListView.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.subtractionListView.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.subtractionListView.GridLines = true;
-			this.subtractionListView.Location = new System.Drawing.Point(3, 3);
-			this.subtractionListView.Name = "subtractionListView";
-			this.subtractionListView.Size = new System.Drawing.Size(272, 225);
-			this.subtractionListView.TabIndex = 0;
-			this.subtractionListView.UseCompatibleStateImageBehavior = false;
-			// 
-			// additionListView
-			// 
-			this.additionListView.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.additionListView.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.additionListView.Location = new System.Drawing.Point(3, 3);
-			this.additionListView.Name = "additionListView";
-			this.additionListView.Size = new System.Drawing.Size(272, 225);
-			this.additionListView.TabIndex = 0;
-			this.additionListView.UseCompatibleStateImageBehavior = false;
-			this.additionListView.SelectedIndexChanged += new System.EventHandler(this.additionListView_SelectedIndexChanged);
-			// 
 			// multiplicationListView
 			// 
 			this.multiplicationListView.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -130,8 +124,21 @@
 			this.multiplicationListView.Location = new System.Drawing.Point(3, 3);
 			this.multiplicationListView.Name = "multiplicationListView";
 			this.multiplicationListView.Size = new System.Drawing.Size(272, 225);
+			this.multiplicationListView.Sorting = System.Windows.Forms.SortOrder.Descending;
 			this.multiplicationListView.TabIndex = 0;
 			this.multiplicationListView.UseCompatibleStateImageBehavior = false;
+			this.multiplicationListView.View = System.Windows.Forms.View.SmallIcon;
+			// 
+			// divisionTabPage
+			// 
+			this.divisionTabPage.Controls.Add(this.divisionListView);
+			this.divisionTabPage.Location = new System.Drawing.Point(4, 24);
+			this.divisionTabPage.Name = "divisionTabPage";
+			this.divisionTabPage.Padding = new System.Windows.Forms.Padding(3);
+			this.divisionTabPage.Size = new System.Drawing.Size(278, 231);
+			this.divisionTabPage.TabIndex = 3;
+			this.divisionTabPage.Text = "Division";
+			this.divisionTabPage.UseVisualStyleBackColor = true;
 			// 
 			// divisionListView
 			// 
@@ -139,9 +146,11 @@
 			this.divisionListView.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.divisionListView.Location = new System.Drawing.Point(3, 3);
 			this.divisionListView.Name = "divisionListView";
-			this.divisionListView.Size = new System.Drawing.Size(272, 222);
+			this.divisionListView.Size = new System.Drawing.Size(272, 225);
+			this.divisionListView.Sorting = System.Windows.Forms.SortOrder.Descending;
 			this.divisionListView.TabIndex = 0;
 			this.divisionListView.UseCompatibleStateImageBehavior = false;
+			this.divisionListView.View = System.Windows.Forms.View.SmallIcon;
 			// 
 			// ReviewResponseDataDialog
 			// 
@@ -149,6 +158,8 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(285, 261);
 			this.Controls.Add(this.responseDataTabControl);
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+			this.MaximizeBox = false;
 			this.Name = "ReviewResponseDataDialog";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Review Response Data";

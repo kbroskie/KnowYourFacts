@@ -182,8 +182,8 @@ namespace KnowYourFacts.UI
 				toggleMainMenuControl ();
 				this.Controls.Remove (factsReviewControl);
 
-				factsReviewControl.incorrectQuestions.Clear ();
-				factsReviewControl.incorrectQuestions.Clear ();
+				//factsReviewControl.incorrectQuestions.Clear ();
+				//factsReviewControl.incorrectQuestions.Clear ();
 			}
 			else
 			{
@@ -355,6 +355,7 @@ namespace KnowYourFacts.UI
 			else
 			{
 				ReviewResponseDataDialog reviewResponseDataDialog = new ReviewResponseDataDialog ();
+				reviewResponseDataDialog.loadResponseData (userProfile.user.name);
 				reviewResponseDataDialog.ShowDialog ();
 			}
 		}
@@ -424,6 +425,7 @@ namespace KnowYourFacts.UI
 			reference.factResponseTime.Clear ();
 			reference.factsOrder.Clear ();
 			incorrectResponses.Clear ();
+			factsReviewControl.incorrectQuestions.Clear ();
 			 
 			reference.startProcessingFacts (speedTest, operationType, m_factsDisplayControl, processingAllDailyFacts, userProfile);
 		}
@@ -495,9 +497,12 @@ namespace KnowYourFacts.UI
 				{
 					reference.writeResultsToFile (reference.correctResponseCount, reference.unknownFacts,
 						reference.knownFacts, operationType, reference.factResponseTime);
+					Console.WriteLine (reference.unknownFacts.ToArray ());
 					files.saveResponseData (incorrectResponses.ToArray (), reference.unknownFacts.ToArray (),userProfile.user.name, operationType.operationType);
 				}
-
+				//TODO remove after testing
+				Console.WriteLine (reference.unknownFacts.ToArray ());
+				files.saveResponseData (incorrectResponses.ToArray (), reference.unknownFacts.ToArray (), userProfile.user.name, operationType.operationType);
 				if (reference.correctResponseCount == 0)
 				{
 					if (processingAllDailyFacts && operationType.operationType != MathOperationTypeEnum.DIVISION)

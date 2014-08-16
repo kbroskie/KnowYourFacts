@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace KnowYourFacts.Dialogs
@@ -17,45 +11,67 @@ namespace KnowYourFacts.Dialogs
 			InitializeComponent ();
 		}
 
-		private void loadResponseData (String username)
+		/*
+		 * Load the response data, dividing operations into separate tabs, and dates into separate groups within each tab.
+		 */ 
+		public void loadResponseData (String username)
 		{
-			Data.UserDataSetTableAdapters.ResponseDataTableAdapter responseDataTableAdapter = new Data.UserDataSetTableAdapters.ResponseDataTableAdapter ();
-			Console.WriteLine (responseDataTableAdapter.GetData ().ToArray ()[0][3].ToString ());
-
-			// TODO: Add Groups to relevant tab, with each group name set to the response data date
-			// TODO: Add Items that correspond to each group for each response data set.
+			Data.UserDataSetTableAdapters.ResponseDataTableAdapter responseDataTableAdapter = new Data.UserDataSetTableAdapters.ResponseDataTableAdapter ();	
 			Data.UserDataSet.ResponseDataRow[] responseDataRows = responseDataTableAdapter.GetData ().ToArray ();
-			
+
 			for (int index = 0; index < responseDataRows.Count (); ++index)
 			if (responseDataRows[index][0].ToString () == username)
 			{
-				String groupName = responseDataRows[index][1].ToString ();
-				ListViewGroup responseDataGroup = new ListViewGroup (groupName);
-				responseDataGroup.Items.Add (responseDataRows[index][3].ToString ());
-				
+				String responseDate = responseDataRows[index][1].ToString ();
+				String responseString = responseDataRows[index][3].ToString ();
+				ListView listView;
+
 				Math.MathOperationTypeEnum operation = (Math.MathOperationTypeEnum) responseDataRows[index][2];
+
 				if (operation == Math.MathOperationTypeEnum.ADDITION)
 				{
-					additionListView.Groups.Add (responseDataGroup);
+					listView = additionListView;
 				}
 				else if (operation == Math.MathOperationTypeEnum.SUBTRACTION)
 				{
-					subtractionListView.Groups.Add (responseDataGroup);
+					listView = subtractionListView;
 				}
 				else if (operation == Math.MathOperationTypeEnum.MULTIPLICATION)
 				{
-					multiplicationListView.Groups.Add (responseDataGroup);
+					listView = multiplicationListView;
 				}
 				else
 				{
-					divisionListView.Groups.Add (responseDataGroup);
+					listView = divisionListView;
 				}
+
+				createListView (listView, responseDate, responseString);
 			}
 		}
 
-		private void additionListView_SelectedIndexChanged (object sender, EventArgs e)
+		public void createListView (ListView listView, String responseDate, String responseString)
 		{
+			// Add the group, using the date for the response data as the group name.
+			ListViewGroup responseDateGroup = new ListViewGroup (responseDate);
+			listView.Groups.Add (responseDateGroup);
 
+			// This ensures that each entry is put on a separate line.
+			listView.AutoResizeColumns (ColumnHeaderAutoResizeStyle.ColumnContent);
+
+			// Without clearing the listview first, duplicate elements will appear.
+			if (listView.Groups.Count == 1)
+			{
+				listView.Clear ();
+			}
+
+			// Display each response on a separate line.
+			ListViewItem responseStringItem;
+			String[] responses = responseString.Split ('\n');
+			foreach (string word in responses)
+			{
+				responseStringItem = new ListViewItem (word, responseDateGroup);
+				listView.Items.Add (responseStringItem);
+			}
 		}
 	}
 }
